@@ -8,7 +8,7 @@ export default function Footer() {
     <footer className="bg-noir text-white">
       <Container className="grid gap-10 py-14 sm:grid-cols-2 lg:grid-cols-5">
         <div className="flex flex-col gap-4">
-          <Logo />
+          <Logo grand />
           <p className="text-[14px] leading-relaxed text-white/60">{site.metier} à {site.adresse.ville}, près de Dijon ({site.adresse.departement}).</p>
         </div>
         {(['Carrosserie', 'Mécanique', 'Services'] as const).map((famille) => (

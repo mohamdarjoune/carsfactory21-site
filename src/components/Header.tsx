@@ -15,7 +15,7 @@ export default function Header() {
 
   return (
     <header className="sticky top-0 z-50 border-b border-white/10 bg-noir/95 text-white backdrop-blur">
-      <Container className="flex h-[72px] items-center justify-between gap-4">
+      <Container className="flex h-[76px] items-center justify-between gap-4 md:h-[84px]">
         <a href="/" className="no-underline" aria-label="Cars Factory 21, accueil"><Logo /></a>
 
         <nav aria-label="Navigation principale" className="hidden items-center gap-5 text-[15px] font-medium lg:flex xl:gap-7">

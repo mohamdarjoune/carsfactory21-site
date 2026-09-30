@@ -44,7 +44,7 @@ export function LogoDessin({ clair = true, className = '' }: { clair?: boolean; 
   const air = clair ? '#9FB3C8' : '#6B7C8F'
   const id = useId().replace(/:/g, '')
   return (
-    <svg viewBox="-75 -12 440 92" className={`logo-cf21 ${className}`} role="img" aria-label="CF21">
+    <svg viewBox="-75 -12 440 116" className={`logo-cf21 ${className}`} role="img" aria-label="Cars Factory 21">
       <defs>
         {/* léger tremblé, comme un trait de plume à main levée */}
         <filter id={`trait-${id}`} x="-5%" y="-10%" width="110%" height="120%">
@@ -83,20 +83,14 @@ export function LogoDessin({ clair = true, className = '' }: { clair?: boolean; 
         <text x="306" y="60" fontFamily="'Barlow Condensed', 'Arial Narrow', sans-serif" fontWeight="600" fontSize="54"
           fill={clair ? 'none' : rouge} stroke={rouge} strokeWidth={clair ? 1.5 : 0}>21</text>
       </g>
+      {/* Le nom en toutes lettres, sous la voiture (droit, pour rester bien lisible) */}
+      <text x="160" y="100" textAnchor="middle" fontFamily="'Barlow Condensed', 'Arial Narrow', sans-serif" fontWeight="600" fontSize="23"
+        letterSpacing="6" fill={trait}>CARS <tspan fill={rouge}>FACTORY</tspan> 21</text>
     </svg>
   )
 }
 
-/** Logo complet de l'en-tête et du pied de page. */
-export function Logo({ clair = true }: { clair?: boolean }) {
-  return (
-    <span className="flex items-center gap-3">
-      <LogoDessin clair={clair} className="h-12 w-auto md:h-14" />
-      {/* Nom en toutes lettres : masqué quand le menu d'ordinateur manque de place (1024–1279 px) */}
-      <span className="hidden flex-col leading-none sm:flex lg:hidden xl:flex">
-        <span className={`font-titre text-[20px] font-semibold uppercase tracking-[0.12em] ${clair ? 'text-white' : 'text-noir'}`}>Cars Factory 21</span>
-        <span className={`whitespace-nowrap text-[11px] font-medium uppercase tracking-[0.18em] ${clair ? 'text-white/60' : 'text-gris'}`}>Carrosserie · Mécanique</span>
-      </span>
-    </span>
-  )
+/** Logo complet de l'en-tête et du pied de page (le nom est dans le dessin, sous la voiture). */
+export function Logo({ clair = true, grand = false }: { clair?: boolean; grand?: boolean }) {
+  return <LogoDessin clair={clair} className={grand ? 'h-24 w-auto' : 'h-[60px] w-auto md:h-[68px]'} />
 }

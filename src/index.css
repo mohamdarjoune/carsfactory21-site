@@ -24,7 +24,7 @@
   --font-titre: "Barlow Condensed", "Arial Narrow", sans-serif;
 }
 
-html { scroll-behavior: smooth; scroll-padding-top: 88px; }
+html { scroll-behavior: smooth; scroll-padding-top: 100px; }
 body { @apply bg-white text-noir font-sans antialiased; }
 h1, h2, h3 { font-family: var(--font-titre); text-wrap: balance; }
 a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible, summary:focus-visible {
