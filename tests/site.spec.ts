@@ -36,6 +36,18 @@ test('photos : version adaptée à l’écran, pas le 4K sur téléphone', async
   expect(src).toMatch(isMobile ? /-(960|1920)\.webp$/ : /\.webp$/)
 })
 
+test('accès : les deux adresses avec leur plan et leur itinéraire', async ({ page }) => {
+  await page.goto('/#acces')
+  const acces = page.locator('#acces')
+  await expect(acces.getByText('6 rue de Bastogne, 21850 Saint-Apollinaire')).toBeVisible()
+  await expect(acces.getByText('1 bis rue de la Fonderie, 21800 Chevigny-Saint-Sauveur')).toBeVisible()
+  const plans = acces.locator('iframe')
+  await expect(plans).toHaveCount(2)
+  await expect(plans.first()).toHaveAttribute('src', /openstreetmap\.org\/export\/embed\.html.*marker=47\.339/)
+  await expect(plans.nth(1)).toHaveAttribute('src', /marker=47\.293/)
+  await expect(acces.getByRole('link', { name: 'Itinéraire' })).toHaveCount(2)
+})
+
 test('vidéo : image de couverture, chargée seulement au clic, fichier servi', async ({ page, request }) => {
   await page.goto('/')
   const video = page.locator('#video video')

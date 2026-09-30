@@ -12,8 +12,20 @@ export const site = {
   telephone: '07 59 56 38 39',
   telephoneLien: '+33759563839',
   email: '[E-mail]',
+  // Adresse de l'atelier (siège, fiche Google)
   adresse: { rue: '1 bis rue de la Fonderie', codePostal: '21800', ville: 'Chevigny-Saint-Sauveur', departement: 'Côte-d’Or' },
-  lienItineraire: 'https://www.google.com/maps/search/?api=1&query=Cars+Factory+21+1+bis+rue+de+la+Fonderie+21800+Chevigny-Saint-Sauveur',
+  lienItineraire: 'https://www.google.com/maps/dir/?api=1&destination=47.3391354,5.0720674',
+  // Deux adresses : les clients sont reçus à Saint-Apollinaire (commerces et transports en commun à proximité),
+  // le garage emmène ensuite la voiture à l'atelier de Chevigny-Saint-Sauveur et la ramène.
+  // Coordonnées : OpenStreetMap (Nominatim), 30/09/2026 ; atelier placé sur la rue (le n° 1 bis n'est pas référencé).
+  lieux: [
+    { id: 'accueil', titre: 'Accueil et bureau', rue: '6 rue de Bastogne', codePostal: '21850', ville: 'Saint-Apollinaire',
+      texte: 'C’est ici que vous déposez et récupérez votre voiture, et que se font devis et démarches. Commerces et transports en commun à proximité.',
+      lat: 47.3391354, lon: 5.0720674 },
+    { id: 'atelier', titre: 'Atelier', rue: '1 bis rue de la Fonderie', codePostal: '21800', ville: 'Chevigny-Saint-Sauveur',
+      texte: 'Carrosserie, peinture et mécanique sont réalisées ici. Le garage s’occupe du transfert de votre voiture entre l’accueil et l’atelier.',
+      lat: 47.2937067, lon: 5.1494143 },
+  ],
   lienAvisGoogle: '',              // lien vers les avis Google du garage (à récupérer sur la fiche)
   horaires: [
     ['Lundi', 'Fermé'],
@@ -47,3 +59,12 @@ export const site = {
 }
 
 export const adresseComplete = `${site.adresse.rue}, ${site.adresse.codePostal} ${site.adresse.ville}`
+export type Lieu = (typeof site.lieux)[number]
+export const adresseLieu = (l: Lieu) => `${l.rue}, ${l.codePostal} ${l.ville}`
+export const accueil = site.lieux[0]
+export const atelier = site.lieux[1]
+/** Plan OpenStreetMap intégrable (sans cookie de suivi), centré sur le lieu avec un repère. */
+export const planOsm = (l: Lieu, zoom = 0.006) =>
+  `https://www.openstreetmap.org/export/embed.html?bbox=${l.lon - zoom},${l.lat - zoom / 2},${l.lon + zoom},${l.lat + zoom / 2}&layer=mapnik&marker=${l.lat},${l.lon}`
+export const itineraire = (l: Lieu) => `https://www.google.com/maps/dir/?api=1&destination=${l.lat},${l.lon}`
+export const voirOsm = (l: Lieu) => `https://www.openstreetmap.org/?mlat=${l.lat}&mlon=${l.lon}#map=17/${l.lat}/${l.lon}`

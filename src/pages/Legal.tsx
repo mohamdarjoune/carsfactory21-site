@@ -2,7 +2,7 @@ import type { ReactNode } from 'react'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import { Container } from '../components/ui'
-import { site, adresseComplete } from '../config'
+import { site, adresseComplete, adresseLieu } from '../config'
 import photos from '../photos.json'
 
 function PageTexte({ titre, children }: { titre: string; children: ReactNode }) {
@@ -25,7 +25,7 @@ export function MentionsLegales() {
   return (
     <PageTexte titre="Mentions légales">
       <h2>Éditeur du site</h2>
-      <p>{m.raisonSociale}, capital {m.capital}<br />Siège : {adresseComplete}<br />SIREN {m.siren} · {m.rcs}<br />Téléphone : {site.telephone} · E-mail : {site.email}</p>
+      <p>{m.raisonSociale}, capital {m.capital}<br />Siège et atelier : {adresseComplete}<br />Accueil et bureau : {adresseLieu(site.lieux[0])}<br />SIREN {m.siren} · {m.rcs}<br />Téléphone : {site.telephone} · E-mail : {site.email}</p>
       <p>Responsable de la publication : {m.responsable}.</p>
       <h2>Hébergement</h2>
       <p>{m.hebergeur}</p>
@@ -46,6 +46,8 @@ export function Confidentialite() {
   return (
     <PageTexte titre="Confidentialité">
       <p>Ce site ne dépose aucun cookie publicitaire ni de mesure d’audience. Aucune donnée n’est vendue ni transmise à des tiers à des fins commerciales.</p>
+      <h2>Plans d’accès</h2>
+      <p>Les plans de la page d’accueil sont affichés depuis OpenStreetMap (openstreetmap.org), seulement quand ils apparaissent à l’écran. OpenStreetMap reçoit alors votre adresse IP, comme pour toute image chargée depuis son site ; il ne dépose pas de cookie publicitaire.</p>
       <h2>Formulaire de devis</h2>
       <p>Les informations envoyées par le formulaire (nom, téléphone, e-mail, véhicule, message, photos) servent uniquement à répondre à votre demande de devis. Elles sont transmises par e-mail au garage et ne sont pas conservées sur le site.</p>
       <p>Responsable du traitement : {site.mentions.raisonSociale}, {adresseComplete}.</p>

@@ -211,7 +211,7 @@ scene(0, 6,
     ${feuilles('s1-feuilles', 22, 5)}
   </g>`,
   `<div class="grand-titre" id="s1-titre" style="top:120px"><div style="font-weight:900;font-size:128px;letter-spacing:2px">Cars Factory 21</div>
-   <div style="font-weight:700;font-size:40px;margin-top:6px">Carrosserie · Mécanique · Chevigny-Saint-Sauveur</div></div>`,
+   <div style="font-weight:700;font-size:40px;margin-top:6px">Carrosserie · Mécanique · Saint-Apollinaire et Chevigny</div></div>`,
   (t) => {
     $('s1-monde').setAttribute('transform', `translate(0,${lerp(-140, 0, sortie(entre(t, 0, 3.2)))})`)
     ;['s1-n1', 's1-n2', 's1-n3', 's1-n4'].forEach((n, i) => { const x = [300, 1000, 1650, 700][i] + t * [14, 9, 18, 24][i]; $(n).setAttribute('transform', `translate(${x},${[150, 90, 250, 330][i]}) scale(${[1.1, 1.4, 0.9, 0.6][i]})`) })
@@ -457,9 +457,10 @@ scene(42, 48,
      <div style="font-weight:900;font-size:132px">Cars Factory 21</div>
      <div style="font-weight:700;font-size:42px;margin-top:4px">Carrosserie · Peinture · Mécanique · Dépannage 24 h/24</div>
    </div>
-   <div class="grand-titre" id="s9-infos" style="top:470px;font-weight:700;font-size:40px;line-height:1.55">
+   <div class="grand-titre" id="s9-infos" style="top:440px;font-weight:700;font-size:38px;line-height:1.5">
      <div style="font-size:74px;font-weight:900">07 59 56 38 39</div>
-     <div>1 bis rue de la Fonderie · Chevigny-Saint-Sauveur</div>
+     <div>Accueil : 6 rue de Bastogne · Saint-Apollinaire</div>
+     <div>Atelier : 1 bis rue de la Fonderie · Chevigny-Saint-Sauveur</div>
      <div>Du mardi au samedi, 9 h – 19 h</div>
    </div>
    <div style="position:absolute;right:30px;bottom:18px;font:500 20px 'Zen Maru Gothic',sans-serif;color:#FFFFFFAA">Illustrations non contractuelles</div>`,

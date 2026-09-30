@@ -1,8 +1,9 @@
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import Devis from '../components/Devis'
+import Acces from '../components/Acces'
 import { Container, Ico, Photo, TitreSection, btnClair, btnRouge, type NomPhoto } from '../components/ui'
-import { site, adresseComplete } from '../config'
+import { site, accueil, atelier, adresseLieu } from '../config'
 import { PRESTATIONS, type PagePrestation } from './services'
 
 const rempli = (v: string) => v !== '' && !v.startsWith('[')
@@ -14,6 +15,8 @@ function donneesGarage() {
     name: site.nom, url: `${site.siteUrl}/`, image: `${site.siteUrl}/photos/atelier-1920.webp`,
     description: 'Carrosserie, peinture, covering, réparation après sinistre, mécanique, entretien, diagnostic et dépannage 24 h/24 à Chevigny-Saint-Sauveur, près de Dijon.',
     telephone: site.telephoneLien,
+    geo: { '@type': 'GeoCoordinates', latitude: atelier.lat, longitude: atelier.lon },
+    location: site.lieux.map((l) => ({ '@type': 'Place', name: `Cars Factory 21 · ${l.titre}`, address: { '@type': 'PostalAddress', streetAddress: l.rue, postalCode: l.codePostal, addressLocality: l.ville, addressCountry: 'FR' }, geo: { '@type': 'GeoCoordinates', latitude: l.lat, longitude: l.lon } })),
     address: { '@type': 'PostalAddress', streetAddress: site.adresse.rue, postalCode: site.adresse.codePostal, addressLocality: site.adresse.ville, addressRegion: 'Bourgogne-Franche-Comté', addressCountry: 'FR' },
     openingHoursSpecification: site.horairesGoogle.map((h) => ({ '@type': 'OpeningHoursSpecification', dayOfWeek: h.jours, opens: h.ouverture, closes: h.fermeture })),
     areaServed: [...site.zone.map((name) => ({ '@type': 'City', name })), { '@type': 'AdministrativeArea', name: site.adresse.departement }],
@@ -57,6 +60,7 @@ const ETAPES: [string, string][] = [
 
 const FAQ: [string, string][] = [
   ['Puis-je obtenir un devis sans venir au garage ?', 'Oui. Remplissez le formulaire de devis en ajoutant des photos des dégâts et le modèle de votre voiture : le garage vous recontacte pour une première estimation.'],
+  ['Où dois-je déposer ma voiture ?', 'À l’accueil, 6 rue de Bastogne à Saint-Apollinaire, près des commerces et des transports en commun. Le garage emmène ensuite votre voiture à son atelier de Chevigny-Saint-Sauveur et vous la ramène une fois les travaux terminés.'],
   ['Quels sont les horaires du garage ?', 'Le garage est ouvert du mardi au samedi, de 9 h à 19 h. Il est fermé le lundi et le dimanche. Le dépannage fonctionne 24 h/24, 7 j/7.'],
   ['Le garage s’occupe-t-il des démarches avec mon assurance ?', 'Le garage vous aide à préparer votre dossier et à présenter le véhicule à l’expert si votre assurance en mandate un.'],
   ['Faut-il prendre rendez-vous ?', '[À confirmer avec le garage : rendez-vous obligatoire ou possibilité de passer sans rendez-vous.]'],
@@ -87,7 +91,7 @@ export default function Accueil() {
               <a href="#devis" className={btnRouge}>Demander un devis</a>
               <a href={appeler} className={btnClair}><Ico nom="telephone" taille={18} />{site.telephone}</a>
             </div>
-            <p className="flex items-center gap-2 text-[14px] text-white/65"><Ico nom="horloge" taille={18} />Du mardi au samedi, 9 h – 19 h · {site.adresse.ville}</p>
+            <p className="flex items-center gap-2 text-[14px] text-white/65"><Ico nom="horloge" taille={18} />Du mardi au samedi, 9 h – 19 h · accueil à {accueil.ville}, atelier à {atelier.ville}</p>
           </Container>
           <span className="absolute bottom-3 right-3 text-[11px] text-white/50">Photo non contractuelle</span>
         </section>
@@ -203,20 +207,23 @@ export default function Accueil() {
             <div className="flex flex-col gap-6">
               <TitreSection label="Le garage" titre={site.nom} texte="[Présentation du garage : son histoire, l’équipe, les équipements de l’atelier, ce qui le distingue. Quelques phrases fournies par le client.]" />
               <dl className="grid gap-4 text-[15px] sm:grid-cols-2">
-                <div className="sm:col-span-2"><dt className="font-semibold">Adresse</dt><dd className="text-gris">{adresseComplete}</dd></div>
+                <div className="sm:col-span-2"><dt className="font-semibold">Accueil et bureau</dt><dd className="text-gris">{adresseLieu(accueil)}</dd></div>
+                <div className="sm:col-span-2"><dt className="font-semibold">Atelier</dt><dd className="text-gris">{adresseLieu(atelier)}</dd></div>
                 <div><dt className="font-semibold">Téléphone</dt><dd><a href={appeler} className="text-noir">{site.telephone}</a></dd></div>
                 {site.horaires.map(([j, h]) => <div key={j}><dt className="font-semibold">{j}</dt><dd className="text-gris">{h}</dd></div>)}
               </dl>
-              <a href={site.lienItineraire} target="_blank" rel="noopener noreferrer" className={`${btnRouge} self-start`}><Ico nom="lieu" taille={18} />Itinéraire</a>
+              <a href="#acces" className={`${btnRouge} self-start`}><Ico nom="lieu" taille={18} />Voir les deux adresses sur le plan</a>
             </div>
           </Container>
         </section>
+
+        <Acces />
 
         {/* ── Zone ── */}
         <section aria-labelledby="titre-zone" className="bg-noir text-white">
           <Container className="flex flex-col gap-5 py-12">
             <h2 id="titre-zone" className="text-[30px] font-bold uppercase leading-none md:text-[40px]">À deux pas de Dijon</h2>
-            <p className="max-w-[720px] text-[16px] text-white/70">Le garage est à Chevigny-Saint-Sauveur, à l’est de Dijon. Il accueille les conducteurs de toute l’agglomération et des communes voisines :</p>
+            <p className="max-w-[720px] text-[16px] text-white/70">Accueil à Saint-Apollinaire, atelier à Chevigny-Saint-Sauveur : le garage est à l’est de Dijon et accueille les conducteurs de toute l’agglomération et des communes voisines :</p>
             <ul className="flex flex-wrap gap-2">
               {site.zone.map((v) => <li key={v} className="rounded-full border border-white/20 px-3 py-1.5 text-[14px] text-white/85">{v}</li>)}
             </ul>
