@@ -1,0 +1,49 @@
+RewriteEngine On
+Options -Indexes
+
+# Bloquer les fichiers cachés
+<FilesMatch "^\.">
+    Require all denied
+</FilesMatch>
+
+# Adresse unique : https://www.cars-factory-21.fr (à adapter au nom de domaine choisi)
+RewriteCond %{HTTPS} off [OR]
+RewriteCond %{HTTP_HOST} !^www\. [NC]
+RewriteCond %{HTTP_HOST} !^localhost [NC]
+RewriteRule ^ https://www.cars-factory-21.fr%{REQUEST_URI} [L,R=301]
+
+# Protections du navigateur
+<IfModule mod_headers.c>
+    Header always set Strict-Transport-Security "max-age=31536000"
+    Header always set X-Frame-Options "DENY"
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+    Header always set Permissions-Policy "camera=(), microphone=(), geolocation=(), payment=()"
+    Header always set Content-Security-Policy "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: blob:; connect-src 'self'; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests"
+    Header always unset X-Powered-By
+</IfModule>
+
+# Mise en cache : fichiers versionnés 1 an, photos et polices 30 jours, pages HTML toujours vérifiées
+<IfModule mod_headers.c>
+    <If "%{REQUEST_URI} =~ m#^/assets/#">
+        Header set Cache-Control "public, max-age=31536000, immutable"
+    </If>
+    <If "%{REQUEST_URI} =~ m#^/(photos|fonts)/#">
+        Header set Cache-Control "public, max-age=2592000"
+    </If>
+    <FilesMatch "\.html$">
+        Header set Cache-Control "no-cache"
+    </FilesMatch>
+</IfModule>
+AddType image/webp .webp
+
+# Adresses propres : /carrosserie sert carrosserie.html
+RewriteCond %{THE_REQUEST} \s/index\.html[\s?]
+RewriteRule ^ / [R=301,L]
+RewriteCond %{THE_REQUEST} \s/([^.\s?]+)\.html[\s?]
+RewriteRule ^ /%1 [R=301,L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME}.html -f
+RewriteRule ^(.+)$ $1.html [L]
+
+ErrorDocument 404 /404.html

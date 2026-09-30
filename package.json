@@ -1,0 +1,30 @@
+{
+  "name": "carsfactory21-site",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build && vite build --ssr src/entree-serveur.tsx --outDir dist-serveur --emptyOutDir && node scripts/prerendu.mjs",
+    "preview": "node scripts/serveur-local.mjs 5181",
+    "test": "vitest run",
+    "test:site": "playwright test"
+  },
+  "dependencies": {
+    "@fontsource/barlow-condensed": "^5.1.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^7.18.4"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.63.0",
+    "@tailwindcss/vite": "^4.0.0",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "@vitejs/plugin-react": "^4.3.4",
+    "tailwindcss": "^4.0.0",
+    "typescript": "^5.6.3",
+    "vite": "^6.0.0",
+    "vitest": "^5.0.2"
+  }
+}
