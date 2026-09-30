@@ -14,7 +14,7 @@ const csp = htaccess.match(/Content-Security-Policy "([^"]+)"/)[1].replace(/; up
 const types = {
   '.html': 'text/html; charset=utf-8', '.js': 'text/javascript', '.css': 'text/css', '.json': 'application/json',
   '.svg': 'image/svg+xml', '.png': 'image/png', '.webp': 'image/webp', '.ico': 'image/x-icon',
-  '.xml': 'application/xml', '.txt': 'text/plain', '.woff2': 'font/woff2',
+  '.xml': 'application/xml', '.mp4': 'video/mp4', '.jpg': 'image/jpeg', '.txt': 'text/plain', '.woff2': 'font/woff2',
 }
 const fichier = (p) => { const f = path.join(dist, p); return f.startsWith(dist) && fs.existsSync(f) && fs.statSync(f).isFile() ? f : null }
 

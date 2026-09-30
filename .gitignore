@@ -5,3 +5,5 @@ dist-serveur
 test-results
 playwright-report
 venv
+medias/*.mp4
+outils/video/images

@@ -1,0 +1,490 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<title>Cars Factory 21 · présentation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700;900&display=swap" rel="stylesheet">
+<style>
+@font-face { font-family: BC; src: url("file:///C:/Users/ST/Projet_perso/carsfactory21-site/node_modules/@fontsource/barlow-condensed/files/barlow-condensed-latin-700-normal.woff2"); font-weight: 700; }
+html, body { margin: 0; width: 1920px; height: 1080px; overflow: hidden; background: #000; }
+#film { position: relative; width: 1920px; height: 1080px; overflow: hidden; }
+.s { position: absolute; inset: 0; opacity: 0; }
+.s > svg, #grain { position: absolute; inset: 0; width: 1920px; height: 1080px; }
+.carte { position: absolute; left: 110px; top: 80px; max-width: 1100px; padding: 26px 40px 30px; border-radius: 28px;
+  background: rgba(255, 250, 240, 0.9); box-shadow: 0 18px 50px rgba(40, 25, 10, 0.25); color: #3B2F2A; opacity: 0;
+  font-family: "Zen Maru Gothic", BC, sans-serif; }
+.carte .etq { display: inline-block; padding: 6px 16px; border-radius: 999px; background: #D23A2B; color: #fff; font-weight: 700; font-size: 26px; letter-spacing: 1px; }
+.carte .titre { margin-top: 12px; font-weight: 900; font-size: 64px; line-height: 1.05; }
+.carte .sous { margin-top: 10px; font-weight: 500; font-size: 32px; color: #6B5A4E; }
+.grand-titre { position: absolute; left: 0; right: 0; text-align: center; font-family: "Zen Maru Gothic", BC, sans-serif; color: #FFFBF2; opacity: 0;
+  text-shadow: 0 5px 0 rgba(70, 45, 25, 0.35), 0 12px 40px rgba(40, 30, 60, 0.35); }
+#grain { pointer-events: none; mix-blend-mode: multiply; opacity: 0.16; }
+#vignette { position: absolute; inset: 0; pointer-events: none; background: radial-gradient(ellipse at center, transparent 55%, rgba(40, 25, 15, 0.35) 100%); }
+</style></head>
+<body>
+<div id="film"></div>
+<svg id="grain" viewBox="0 0 1920 1080"><filter id="g"><feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" seed="3"/><feColorMatrix values="0 0 0 0 0.45  0 0 0 0 0.38  0 0 0 0 0.3  0 0 0 1.2 -0.25"/></filter><rect width="1920" height="1080" filter="url(#g)"/></svg>
+<div id="vignette"></div>
+
+<script>
+/* ═══════════════ Outils ═══════════════ */
+const $ = (id) => document.getElementById(id)
+const c01 = (x) => Math.max(0, Math.min(1, x))
+const lisse = (x) => { x = c01(x); return x * x * (3 - 2 * x) }
+const sortie = (x) => { x = c01(x); return 1 - Math.pow(1 - x, 3) }
+const entre = (t, a, b) => c01((t - a) / (b - a))
+const lerp = (a, b, x) => a + (b - a) * x
+function hasard(graine) { let a = graine; return () => { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296 } }
+const attr = (el, o) => { for (const k in o) el.setAttribute(k, o[k]) }
+
+/* ═══════════════ La voiture (même dessin que le logo) ═══════════════ */
+const CONTOUR = 'M12,54 L12,42 Q13,37 22,36 L40,35 L150,15 Q160,13 168,14 L178,15 Q186,17 200,31 L276,32 Q290,33 293,38 L294,50 Q294,56 288,56 L266,56 A21,21 0 0 0 224,56 L92,56 A21,21 0 0 0 50,56 L18,56 Q12,56 12,54 Z'
+const VITRE = 'M116,29 L150,19 L175,18.5 Q182,20 191,30 Z'
+const OUIES = 'M88,33 L96,31 M92,37 L101,35 M96,41 L106,39'
+const DETAILS = 'M196,33 L200,55 M186,38 L194,38 M288,40 Q292,41 293,45 M280,51 L294,51 M12,48 L20,48 M14,40 L19,40 L19,45 L14,45'
+const LETTRES = 'M150,40 L114,40 Q102,40 102,46.5 Q102,53 114,53 L148,53 M158,53 L158,40 L284,39 M158,46.5 L184,46.5'
+
+function roue(id, x) {
+  return `<g><circle cx="${x}" cy="57" r="16" fill="#2F2B2A"/><circle cx="${x}" cy="57" r="10.5" fill="#D5DADF" stroke="#2F2B2A" stroke-width="1"/>
+  <g id="${id}"><path d="M${x},47.5 V66.5 M${x - 9.5},57 H${x + 9.5} M${x - 6.7},50.3 L${x + 6.7},63.7 M${x - 6.7},63.7 L${x + 6.7},50.3" stroke="#8A9299" stroke-width="1.6"/></g>
+  <circle cx="${x}" cy="57" r="3.2" fill="#8A9299" stroke="#2F2B2A" stroke-width=".8"/></g>`
+}
+function voiture(id, o = {}) {
+  const caisse = o.caisse ?? '#F5EDDF', trait = '#2E2A28', bande = o.bande ?? '#D23A2B'
+  return `<g id="${id}">
+    <ellipse cx="153" cy="74" rx="150" ry="5.5" fill="rgba(45,32,20,.22)"/>
+    <path id="${id}-caisse" d="${CONTOUR}" fill="${caisse}" stroke="${trait}" stroke-width="2.2" stroke-linejoin="round"/>
+    <path d="M22,37 L150,16 Q160,14 168,15 L178,16" fill="none" stroke="#fff" stroke-width="2" opacity=".55" stroke-linecap="round"/>
+    ${o.surCaisse ?? ''}
+    <path d="${VITRE}" fill="#A9D3E7" stroke="${trait}" stroke-width="1.8" stroke-linejoin="round"/>
+    <path d="M124,27.5 L148,21.5" stroke="#fff" stroke-width="2.4" opacity=".75" stroke-linecap="round"/>
+    <path d="M160,19 L162,30" stroke="${trait}" stroke-width="1.6"/>
+    <path d="${OUIES}" stroke="${trait}" stroke-width="1.4" stroke-linecap="round"/>
+    <path d="${DETAILS}" fill="none" stroke="${trait}" stroke-width="1.2" stroke-linecap="round"/>
+    <circle cx="287" cy="42.5" r="3" fill="#FFF3C4" stroke="${trait}" stroke-width="1.2"/>
+    <path d="${LETTRES}" fill="none" stroke="${bande}" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"/>
+    ${o.devant ?? ''}
+    ${roue(id + '-r1', 71)}${roue(id + '-r2', 245)}
+  </g>`
+}
+function placerVoiture(id, x, y, s, distance) {
+  $(id).setAttribute('transform', `translate(${x},${y}) scale(${s})`)
+  const angle = (distance / (s * 16)) * (180 / Math.PI)   // les roues tournent au rythme du déplacement
+  $(id + '-r1').setAttribute('transform', `rotate(${angle} 71 57)`)
+  $(id + '-r2').setAttribute('transform', `rotate(${angle} 245 57)`)
+}
+
+/* ═══════════════ Décors : nuages, collines, arbres, herbe ═══════════════ */
+function nuage(id, x, y, s, teinte = '#FFFFFF', ombre = '#D9E6F1') {
+  return `<g id="${id}" transform="translate(${x},${y}) scale(${s})" filter="url(#aquarelle)">
+    <ellipse cx="0" cy="40" rx="190" ry="42" fill="${ombre}"/>
+    <circle cx="-110" cy="20" r="60" fill="${teinte}"/><circle cx="-40" cy="-10" r="85" fill="${teinte}"/><circle cx="50" cy="-30" r="100" fill="${teinte}"/>
+    <circle cx="140" cy="5" r="70" fill="${teinte}"/><ellipse cx="10" cy="30" rx="180" ry="38" fill="${teinte}"/>
+    <ellipse cx="20" cy="52" rx="170" ry="16" fill="${ombre}" opacity=".8"/></g>`
+}
+function arbre(x, y, s, v = ['#4E8B57', '#6FAA66', '#9CCB7E']) {
+  return `<g class="arbre" data-x="${x}" data-y="${y}" transform="translate(${x},${y}) scale(${s})">
+    <path d="M-5,0 L-3,-60 L3,-60 L5,0Z" fill="#6B4E3A"/>
+    <g filter="url(#aquarelle)"><circle cx="0" cy="-90" r="46" fill="${v[0]}"/><circle cx="-32" cy="-70" r="32" fill="${v[0]}"/><circle cx="30" cy="-68" r="34" fill="${v[0]}"/>
+    <circle cx="-8" cy="-104" r="30" fill="${v[1]}"/><circle cx="22" cy="-86" r="22" fill="${v[1]}"/><circle cx="-16" cy="-112" r="14" fill="${v[2]}"/></g></g>`
+}
+function herbe(id, n, graine, y0 = 1080, hMin = 40, hMax = 110, couleurs = ['#5D9A5B', '#7DB56B', '#4C8150']) {
+  const r = hasard(graine)
+  let h = `<g id="${id}">`
+  for (let i = 0; i < n; i++) {
+    const x = r() * 1960 - 20, haut = lerp(hMin, hMax, r()), c = couleurs[Math.floor(r() * couleurs.length)]
+    h += `<path class="brin" data-x="${x.toFixed(1)}" data-h="${haut.toFixed(1)}" data-p="${(r() * 6).toFixed(2)}" data-y="${y0}" fill="${c}"/>`
+  }
+  return h + '</g>'
+}
+function animerHerbe(id, t, vent = 1) {
+  for (const b of $(id).children) {
+    const x = +b.dataset.x, h = +b.dataset.h, p = +b.dataset.p, y = +b.dataset.y
+    const plie = (Math.sin(t * 2.2 + p + x * 0.004) * 10 + 14) * vent
+    b.setAttribute('d', `M${x - 5},${y} Q${x - 2 + plie * 0.4},${y - h * 0.55} ${x + plie},${y - h} Q${x + 3 + plie * 0.3},${y - h * 0.5} ${x + 5},${y}Z`)
+  }
+}
+function animerArbres(scene, t) {
+  scene.querySelectorAll('.arbre').forEach((a, i) => {
+    const x = a.dataset.x, y = a.dataset.y, s = a.getAttribute('transform').match(/scale\(([^)]+)\)/)[1]
+    a.setAttribute('transform', `translate(${x},${y}) scale(${s}) rotate(${Math.sin(t * 1.3 + i) * 1.8})`)
+  })
+}
+function feuilles(id, n, graine) {
+  const r = hasard(graine), c = ['#6FAA66', '#9CCB7E', '#E3B75B', '#4E8B57']
+  let h = `<g id="${id}">`
+  for (let i = 0; i < n; i++) h += `<path class="feuille" data-v="${(0.6 + r() * 0.8).toFixed(2)}" data-y="${(120 + r() * 820).toFixed(0)}" data-d="${r().toFixed(3)}" data-a="${(r() * 60 + 20).toFixed(0)}" d="M0,0 Q9,-9 18,0 Q9,9 0,0Z" fill="${c[i % c.length]}"/>`
+  return h + '</g>'
+}
+function animerFeuilles(id, t, sens = -1) {
+  for (const f of $(id).children) {
+    const v = +f.dataset.v, y0 = +f.dataset.y, d = +f.dataset.d, a = +f.dataset.a
+    const k = ((t * 0.28 * v + d) % 1)
+    const x = sens < 0 ? lerp(2020, -100, k) : lerp(-100, 2020, k)
+    const y = y0 + Math.sin(t * 2 + d * 10) * a
+    f.setAttribute('transform', `translate(${x},${y}) rotate(${t * 140 * v + d * 360}) scale(${1.2 + v})`)
+  }
+}
+function trainees(id, lignes) {
+  // traînées de vent : [décalage vertical, longueur, épaisseur, opacité]
+  return `<g id="${id}" fill="none" stroke="#FFFFFF" stroke-linecap="round">` +
+    lignes.map(([dy, l, e, o]) => `<path data-dy="${dy}" data-l="${l}" stroke-width="${e}" opacity="${o}" pathLength="100" stroke-dasharray="55 45"/>`).join('') + '</g>'
+}
+function animerTrainees(id, xArriere, yRef, t, force = 1) {
+  for (const p of $(id).children) {
+    const dy = +p.dataset.dy, l = +p.dataset.l * force
+    p.setAttribute('d', `M${xArriere},${yRef + dy} C${xArriere - l * 0.3},${yRef + dy - 6} ${xArriere - l * 0.7},${yRef + dy + 6} ${xArriere - l},${yRef + dy}`)
+    p.setAttribute('stroke-dashoffset', (t * 160) % 100)
+    p.style.opacity = force
+  }
+}
+function engrenage(dents, rExt, rInt) {
+  let d = ''
+  for (let i = 0; i < dents * 2; i++) {
+    const a1 = (i / (dents * 2)) * Math.PI * 2, a2 = ((i + 1) / (dents * 2)) * Math.PI * 2, r = i % 2 ? rInt : rExt
+    d += `${i ? 'L' : 'M'}${(Math.cos(a1) * r).toFixed(1)},${(Math.sin(a1) * r).toFixed(1)} L${(Math.cos(a2) * r).toFixed(1)},${(Math.sin(a2) * r).toFixed(1)} `
+  }
+  return d + 'Z'
+}
+function etoile4(x, y, r, couleur = '#FFF6D8') { return `<path d="M${x},${y - r} Q${x + r * 0.18},${y - r * 0.18} ${x + r},${y} Q${x + r * 0.18},${y + r * 0.18} ${x},${y + r} Q${x - r * 0.18},${y + r * 0.18} ${x - r},${y} Q${x - r * 0.18},${y - r * 0.18} ${x},${y - r}Z" fill="${couleur}"/>` }
+
+/* ═══════════════ Définitions communes ═══════════════ */
+const DEFS = `<defs>
+  <filter id="aquarelle" x="-20%" y="-20%" width="140%" height="140%"><feTurbulence type="fractalNoise" baseFrequency="0.018" numOctaves="3" seed="8" result="b"/><feDisplacementMap in="SourceGraphic" in2="b" scale="9"/><feGaussianBlur stdDeviation="0.8"/></filter>
+  <filter id="halo" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="18"/></filter>
+  <filter id="doux" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="4"/></filter>
+  <linearGradient id="cielJour" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5FA8DA"/><stop offset=".55" stop-color="#B9E0F2"/><stop offset="1" stop-color="#FCE8CC"/></linearGradient>
+  <linearGradient id="cielSoir" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3A4585"/><stop offset=".42" stop-color="#B96B8C"/><stop offset=".7" stop-color="#F1A266"/><stop offset="1" stop-color="#FCD690"/></linearGradient>
+  <linearGradient id="cielNuit" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0B1433"/><stop offset=".7" stop-color="#23365F"/><stop offset="1" stop-color="#3C4D72"/></linearGradient>
+  <linearGradient id="collineLoin" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9DC4B0"/><stop offset="1" stop-color="#B8D6C0"/></linearGradient>
+  <linearGradient id="collineMoy" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7DB374"/><stop offset="1" stop-color="#5E9A5E"/></linearGradient>
+  <linearGradient id="collinePres" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8CC47A"/><stop offset="1" stop-color="#5C9657"/></linearGradient>
+  <linearGradient id="atelierMur" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F6E3BF"/><stop offset="1" stop-color="#EACB98"/></linearGradient>
+  <linearGradient id="atelierSol" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#CDB592"/><stop offset="1" stop-color="#B89D78"/></linearGradient>
+  <linearGradient id="cabine" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#EEF3F6"/><stop offset="1" stop-color="#CCD8E1"/></linearGradient>
+  <radialGradient id="soleil"><stop offset="0" stop-color="#FFF6D6"/><stop offset=".35" stop-color="#FFE7A8" stop-opacity=".9"/><stop offset="1" stop-color="#FFE7A8" stop-opacity="0"/></radialGradient>
+  <radialGradient id="lampe"><stop offset="0" stop-color="#FFE7AE" stop-opacity=".95"/><stop offset="1" stop-color="#FFE7AE" stop-opacity="0"/></radialGradient>
+  <radialGradient id="gyro"><stop offset="0" stop-color="#FFB33B"/><stop offset="1" stop-color="#FFB33B" stop-opacity="0"/></radialGradient>
+  <linearGradient id="phares" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#FFF1B8" stop-opacity=".75"/><stop offset="1" stop-color="#FFF1B8" stop-opacity="0"/></linearGradient>
+  <pattern id="vigne" width="46" height="18" patternUnits="userSpaceOnUse" patternTransform="rotate(-8)"><rect width="46" height="18" fill="#7FB36E"/><path d="M0,9 H46" stroke="#4F8747" stroke-width="5" stroke-dasharray="7 5"/></pattern>
+  <pattern id="tuiles" width="48" height="28" patternUnits="userSpaceOnUse"><rect width="48" height="28" fill="#B6412F"/><path d="M0,14 L12,0 L24,14 L12,28Z" fill="#E1B23C"/><path d="M24,14 L36,0 L48,14 L36,28Z" fill="#2F6B4E"/><path d="M12,0 L24,14 L36,0Z M12,28 L24,14 L36,28Z" fill="#26211F"/></pattern>
+  <pattern id="lattes" width="20" height="26" patternUnits="userSpaceOnUse"><rect width="20" height="26" fill="#C9372B"/><path d="M0,24 H20" stroke="#8E2419" stroke-width="3"/></pattern>
+  <clipPath id="cadre"><rect width="1920" height="1080"/></clipPath>
+</defs>`
+
+/* ═══════════════ Scènes ═══════════════ */
+const SCENES = []
+const film = $('film')
+function scene(debut, fin, svg, html, rendu) {
+  const el = document.createElement('section'); el.className = 's'
+  el.innerHTML = `<svg viewBox="0 0 1920 1080">${SCENES.length ? '' : DEFS}${svg}</svg>${html}`
+  film.appendChild(el)
+  SCENES.push({ debut, fin, el, rendu })
+}
+function carte(etq, titre, sous, id = '') {
+  return `<div class="carte" ${id ? `id="${id}"` : ''}><span class="etq">${etq}</span><div class="titre">${titre}</div><div class="sous">${sous}</div></div>`
+}
+function montrerCarte(el, t, debut = 0.5, fin = 99) {
+  const k = sortie(entre(t, debut, debut + 0.6)) * (1 - lisse(entre(t, fin - 0.4, fin)))
+  el.style.opacity = k
+  el.style.transform = `translateY(${(1 - k) * 30}px)`
+}
+function collines(extra = '') {
+  return `<path d="M0,640 C260,560 520,600 760,570 C1040,530 1300,600 1560,560 C1740,535 1850,560 1920,570 V1080 H0Z" fill="url(#collineLoin)" filter="url(#aquarelle)"/>
+  <path d="M0,720 C300,650 600,700 900,670 C1200,640 1500,700 1920,660 V1080 H0Z" fill="url(#vigne)" filter="url(#aquarelle)" opacity=".95"/>
+  <path d="M0,720 C300,650 600,700 900,670 C1200,640 1500,700 1920,660" fill="none" stroke="#A6D08E" stroke-width="6" opacity=".7" filter="url(#aquarelle)"/>
+  ${extra}
+  <path d="M0,820 C320,780 700,800 1000,790 C1350,778 1650,800 1920,790 V1080 H0Z" fill="url(#collinePres)" filter="url(#aquarelle)"/>`
+}
+
+/* 1 · Ouverture : ciel, collines de vignes, la voiture arrive dans le vent (0 – 6 s) */
+scene(0, 6,
+  `<g id="s1-monde">
+    <rect width="1920" height="1300" y="-220" fill="url(#cielJour)"/>
+    <circle cx="1560" cy="120" r="260" fill="url(#soleil)"/>
+    ${nuage('s1-n1', 300, 150, 1.1)}${nuage('s1-n2', 1000, 90, 1.4)}${nuage('s1-n3', 1650, 250, 0.9)}${nuage('s1-n4', 700, 330, 0.6, '#FFFFFF', '#E5EEF5')}
+    ${collines(arbre(260, 700, 0.9) + arbre(1480, 690, 1.1) + arbre(1560, 700, 0.8) + arbre(900, 685, 0.7))}
+    <path d="M0,905 C500,890 1400,890 1920,900 V965 C1400,955 500,955 0,968Z" fill="#E6D3AE" filter="url(#aquarelle)"/>
+    <path d="M0,936 C500,923 1400,923 1920,932" fill="none" stroke="#FFF8E6" stroke-width="5" stroke-dasharray="46 38" opacity=".8"/>
+    ${trainees('s1-vent', [[-150, 520, 4, .8], [-95, 700, 3, .6], [-40, 460, 3.5, .7], [20, 620, 2.5, .5]])}
+    ${voiture('s1-auto')}
+    ${herbe('s1-herbe', 150, 11, 1085)}
+    ${feuilles('s1-feuilles', 22, 5)}
+  </g>`,
+  `<div class="grand-titre" id="s1-titre" style="top:120px"><div style="font-weight:900;font-size:128px;letter-spacing:2px">Cars Factory 21</div>
+   <div style="font-weight:700;font-size:40px;margin-top:6px">Carrosserie · Mécanique · Chevigny-Saint-Sauveur</div></div>`,
+  (t) => {
+    $('s1-monde').setAttribute('transform', `translate(0,${lerp(-140, 0, sortie(entre(t, 0, 3.2)))})`)
+    ;['s1-n1', 's1-n2', 's1-n3', 's1-n4'].forEach((n, i) => { const x = [300, 1000, 1650, 700][i] + t * [14, 9, 18, 24][i]; $(n).setAttribute('transform', `translate(${x},${[150, 90, 250, 330][i]}) scale(${[1.1, 1.4, 0.9, 0.6][i]})`) })
+    const k = sortie(entre(t, 0.8, 4.6)), x = lerp(-900, 560, k), s = 2.6
+    placerVoiture('s1-auto', x, 918 - 74 * s, s, x)
+    animerTrainees('s1-vent', x + 20 * s, 918 - 30 * s, t, 1 - entre(t, 4.2, 5.2) * 0.6)
+    animerHerbe('s1-herbe', t, 1.2); animerFeuilles('s1-feuilles', t); animerArbres(SCENES[0].el, t)
+    const titre = $('s1-titre'), kt = sortie(entre(t, 2.4, 3.4)); titre.style.opacity = kt; titre.style.transform = `translateY(${(1 - kt) * 24}px)`
+  })
+
+/* 2 · Le garage : toit de tuiles vernissées, rideau qui se lève, la voiture entre (6 – 11 s) */
+scene(6, 11,
+  `<rect width="1920" height="1080" fill="url(#cielJour)"/>
+   ${nuage('s2-n1', 260, 170, 1)}${nuage('s2-n2', 1500, 120, 1.2)}
+   ${collines(arbre(180, 700, 1) + arbre(1750, 690, 1.1))}
+   <path d="M0,905 C500,890 1400,890 1920,900 V1080 H0Z" fill="#E6D3AE" filter="url(#aquarelle)"/>
+   <g filter="url(#aquarelle)">
+     <rect x="760" y="440" width="880" height="470" fill="#F7EFE2" stroke="#6B5B4B" stroke-width="4"/>
+     <path d="M700,448 L1700,448 L1580,290 L820,290Z" fill="url(#tuiles)" stroke="#4A3A30" stroke-width="5" stroke-linejoin="round"/>
+   </g>
+   <rect x="980" y="470" width="440" height="72" rx="10" fill="#2E2A28"/>
+   <text x="1200" y="522" text-anchor="middle" font-family="BC" font-size="48" letter-spacing="5" fill="#F5EDDF">CARS <tspan fill="#E24A36">FACTORY</tspan> 21</text>
+   <rect x="880" y="570" width="640" height="340" fill="#F2C879"/>
+   <circle cx="1200" cy="690" r="260" fill="url(#lampe)"/>
+   <path d="M900,910 L960,700 L1440,700 L1500,910" fill="#E9B865" opacity=".5"/>
+   <rect id="s2-rideau" x="880" y="570" width="640" height="340" fill="url(#lattes)" stroke="#6B2A20" stroke-width="3"/>
+   <g filter="url(#aquarelle)"><rect x="700" y="820" width="46" height="90" rx="8" fill="#B8694A"/><circle cx="723" cy="800" r="44" fill="#5E9A5E"/><circle cx="700" cy="790" r="12" fill="#F2A7B5"/><circle cx="740" cy="780" r="10" fill="#FFF1A8"/>
+   <rect x="1655" y="820" width="46" height="90" rx="8" fill="#B8694A"/><circle cx="1678" cy="800" r="44" fill="#6FAA66"/><circle cx="1700" cy="785" r="11" fill="#F2A7B5"/></g>
+   ${voiture('s2-auto')}
+   ${herbe('s2-herbe', 110, 21, 1085, 30, 80)}`,
+  carte('Le garage', 'Un seul atelier pour tout faire', 'Carrosserie, peinture, mécanique, dépannage', 's2-carte'),
+  (t) => {
+    ;['s2-n1', 's2-n2'].forEach((n, i) => $(n).setAttribute('transform', `translate(${[260, 1500][i] + t * 12},${[170, 120][i]}) scale(${[1, 1.2][i]})`))
+    const h = lerp(340, 26, sortie(entre(t, 0.4, 2.2))); attr($('s2-rideau'), { height: h })
+    const k1 = sortie(entre(t, 0.8, 2.6)), k2 = lisse(entre(t, 2.8, 4.6))
+    const x = lerp(lerp(-800, 200, k1), 900, k2), s = lerp(2.4, 1.55, k2), yBas = lerp(1000, 905, k2)
+    placerVoiture('s2-auto', x, yBas - 74 * s, s, x)
+    $('s2-auto').style.opacity = 1 - lisse(entre(t, 4.2, 4.9))
+    animerHerbe('s2-herbe', t, 0.8); animerArbres(SCENES[1].el, t)
+    montrerCarte($('s2-carte'), t, 1.2)
+  })
+
+/* Décor d'atelier (scènes 3 et 5) */
+function atelier(extra = '') {
+  return `<rect width="1920" height="1080" fill="url(#atelierMur)"/>
+   <rect x="120" y="120" width="420" height="300" rx="18" fill="#9FD0EA" stroke="#7A5B40" stroke-width="10"/>
+   <path d="M330,120 V420 M120,270 H540" stroke="#7A5B40" stroke-width="8"/>
+   ${nuage('nuageFenetre' + Math.random().toString(36).slice(2, 6), 300, 230, 0.35)}
+   <g filter="url(#aquarelle)" fill="none" stroke="#6E5440" stroke-width="7" stroke-linecap="round">
+     <path d="M1300,210 H1800 M1300,360 H1800"/>
+   </g>
+   <g filter="url(#aquarelle)">
+     <rect x="1330" y="150" width="60" height="58" rx="6" fill="#C9372B"/><rect x="1410" y="165" width="44" height="43" rx="6" fill="#E1B23C"/><rect x="1470" y="140" width="70" height="68" rx="8" fill="#2F6B4E"/>
+     <rect x="1570" y="160" width="36" height="48" rx="5" fill="#7FA7C4"/><rect x="1630" y="150" width="80" height="58" rx="8" fill="#B6412F"/>
+     <path d="M1340,300 l20,-40 l20,40 M1420,300 v-50 M1470,300 h60 v-40 h-60z M1600,300 a20,20 0 1 1 40,0" fill="none" stroke="#5B4636" stroke-width="7" stroke-linecap="round"/>
+   </g>
+   <path d="M960,0 V70" stroke="#5B4636" stroke-width="5"/><path d="M910,70 H1010 L985,110 H935Z" fill="#3E4A45"/>
+   <circle cx="960" cy="260" r="420" fill="url(#lampe)" opacity=".55"/>
+   <rect y="820" width="1920" height="260" fill="url(#atelierSol)"/>
+   <path d="M0,860 H1920 M0,930 H1920 M0,1010 H1920" stroke="#A8906E" stroke-width="3" opacity=".6"/>
+   ${extra}`
+}
+
+/* 3 · Carrosserie : la bosse disparaît sous le maillet (11 – 16 s) */
+scene(11, 16,
+  atelier() +
+  `<g id="s3-auto-g">${voiture('s3-auto', { surCaisse: `<g id="s3-bosse"><path d="M112,43 Q124,36 138,44 Q126,40 112,43Z" fill="#7B6E62" opacity=".55"/><path d="M116,47 Q127,43 136,49" fill="none" stroke="#5B5048" stroke-width="1.6"/><path d="M104,38 L118,41 M108,50 L121,48 M140,38 L150,41" stroke="#8A7D71" stroke-width="1"/></g>` })}</g>
+   <g id="s3-maillet"><rect x="-6" y="0" width="12" height="150" rx="6" fill="#B0845A" stroke="#5B4636" stroke-width="3"/><rect x="-44" y="-40" width="88" height="52" rx="14" fill="#3B3633"/></g>
+   <g id="s3-eclats">${etoile4(0, 0, 26)}${etoile4(90, -60, 18)}${etoile4(-80, -40, 14)}${etoile4(40, 60, 16)}</g>`,
+  carte('Carrosserie', 'Chocs, bosses, rayures : effacés', 'Redressage, remplacement des éléments, finitions', 's3-carte'),
+  (t) => {
+    const s = 3.9, x = 380, y = 905 - 74 * s
+    placerVoiture('s3-auto', x, y, s, 0)
+    const coup = entre(t, 0.8, 3.2)
+    const frappe = t > 0.8 && t < 3.2 ? Math.abs(Math.sin(t * 7)) : 0
+    const bx = x + 126 * s, by = y + 44 * s
+    $('s3-maillet').setAttribute('transform', `translate(${bx + 60},${by - 150}) rotate(${-35 + frappe * 32})`)
+    $('s3-maillet').style.opacity = t < 3.4 ? lisse(entre(t, 0.5, 0.9)) : 1 - lisse(entre(t, 3.4, 3.8))
+    $('s3-bosse').style.opacity = 1 - lisse(coup)
+    const e = entre(t, 3.3, 4.6)
+    $('s3-eclats').setAttribute('transform', `translate(${bx},${by - 20}) scale(${Math.sin(e * Math.PI) * 1.4})`)
+    montrerCarte($('s3-carte'), t, 0.6)
+  })
+
+/* 4 · Peinture puis covering (16 – 22 s) */
+const clipPeinture = `<clipPath id="s4-clip"><rect id="s4-rect" x="0" y="0" width="0" height="120"/></clipPath><clipPath id="s4-clip2"><rect id="s4-rect2" x="300" y="0" width="0" height="120"/></clipPath><clipPath id="s4-forme"><path d="${CONTOUR}"/></clipPath>`
+scene(16, 22,
+  `<defs>${clipPeinture}</defs>
+   <rect width="1920" height="1080" fill="url(#cabine)"/>
+   <circle cx="960" cy="0" r="700" fill="#FFFFFF" opacity=".55" filter="url(#halo)"/>
+   <path d="M0,300 H1920 M0,520 H1920" stroke="#C1CFD9" stroke-width="3"/>
+   <rect y="840" width="1920" height="240" fill="#AFBCC6"/><path d="M0,880 H1920 M0,940 H1920 M0,1010 H1920" stroke="#8E9EAA" stroke-width="4" stroke-dasharray="14 10"/>
+   <g id="s4-auto-g">${voiture('s4-auto', { caisse: '#B7BDC4', surCaisse: `<g clip-path="url(#s4-forme)"><rect clip-path="url(#s4-clip)" x="0" y="0" width="310" height="120" fill="#F5EDDF"/><rect clip-path="url(#s4-clip2)" x="0" y="0" width="310" height="120" fill="#2F6B6B"/><rect id="s4-reflet" x="-60" y="0" width="30" height="120" fill="#FFFFFF" opacity=".6" transform="skewX(-20)"/></g>` })}</g>
+   <g id="s4-pistolet"><path d="M0,0 h60 v24 h-60z M8,24 v60 h22 v-60z M60,6 h34 v12 h-34z" fill="#3E4A55" stroke="#1F2830" stroke-width="3"/></g>
+   <g id="s4-brume"></g>
+   <g id="s4-raclette"><rect x="-8" y="-90" width="16" height="180" rx="8" fill="#F5F5F5" stroke="#1F2830" stroke-width="3"/><rect x="-26" y="-20" width="20" height="40" rx="6" fill="#E1B23C"/></g>`,
+  carte('Peinture', 'La teinte d’origine, finition vernie', 'Préparation, peinture, vernis', 's4-carte1') + carte('Covering', 'Une nouvelle couleur sans repeindre', 'Film mat, satiné ou brillant', 's4-carte2'),
+  (t) => {
+    const s = 3.6, x = 420, y = 900 - 74 * s
+    placerVoiture('s4-auto', x, y, s, 0)
+    const p = entre(t, 0.4, 2.8)
+    attr($('s4-rect'), { width: 310 * p })
+    const px = x + 310 * p * s
+    $('s4-pistolet').setAttribute('transform', `translate(${px + 10},${y - 60}) rotate(${Math.sin(t * 5) * 4})`)
+    $('s4-pistolet').style.opacity = t < 3 ? 1 : 1 - lisse(entre(t, 3, 3.3))
+    const brume = $('s4-brume'); if (!brume.childElementCount) { const r = hasard(9); for (let i = 0; i < 40; i++) brume.insertAdjacentHTML('beforeend', `<circle data-a="${r()}" data-b="${r()}" r="${(6 + r() * 18).toFixed(0)}" fill="#FFFFFF"/>`) }
+    for (const c of brume.children) { const a = +c.dataset.a, b = +c.dataset.b, k = (t * 1.2 + a) % 1; attr(c, { cx: px + 10 - k * 80 + b * 30, cy: y + 30 + (b - 0.5) * 120 + k * 60 }); c.style.opacity = t > 0.4 && t < 3 ? (1 - k) * 0.55 : 0 }
+    $('s4-reflet').setAttribute('x', lerp(-60, 360, entre(t, 2.8, 3.5)))
+    const c2 = entre(t, 3.6, 5.6)
+    attr($('s4-rect2'), { x: 300 - 300 * c2, width: 300 * c2 + 10 })
+    $('s4-raclette').setAttribute('transform', `translate(${x + (300 - 300 * c2) * s},${y + 40 * s})`)
+    $('s4-raclette').style.opacity = t > 3.5 && t < 5.7 ? 1 : 0
+    montrerCarte($('s4-carte1'), t, 0.5, 3.3); montrerCarte($('s4-carte2'), t, 3.5)
+  })
+
+/* 5 · Mécanique et entretien (22 – 27 s) */
+scene(22, 27,
+  atelier(`<g filter="url(#aquarelle)">
+     <rect x="560" y="430" width="780" height="360" rx="40" fill="#8E969E" stroke="#3B3F44" stroke-width="6"/>
+     <rect x="620" y="360" width="660" height="110" rx="24" fill="#A7AFB6" stroke="#3B3F44" stroke-width="6"/>
+     <rect x="680" y="500" width="120" height="220" rx="18" fill="#727A82"/><rect x="840" y="500" width="120" height="220" rx="18" fill="#727A82"/><rect x="1000" y="500" width="120" height="220" rx="18" fill="#727A82"/>
+     <circle cx="1210" cy="340" r="34" fill="#E1B23C" stroke="#3B3F44" stroke-width="6"/>
+   </g>`) +
+  `<g id="s5-g1" fill="#C9372B" stroke="#6B2A20" stroke-width="5"><path d="${engrenage(14, 120, 100)}"/><circle r="36" fill="#F5EDDF"/></g>
+   <g id="s5-g2" fill="#E1B23C" stroke="#7A5B20" stroke-width="5"><path d="${engrenage(10, 86, 70)}"/><circle r="26" fill="#F5EDDF"/></g>
+   <g id="s5-bidon"><path d="M0,0 h110 v130 h-110z" fill="#2F6B4E" stroke="#1E3F30" stroke-width="5"/><path d="M110,20 l70,-34 l8,16 l-70,34z" fill="#2F6B4E" stroke="#1E3F30" stroke-width="5"/><rect x="20" y="30" width="70" height="50" rx="8" fill="#F5EDDF"/></g>
+   <g id="s5-gouttes"></g>
+   <g id="s5-cle"><path d="M-110,-12 H60 a34,34 0 1 1 0,24 H-110z" fill="#C7CDD2" stroke="#4A5057" stroke-width="5"/></g>`,
+  carte('Mécanique', 'Entretien et réparations', 'Vidange, freins, embrayage, distribution', 's5-carte'),
+  (t) => {
+    $('s5-g1').setAttribute('transform', `translate(1500,560) rotate(${t * 40})`)
+    $('s5-g2').setAttribute('transform', `translate(1650,700) rotate(${-t * 40 * 14 / 10 + 9})`)
+    const incl = lerp(0, -38, sortie(entre(t, 0.6, 1.6)))
+    $('s5-bidon').setAttribute('transform', `translate(1020,150) rotate(${incl} 55 65)`)
+    const g = $('s5-gouttes'); if (!g.childElementCount) for (let i = 0; i < 8; i++) g.insertAdjacentHTML('beforeend', `<ellipse rx="9" ry="13" fill="#E6A93A" stroke="#9A6A1C" stroke-width="2" data-i="${i}"/>`)
+    for (const d of g.children) { const i = +d.dataset.i, k = ((t - 1.6) * 1.4 + i / 8) % 1; attr(d, { cx: 1205, cy: lerp(170, 320, k) }); d.style.opacity = t > 1.7 && t < 4.4 ? 1 - k * 0.3 : 0 }
+    $('s5-cle').setAttribute('transform', `translate(420,760) rotate(${Math.sin(t * 3) * 25 - 10})`)
+    montrerCarte($('s5-carte'), t, 0.6)
+  })
+
+/* 6 · Diagnostic électronique (27 – 32 s) */
+scene(27, 32,
+  `<rect width="1920" height="1080" fill="#3A3431"/>
+   <circle cx="960" cy="200" r="700" fill="#5A4E46" opacity=".6" filter="url(#halo)"/>
+   <g filter="url(#aquarelle)"><rect x="140" y="260" width="1000" height="520" rx="120" fill="#2A2523" stroke="#15110F" stroke-width="8"/></g>
+   <g id="s6-cadrans">
+     <circle cx="420" cy="520" r="190" fill="#F5EDDF" stroke="#15110F" stroke-width="10"/><circle cx="860" cy="520" r="190" fill="#F5EDDF" stroke="#15110F" stroke-width="10"/>
+     ${Array.from({ length: 11 }, (_, i) => { const a = (-210 + i * 24) * Math.PI / 180; return `<path d="M${420 + Math.cos(a) * 150},${520 + Math.sin(a) * 150} L${420 + Math.cos(a) * 172},${520 + Math.sin(a) * 172} M${860 + Math.cos(a) * 150},${520 + Math.sin(a) * 150} L${860 + Math.cos(a) * 172},${520 + Math.sin(a) * 172}" stroke="#3B3633" stroke-width="6" stroke-linecap="round"/>` }).join('')}
+     <path id="s6-aig1" d="M420,520 L420,380" stroke="#D23A2B" stroke-width="10" stroke-linecap="round"/><path id="s6-aig2" d="M860,520 L860,380" stroke="#D23A2B" stroke-width="10" stroke-linecap="round"/>
+     <circle cx="420" cy="520" r="18" fill="#3B3633"/><circle cx="860" cy="520" r="18" fill="#3B3633"/>
+   </g>
+   <circle id="s6-halo" cx="640" cy="690" r="80" fill="#FF8A2A" filter="url(#halo)"/>
+   <path id="s6-voyant" d="M600,672 h20 v-12 h40 v12 h14 l10,10 v28 h-10 v8 h-60 v-8 h-14z" fill="#FF8A2A" stroke="#15110F" stroke-width="4"/>
+   <g filter="url(#aquarelle)"><path d="M1240,760 L1780,760 L1840,820 L1180,820Z" fill="#8E969E" stroke="#3B3F44" stroke-width="6"/><rect x="1270" y="420" width="480" height="340" rx="18" fill="#2A2F35" stroke="#3B3F44" stroke-width="8"/></g>
+   <rect x="1300" y="450" width="420" height="280" rx="8" fill="#EAF4F8"/>
+   <path d="M1330,700 H1690 M1330,470 V700" stroke="#9FB3C3" stroke-width="3"/>
+   <path id="s6-courbe" d="M1330,660 C1380,600 1420,690 1470,610 C1520,540 1560,640 1610,560 C1640,520 1670,540 1690,500" fill="none" stroke="#D23A2B" stroke-width="6" stroke-linecap="round" pathLength="100" stroke-dasharray="100" stroke-dashoffset="100"/>
+   <g id="s6-ok"><circle cx="1510" cy="590" r="84" fill="#3E9A5A"/><path d="M1466,592 l32,32 l58,-66" fill="none" stroke="#FFFFFF" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"/></g>
+   <path d="M1180,800 C1060,860 1000,940 900,1080" fill="none" stroke="#15110F" stroke-width="12"/>`,
+  carte('Diagnostic', 'Un voyant allumé ? On trouve la cause', 'Lecture des codes défaut, contrôle des capteurs', 's6-carte'),
+  (t) => {
+    const a1 = lerp(-150, 20, lisse(entre(t, 0.2, 1.4))) + Math.sin(t * 6) * 3, a2 = lerp(-150, -40, lisse(entre(t, 0.3, 1.6))) + Math.sin(t * 5) * 4
+    $('s6-aig1').setAttribute('transform', `rotate(${a1 + 90} 420 520)`); $('s6-aig2').setAttribute('transform', `rotate(${a2 + 90} 860 520)`)
+    const allume = t < 3 ? (Math.sin(t * 9) > -0.2 ? 1 : 0.35) : 0
+    $('s6-voyant').setAttribute('fill', allume ? '#FF8A2A' : '#4A4440'); $('s6-voyant').style.opacity = allume ? allume : 1
+    $('s6-halo').style.opacity = allume * 0.8
+    $('s6-courbe').setAttribute('stroke-dashoffset', 100 - 100 * entre(t, 0.8, 2.8))
+    const ok = sortie(entre(t, 3, 3.5)); $('s6-ok').setAttribute('transform', `translate(1510,590) scale(${ok}) translate(-1510,-590)`)
+    montrerCarte($('s6-carte'), t, 0.6)
+  })
+
+/* 7 · Dépannage 24 h/24, la nuit (32 – 38 s) */
+function etoiles(n, graine) { const r = hasard(graine); let h = '<g id="s7-etoiles">'; for (let i = 0; i < n; i++) h += `<circle cx="${(r() * 1920).toFixed(0)}" cy="${(r() * 560).toFixed(0)}" r="${(1 + r() * 2.6).toFixed(1)}" fill="#FFF6D8" data-p="${(r() * 6).toFixed(2)}"/>`; return h + '</g>' }
+const DEPANNEUSE = `<g id="s7-camion">
+   <polygon points="-40,108 900,108 900,150 -20,150" fill="#A7B3C2" stroke="#2A3242" stroke-width="5" stroke-linejoin="round"/>
+   <path d="M-40,110 L-120,160" stroke="#A7B3C2" stroke-width="12" stroke-linecap="round"/>
+   <path d="M60,100 L150,112 M760,100 L680,112" stroke="#E1B23C" stroke-width="6" stroke-linecap="round"/>
+   <g transform="translate(60,-80) scale(2.4)">${voiture('s7-auto')}</g>
+   <path d="M900,150 V20 Q900,-10 930,-10 H1080 Q1130,-10 1150,40 L1180,90 Q1200,95 1200,120 V150Z" fill="#C8342A" stroke="#6B2A20" stroke-width="6" stroke-linejoin="round"/>
+   <path d="M950,10 H1070 Q1100,10 1115,50 L1130,80 H950Z" fill="#9CC7DE" stroke="#6B2A20" stroke-width="5"/>
+   <rect x="960" y="-40" width="60" height="30" rx="10" fill="#FFB33B"/>
+   <circle id="s7-gyro" cx="990" cy="-26" r="90" fill="url(#gyro)"/>
+   <path d="M1200,110 L1700,40 L1700,210Z" fill="url(#phares)"/>
+   ${[140, 700, 1080].map((x, i) => `<g><circle cx="${x}" cy="160" r="46" fill="#2F2B2A"/><circle cx="${x}" cy="160" r="22" fill="#C9CED3"/><g id="s7-rc${i}"><path d="M${x - 22},160 H${x + 22} M${x},138 V182" stroke="#6E767D" stroke-width="5"/></g></g>`).join('')}
+</g>`
+scene(32, 38,
+  `<rect width="1920" height="1080" fill="url(#cielNuit)"/>
+   ${etoiles(110, 4)}
+   <circle cx="1560" cy="190" r="150" fill="#FFF4D6" opacity=".25" filter="url(#halo)"/><circle cx="1560" cy="190" r="78" fill="#FFF4D6"/><circle cx="1535" cy="170" r="14" fill="#EFE3C0"/><circle cx="1585" cy="215" r="9" fill="#EFE3C0"/>
+   ${nuage('s7-n1', 500, 250, 0.9, '#3E5078', '#2F3F63')}
+   <path d="M0,650 C300,590 700,640 1000,610 C1350,575 1650,640 1920,610 V1080 H0Z" fill="#2B3D5A" filter="url(#aquarelle)"/>
+   <path d="M0,760 C400,720 900,745 1300,735 C1600,728 1800,740 1920,736 V1080 H0Z" fill="#22324A" filter="url(#aquarelle)"/>
+   ${[250, 900, 1550].map((x) => `<path d="M${x},900 V640" stroke="#1A2233" stroke-width="12"/><path d="M${x},645 h50" stroke="#1A2233" stroke-width="10"/><circle cx="${x + 50}" cy="660" r="120" fill="url(#lampe)" opacity=".5"/><circle cx="${x + 50}" cy="656" r="14" fill="#FFE9A8"/>`).join('')}
+   <path d="M0,880 H1920 V1080 H0Z" fill="#3A4252"/><path d="M0,960 H1920" stroke="#F2D98A" stroke-width="6" stroke-dasharray="60 50" opacity=".7"/>
+   <g id="s7-lucioles"></g>
+   ${DEPANNEUSE}`,
+  carte('Dépannage', '24 h/24, 7 jours sur 7', 'En panne ou accidenté : 07 59 56 38 39', 's7-carte'),
+  (t) => {
+    for (const e of $('s7-etoiles').children) e.style.opacity = 0.45 + 0.55 * Math.abs(Math.sin(t * 1.7 + +e.dataset.p))
+    const x = lerp(-1300, 2100, t / 6)
+    $('s7-camion').setAttribute('transform', `translate(${x},${760 + Math.sin(t * 9) * 2})`)
+    placerVoiture('s7-auto', 0, 0, 1, 0)
+    for (let i = 0; i < 3; i++) $('s7-rc' + i).setAttribute('transform', `rotate(${t * 520} ${[140, 700, 1080][i]} 160)`)
+    $('s7-gyro').style.opacity = 0.35 + 0.65 * Math.abs(Math.sin(t * 6))
+    const l = $('s7-lucioles'); if (!l.childElementCount) { const r = hasard(12); for (let i = 0; i < 24; i++) l.insertAdjacentHTML('beforeend', `<circle r="5" fill="#FFF3A0" data-x="${r() * 1920}" data-y="${620 + r() * 240}" data-p="${r() * 6}"/>`) }
+    for (const f of l.children) { const p = +f.dataset.p; attr(f, { cx: +f.dataset.x + Math.sin(t * 0.9 + p) * 40, cy: +f.dataset.y + Math.cos(t * 1.3 + p) * 25 }); f.style.opacity = 0.3 + 0.7 * Math.abs(Math.sin(t * 2 + p)) }
+    montrerCarte($('s7-carte'), t, 0.8)
+  })
+
+/* 8 · Lavage et occasions (38 – 42 s) */
+scene(38, 42,
+  `<rect width="1920" height="1080" fill="url(#cielJour)"/>
+   ${nuage('s8-n1', 400, 160, 0.9)}${nuage('s8-n2', 1500, 130, 1.1)}
+   <path d="M300,760 A660,560 0 0 1 1620,760" fill="none" stroke="#F7C6D0" stroke-width="26" opacity=".35"/><path d="M330,760 A630,530 0 0 1 1590,760" fill="none" stroke="#FFF1A8" stroke-width="26" opacity=".35"/><path d="M360,760 A600,500 0 0 1 1560,760" fill="none" stroke="#BFE6C8" stroke-width="26" opacity=".35"/>
+   <rect y="840" width="1920" height="240" fill="#BFD3DD"/><path d="M0,880 H1920" stroke="#E7F1F6" stroke-width="6"/>
+   ${voiture('s8-auto')}
+   <g id="s8-bulles"></g><g id="s8-eclats">${etoile4(620, 560, 30)}${etoile4(1200, 520, 24)}${etoile4(900, 700, 20)}${etoile4(1450, 640, 26)}</g>`,
+  carte('Lavage et occasions', 'Votre voiture repart comme neuve', 'Lavage intérieur et extérieur · véhicules d’occasion', 's8-carte'),
+  (t) => {
+    const s = 3.6, x = 420, y = 900 - 74 * s
+    placerVoiture('s8-auto', x, y, s, 0)
+    const b = $('s8-bulles'); if (!b.childElementCount) { const r = hasard(3); for (let i = 0; i < 40; i++) b.insertAdjacentHTML('beforeend', `<g data-x="${420 + r() * 1100}" data-v="${0.5 + r()}" data-p="${r()}"><circle r="${(10 + r() * 26).toFixed(0)}" fill="#FFFFFF" fill-opacity=".35" stroke="#FFFFFF" stroke-width="3"/><circle cx="-6" cy="-6" r="4" fill="#FFFFFF"/></g>`) }
+    for (const g of b.children) { const k = (t * 0.35 * +g.dataset.v + +g.dataset.p) % 1; g.setAttribute('transform', `translate(${+g.dataset.x + Math.sin(t * 2 + +g.dataset.p * 9) * 20},${lerp(880, 360, k)})`); g.style.opacity = (t < 2.6 ? 1 : 1 - entre(t, 2.6, 3.2)) * (1 - k * 0.6) }
+    const e = entre(t, 2.7, 3.8); $('s8-eclats').style.opacity = Math.sin(e * Math.PI)
+    montrerCarte($('s8-carte'), t, 0.5)
+  })
+
+/* 9 · Final au coucher du soleil : logo et coordonnées (42 – 48 s) */
+scene(42, 48,
+  `<rect width="1920" height="1080" fill="url(#cielSoir)"/>
+   <circle cx="960" cy="720" r="420" fill="url(#soleil)"/><circle cx="960" cy="740" r="150" fill="#FFE2A0"/>
+   ${nuage('s9-n1', 360, 260, 1, '#F8C9B0', '#D79A95')}${nuage('s9-n2', 1560, 200, 1.2, '#F8C9B0', '#D79A95')}
+   <path d="M0,760 C300,700 600,740 960,720 C1300,700 1600,750 1920,720 V1080 H0Z" fill="#7B5C83" filter="url(#aquarelle)"/>
+   <g filter="url(#aquarelle)">
+     <rect x="1280" y="640" width="120" height="110" fill="#5E4768"/><path d="M1268,645 L1340,590 L1412,645Z" fill="url(#tuiles)"/>
+     <rect x="1420" y="660" width="100" height="90" fill="#5E4768"/><path d="M1410,664 L1470,618 L1530,664Z" fill="url(#tuiles)"/>
+     <path d="M1560,750 V560 L1580,480 L1600,560 V750Z" fill="#553F5E"/>
+   </g>
+   <path d="M0,860 C400,820 900,850 1300,840 C1600,832 1800,845 1920,840 V1080 H0Z" fill="#4A3654" filter="url(#aquarelle)"/>
+   ${trainees('s9-vent', [[-40, 380, 3, .7], [0, 520, 2.5, .5], [30, 300, 2, .5]])}
+   <g id="s9-auto-g">${voiture('s9-auto')}</g>`,
+  `<div class="grand-titre" id="s9-titre" style="top:110px">
+     <div style="font-weight:900;font-size:132px">Cars Factory 21</div>
+     <div style="font-weight:700;font-size:42px;margin-top:4px">Carrosserie · Peinture · Mécanique · Dépannage 24 h/24</div>
+   </div>
+   <div class="grand-titre" id="s9-infos" style="top:470px;font-weight:700;font-size:40px;line-height:1.55">
+     <div style="font-size:74px;font-weight:900">07 59 56 38 39</div>
+     <div>1 bis rue de la Fonderie · Chevigny-Saint-Sauveur</div>
+     <div>Du mardi au samedi, 9 h – 19 h</div>
+   </div>
+   <div style="position:absolute;right:30px;bottom:18px;font:500 20px 'Zen Maru Gothic',sans-serif;color:#FFFFFFAA">Illustrations non contractuelles</div>`,
+  (t) => {
+    const x = lerp(-700, 2100, lisse(entre(t, 0.3, 5.8))), s = 1.4
+    placerVoiture('s9-auto', x, 900 - 74 * s, s, x)
+    animerTrainees('s9-vent', x + 20 * s, 900 - 30 * s, t)
+    ;['s9-n1', 's9-n2'].forEach((n, i) => $(n).setAttribute('transform', `translate(${[360, 1560][i] + t * 10},${[260, 200][i]}) scale(${[1, 1.2][i]})`))
+    const a = sortie(entre(t, 0.4, 1.4)); $('s9-titre').style.opacity = a; $('s9-titre').style.transform = `translateY(${(1 - a) * 24}px)`
+    const b = sortie(entre(t, 1.4, 2.4)); $('s9-infos').style.opacity = b; $('s9-infos').style.transform = `translateY(${(1 - b) * 24}px)`
+  })
+
+/* ═══════════════ Horloge du film ═══════════════ */
+const DUREE = 48, FONDU = 0.7
+window.DUREE = DUREE
+window.rendre = (t) => {
+  SCENES.forEach((s, i) => {
+    const visible = t >= s.debut && t < s.fin + (i < SCENES.length - 1 ? FONDU : 0)
+    if (!visible) { s.el.style.opacity = 0; return }
+    s.el.style.opacity = i === 0 ? 1 : lisse((t - s.debut) / FONDU)
+    s.rendu(t - s.debut)
+  })
+}
+window.rendre(0)
+// Lecture en direct dans le navigateur (aperçu) : ouvrir le fichier avec #lecture
+if (location.hash === '#lecture') { const d = performance.now(); const boucle = () => { window.rendre(((performance.now() - d) / 1000) % DUREE); requestAnimationFrame(boucle) }; boucle() }
+</script>
+</body></html>

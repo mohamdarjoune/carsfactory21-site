@@ -36,6 +36,17 @@ test('photos : version adaptée à l’écran, pas le 4K sur téléphone', async
   expect(src).toMatch(isMobile ? /-(960|1920)\.webp$/ : /\.webp$/)
 })
 
+test('vidéo : image de couverture, chargée seulement au clic, fichier servi', async ({ page, request }) => {
+  await page.goto('/')
+  const video = page.locator('#video video')
+  await expect(video).toBeVisible()
+  await expect(video).toHaveAttribute('preload', 'none')
+  await expect(video).toHaveAttribute('poster', '/videos/presentation-garage.webp')
+  const fichier = await request.get('/videos/presentation-garage.mp4')
+  expect(fichier.status()).toBe(200)
+  expect(fichier.headers()['content-type']).toBe('video/mp4')
+})
+
 test('devis : envoi avec prestation et message de confirmation', async ({ page }) => {
   let corps = ''
   await page.route('**/api/devis.php', async (r) => { corps = r.request().postData() ?? ''; await r.fulfill({ json: { ok: true } }) })

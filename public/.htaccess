@@ -28,7 +28,7 @@ RewriteRule ^ https://www.cars-factory-21.fr%{REQUEST_URI} [L,R=301]
     <If "%{REQUEST_URI} =~ m#^/assets/#">
         Header set Cache-Control "public, max-age=31536000, immutable"
     </If>
-    <If "%{REQUEST_URI} =~ m#^/(photos|fonts)/#">
+    <If "%{REQUEST_URI} =~ m#^/(photos|fonts|videos)/#">
         Header set Cache-Control "public, max-age=2592000"
     </If>
     <FilesMatch "\.html$">
@@ -36,6 +36,7 @@ RewriteRule ^ https://www.cars-factory-21.fr%{REQUEST_URI} [L,R=301]
     </FilesMatch>
 </IfModule>
 AddType image/webp .webp
+AddType video/mp4 .mp4
 
 # Adresses propres : /carrosserie sert carrosserie.html
 RewriteCond %{THE_REQUEST} \s/index\.html[\s?]

@@ -23,6 +23,18 @@ function donneesGarage() {
   return d
 }
 
+/** La vidéo de présentation, décrite pour Google (peut apparaître dans les résultats vidéo). */
+const VIDEO = {
+  '@context': 'https://schema.org', '@type': 'VideoObject',
+  name: 'Cars Factory 21 : le garage en 48 secondes',
+  description: 'Carrosserie, peinture, covering, mécanique, diagnostic, dépannage 24 h/24 et lavage à Chevigny-Saint-Sauveur, près de Dijon, en dessin animé.',
+  thumbnailUrl: `${site.siteUrl}/videos/presentation-garage.webp`,
+  contentUrl: `${site.siteUrl}/videos/presentation-garage.mp4`,
+  uploadDate: '2026-09-30',
+  duration: 'PT48S',
+  publisher: { '@id': `${site.siteUrl}/#garage` },
+}
+
 function CartePrestation({ p, sombre = false }: { p: PagePrestation; sombre?: boolean }) {
   return (
     <a href={p.chemin} className={`group flex flex-col overflow-hidden rounded-lg no-underline transition-transform hover:-translate-y-1 ${sombre ? 'bg-acier text-white' : 'border border-ligne bg-white text-noir'}`}>
@@ -89,6 +101,27 @@ export default function Accueil() {
                 <div><p className="font-titre text-[22px] font-bold uppercase leading-tight">{t}</p><p className="text-[14px] text-white/65">{d}</p></div>
               </div>
             ))}
+          </Container>
+        </section>
+
+        {/* ── Vidéo de présentation (chargée seulement au clic sur Lecture) ── */}
+        <section id="video" aria-labelledby="titre-video" className="scroll-mt-20 bg-noir text-white">
+          <Container className="grid items-center gap-10 py-16 md:py-20 lg:grid-cols-12">
+            <div className="flex flex-col gap-4 lg:col-span-4">
+              <p className="text-[13px] font-semibold uppercase tracking-[0.18em] text-rouge-vif">En vidéo</p>
+              <h2 id="titre-video" className="text-[40px] font-bold uppercase leading-[0.95] md:text-[56px]">Le garage en 48 secondes</h2>
+              <div className="lisere" />
+              <p className="text-[17px] leading-relaxed text-white/75">Carrosserie, peinture, covering, mécanique, diagnostic, dépannage 24 h/24 et lavage : tous les services de Cars Factory 21, en dessin animé.</p>
+            </div>
+            <div className="lg:col-span-8">
+              <video controls preload="none" playsInline poster="/videos/presentation-garage.webp" width={1280} height={720}
+                className="aspect-video w-full rounded-lg border border-white/10 bg-acier shadow-[0_20px_60px_rgba(0,0,0,0.45)]"
+                aria-label="Vidéo de présentation des services de Cars Factory 21, en dessin animé">
+                <source src="/videos/presentation-garage.mp4" type="video/mp4" />
+                Votre navigateur ne lit pas cette vidéo. <a href="/videos/presentation-garage.mp4" className="text-rouge-vif">Télécharger la vidéo</a>.
+              </video>
+              <p className="mt-2 text-right text-[12px] text-white/45">Illustrations non contractuelles</p>
+            </div>
           </Container>
         </section>
 
@@ -228,6 +261,7 @@ export default function Accueil() {
       </main>
       <Footer />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(donneesGarage()) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(VIDEO) }} />
     </>
   )
 }
