@@ -1,3 +1,4 @@
+import { vers } from '../vers'
 import type { ReactNode } from 'react'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
@@ -61,7 +62,7 @@ export function Introuvable() {
   return (
     <PageTexte titre="Page introuvable">
       <p>Cette page n’existe pas ou a changé d’adresse.</p>
-      <p><a href="/" className="font-semibold text-rouge">← Retour à l’accueil</a> · ou appelez le garage au <a href={`tel:${site.telephoneLien}`} className="font-semibold text-noir">{site.telephone}</a>.</p>
+      <p><a href={vers('/')} className="font-semibold text-rouge">← Retour à l’accueil</a> · ou appelez le garage au <a href={`tel:${site.telephoneLien}`} className="font-semibold text-noir">{site.telephone}</a>.</p>
     </PageTexte>
   )
 }

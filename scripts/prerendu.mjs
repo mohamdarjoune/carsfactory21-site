@@ -25,6 +25,8 @@ for (const page of PAGES_PRERENDUES) {
     .replace(/(<meta property="og:title" content=")[^"]*(")/, `$1${titre}$2`)
     .replace(/(<meta property="og:description" content=")[^"]*(")/, `$1${description}$2`)
     .replace('<div id="root"></div>', `<div id="root">${rendre(page.chemin)}</div>`)
+  // Démonstration : jamais indexée par Google
+  if (process.env.VITE_DEMO === '1') html = html.replace('<meta charset="UTF-8" />', '<meta charset="UTF-8" />\n    <meta name="robots" content="noindex, nofollow" />')
   html = page.introuvable
     ? html.replace(/\s*<link rel="canonical"[^>]*>/, '\n    <meta name="robots" content="noindex" />').replace(/\s*<meta property="og:url"[^>]*>/, '')
     : html.replace(/(<link rel="canonical" href=")[^"]*(")/, `$1${url}$2`).replace(/(<meta property="og:url" content=")[^"]*(")/, `$1${url}$2`)
@@ -38,5 +40,9 @@ const urls = PAGES_PRERENDUES.filter((p) => !p.introuvable).map((p) =>
   `  <url>\n    <loc>${SITE}${p.chemin === '/' ? '/' : p.chemin}</loc>\n    <lastmod>${aujourdhui}</lastmod>\n    <priority>${p.priorite}</priority>\n  </url>`)
 await writeFile(path.join(dist, 'sitemap.xml'), `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.join('\n')}\n</urlset>\n`)
 console.log(`✓ sitemap.xml (${urls.length} pages)`)
+if (process.env.VITE_DEMO === '1') {
+  await writeFile(path.join(dist, 'robots.txt'), 'User-agent: *\nDisallow: /\n')
+  console.log('✓ démonstration : pages non indexées par Google')
+}
 
 await rm(path.join(racine, 'dist-serveur'), { recursive: true, force: true })

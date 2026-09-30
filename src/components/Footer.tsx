@@ -1,4 +1,6 @@
+import { vers } from '../vers'
 import { Logo } from './Logo'
+import { Aide, BarreMobile } from './Actions'
 import { Container } from './ui'
 import { site, accueil, atelier, adresseLieu } from '../config'
 import { PRESTATIONS } from '../pages/services'
@@ -15,7 +17,7 @@ export default function Footer() {
           <div key={famille} className="flex flex-col gap-2.5">
             <p className="font-titre text-[20px] font-bold uppercase">{famille}</p>
             {PRESTATIONS.filter((p) => p.famille === famille).map((p) => (
-              <a key={p.chemin} href={p.chemin} className="text-[15px] text-white/70 no-underline hover:text-white">{p.nom}</a>
+              <a key={p.chemin} href={vers(p.chemin)} className="text-[15px] text-white/70 no-underline hover:text-white">{p.nom}</a>
             ))}
           </div>
         ))}
@@ -31,11 +33,13 @@ export default function Footer() {
         <Container className="flex flex-col gap-2 py-5 text-[13px] text-white/50 md:flex-row md:justify-between">
           <span>© {new Date().getFullYear()} {site.nom}</span>
           <span className="flex gap-5">
-            <a href="/mentions-legales" className="text-white/60 no-underline hover:text-white">Mentions légales</a>
-            <a href="/confidentialite" className="text-white/60 no-underline hover:text-white">Confidentialité</a>
+            <a href={vers('/mentions-legales')} className="text-white/60 no-underline hover:text-white">Mentions légales</a>
+            <a href={vers('/confidentialite')} className="text-white/60 no-underline hover:text-white">Confidentialité</a>
           </span>
         </Container>
       </div>
+      <BarreMobile />
+      <Aide />
     </footer>
   )
 }

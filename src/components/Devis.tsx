@@ -1,7 +1,9 @@
+import { vers, DEMO } from '../vers'
 import { useState, type FormEvent } from 'react'
 import { Container, Ico, TitreSection, btnRouge } from './ui'
 import { site, accueil, atelier, adresseLieu } from '../config'
 import { PRESTATIONS } from '../pages/services'
+import { decrireVehicule, useVehicule } from '../vehicule'
 
 type Etat = 'idle' | 'envoi' | 'ok' | 'erreur' | 'limite'
 
@@ -27,6 +29,7 @@ async function reduire(fichier: File): Promise<Blob> {
 }
 
 export default function Devis({ prestationParDefaut = '' }: { prestationParDefaut?: string }) {
+  const vehicule = useVehicule()
   const [etat, setEtat] = useState<Etat>('idle')
   const [photos, setPhotos] = useState<File[]>([])
   const [erreurPhotos, setErreurPhotos] = useState('')
@@ -48,8 +51,11 @@ export default function Devis({ prestationParDefaut = '' }: { prestationParDefau
         const reduite = await reduire(p)
         if (reduite.size <= TAILLE_MAX) donnees.append('photos[]', reduite, `photo-${i + 1}.jpg`)
       }
-      const res = await fetch('/api/devis.php', { method: 'POST', body: donnees })
-      if (!res.ok) throw new Error(res.status === 429 ? 'limite' : '')
+      // Démonstration (hébergement sans PHP) : rien n'est envoyé
+      if (!DEMO) {
+        const res = await fetch(vers('/api/devis.php'), { method: 'POST', body: donnees })
+        if (!res.ok) throw new Error(res.status === 429 ? 'limite' : '')
+      }
       setEtat('ok')
       setPhotos([])
       form.reset()
@@ -65,7 +71,7 @@ export default function Devis({ prestationParDefaut = '' }: { prestationParDefau
           <TitreSection label="Demande de devis" titre="Décrivez-nous le problème" texte="Quelques photos des dégâts et votre modèle de voiture suffisent pour une première estimation. On vous rappelle pour fixer un rendez-vous." />
           <ul className="flex flex-col gap-4 text-[16px]">
             <li className="flex items-start gap-3"><Ico nom="telephone" className="mt-0.5 shrink-0 text-rouge" /><span><strong className="block">Téléphone · dépannage 24 h/24</strong><a href={`tel:${site.telephoneLien}`} className="text-noir">{site.telephone}</a></span></li>
-            <li className="flex items-start gap-3"><Ico nom="lieu" className="mt-0.5 shrink-0 text-rouge" /><span><strong className="block">Accueil et bureau</strong>{adresseLieu(accueil)}<strong className="mt-2 block">Atelier</strong>{adresseLieu(atelier)} <a href="/#acces" className="text-rouge">(plan)</a></span></li>
+            <li className="flex items-start gap-3"><Ico nom="lieu" className="mt-0.5 shrink-0 text-rouge" /><span><strong className="block">Accueil et bureau</strong>{adresseLieu(accueil)}<strong className="mt-2 block">Atelier</strong>{adresseLieu(atelier)} <a href={vers('/#acces')} className="text-rouge">(plan)</a></span></li>
             <li className="flex items-start gap-3"><Ico nom="horloge" className="mt-0.5 shrink-0 text-rouge" />
               <span className="flex flex-col"><strong>Horaires</strong>
                 {site.horaires.map(([j, h]) => <span key={j} className="text-gris">{j} : <span className="text-noir">{h}</span></span>)}
@@ -79,6 +85,7 @@ export default function Devis({ prestationParDefaut = '' }: { prestationParDefau
             <div role="status" className="flex flex-col gap-3 rounded-lg border border-ligne bg-white p-8">
               <p className="font-titre text-[32px] font-bold uppercase">Demande envoyée</p>
               <p className="text-gris">Merci ! Le garage vous recontacte rapidement pour votre devis.</p>
+              {DEMO && <p className="rounded-lg bg-[#FFF4F2] px-3 py-2 text-[14px] text-rouge">Démonstration : cette demande n’a pas été envoyée.</p>}
             </div>
           ) : (
             <form onSubmit={envoyer} className="flex flex-col gap-4 rounded-lg border border-ligne bg-white p-5 md:p-8">
@@ -86,7 +93,8 @@ export default function Devis({ prestationParDefaut = '' }: { prestationParDefau
                 <label className={lbl}>Nom<input name="nom" required autoComplete="name" className={champ} /></label>
                 <label className={lbl}>Téléphone<input name="telephone" type="tel" required autoComplete="tel" inputMode="tel" className={champ} /></label>
                 <label className={lbl}><span>E-mail <span className="font-normal text-gris">(facultatif)</span></span><input name="email" type="email" autoComplete="email" className={champ} /></label>
-                <label className={lbl}>Véhicule<input name="vehicule" required placeholder="Marque, modèle, année" className={champ} /></label>
+                <label className={lbl}>Véhicule<input name="vehicule" required placeholder="Marque, modèle, année" className={champ}
+                  key={vehicule ? decrireVehicule(vehicule) : 'vide'} defaultValue={vehicule ? decrireVehicule(vehicule) : ''} /></label>
               </div>
               <label className={lbl}>Prestation
                 <select name="prestation" defaultValue={prestationParDefaut} className={champ}>
@@ -106,7 +114,7 @@ export default function Devis({ prestationParDefaut = '' }: { prestationParDefau
               {erreurPhotos && <p className="text-[14px] text-[#B42318]">{erreurPhotos}</p>}
               <label className="flex cursor-pointer items-start gap-3 text-[14px] leading-normal text-gris">
                 <input type="checkbox" name="consentement" required className="mt-0.5 h-5 w-5 shrink-0 accent-rouge" />
-                <span>J’accepte que ces informations soient utilisées pour me recontacter au sujet de ma demande (<a href="/confidentialite" className="text-noir">confidentialité</a>).</span>
+                <span>J’accepte que ces informations soient utilisées pour me recontacter au sujet de ma demande (<a href={vers('/confidentialite')} className="text-noir">confidentialité</a>).</span>
               </label>
               {/* Piège à robots : invisible pour un humain */}
               <div aria-hidden="true" className="absolute -left-[9999px] h-px w-px overflow-hidden"><label>Site web<input name="site_web" tabIndex={-1} autoComplete="off" /></label></div>

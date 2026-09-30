@@ -19,7 +19,10 @@ const types = {
 const fichier = (p) => { const f = path.join(dist, p); return f.startsWith(dist) && fs.existsSync(f) && fs.statSync(f).isFile() ? f : null }
 
 http.createServer((req, res) => {
-  const url = decodeURIComponent(req.url.split('?')[0])
+  // BASE_SITE=/carsfactory21-site/ : sert le site comme GitHub Pages, dans un sous-dossier
+  const base = (process.env.BASE_SITE ?? '/').replace(/\/$/, '')
+  let url = decodeURIComponent(req.url.split('?')[0])
+  if (base && url.startsWith(base)) url = url.slice(base.length) || '/'
   if (url.startsWith('/api/')) { res.writeHead(404, { 'Content-Type': 'application/json' }); res.end('{"erreur":"PHP non disponible en local"}'); return }
   let statut = 200
   let f = url === '/' ? fichier('index.html') : fichier(url) || (url.length > 1 && fichier(url + '.html'))

@@ -26,6 +26,11 @@
 
 html { scroll-behavior: smooth; scroll-padding-top: 100px; }
 body { @apply bg-white text-noir font-sans antialiased; }
+/* Téléphone : place pour la barre d'actions fixée en bas de l'écran */
+@media (max-width: 1023px) { body { padding-bottom: calc(60px + env(safe-area-inset-bottom)); } html { scroll-padding-bottom: 76px; } }
+/* En-tête fixe : 68 px sur téléphone, 80 px sur ordinateur */
+html { scroll-padding-top: 84px; }
+@media (min-width: 768px) { html { scroll-padding-top: 96px; } }
 h1, h2, h3 { font-family: var(--font-titre); text-wrap: balance; }
 a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible, summary:focus-visible {
   outline: 2px solid var(--color-rouge-vif);

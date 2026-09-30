@@ -1,0 +1,47 @@
+name: Démonstration en ligne (GitHub Pages)
+
+# À chaque envoi sur main : tests, construction de la version de démonstration, mise en ligne sur GitHub Pages.
+# Version de démonstration : formulaires sans envoi, agenda de démonstration, pages non indexées par Google.
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  construire:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm ci
+      - name: Tests automatiques
+        run: npm test
+      - name: Construction (démonstration, sous-dossier du dépôt)
+        run: npm run build
+        env:
+          BASE_SITE: /${{ github.event.repository.name }}/
+          VITE_DEMO: '1'
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  publier:
+    needs: construire
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploiement.outputs.page_url }}
+    steps:
+      - id: deploiement
+        uses: actions/deploy-pages@v4

@@ -5,11 +5,12 @@ import '@fontsource/barlow-condensed/latin-600.css'
 import '@fontsource/barlow-condensed/latin-700.css'
 import './index.css'
 import { Pages } from './routes'
+import { BASE } from './vers'
 
 const racine = document.getElementById('root')!
 const site = (
   <StrictMode>
-    <BrowserRouter>
+    <BrowserRouter basename={BASE}>
       <Pages />
     </BrowserRouter>
   </StrictMode>

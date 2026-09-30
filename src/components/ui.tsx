@@ -1,3 +1,4 @@
+import { vers, BASE } from '../vers'
 import type { ReactNode } from 'react'
 import type { Icone } from '../pages/services'
 
@@ -22,7 +23,7 @@ export function TitreSection({ label, titre, texte, clair = false }: { label: st
 }
 
 /* Icônes au trait (aucune image extérieure) */
-const TRACES: Record<Icone | 'telephone' | 'horloge' | 'lieu' | 'photo' | 'coche' | 'fleche', string> = {
+const TRACES: Record<Icone | 'telephone' | 'horloge' | 'lieu' | 'photo' | 'coche' | 'fleche' | 'loupe' | 'bulle' | 'fermer' | 'sms' | 'gauche' | 'droite' | 'pause' | 'lecture' | 'devis' | 'goutte' | 'etiquette' | 'calendrier', string> = {
   carrosserie: 'M3 15l2-5 3-3h8l3 3 2 5v3H3zM3 15h18M7 18v2M17 18v2M7.5 15a1 1 0 1 0 0-2 1 1 0 0 0 0 2M16.5 15a1 1 0 1 0 0-2 1 1 0 0 0 0 2',
   peinture: 'M4 4h11v5H4zM15 6h3v5h-7v3M10 14h2v7h-2z',
   sinistre: 'M12 3l9 16H3zM12 10v4M12 17v.5',
@@ -36,6 +37,18 @@ const TRACES: Record<Icone | 'telephone' | 'horloge' | 'lieu' | 'photo' | 'coche
   lieu: 'M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11zM12 12.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5',
   photo: 'M4 7h3l2-3h6l2 3h3v12H4zM12 17a4 4 0 1 0 0-8 4 4 0 0 0 0 8',
   coche: 'M5 12l4 4 10-10',
+  loupe: 'M11 18a7 7 0 1 0 0-14 7 7 0 0 0 0 14zM20 20l-4.2-4.2',
+  bulle: 'M4 5h16v11H9l-5 4z',
+  fermer: 'M6 6l12 12M18 6L6 18',
+  sms: 'M4 5h16v11H9l-5 4zM8 10h.01M12 10h.01M16 10h.01',
+  gauche: 'M15 5l-7 7 7 7',
+  droite: 'M9 5l7 7-7 7',
+  pause: 'M8 5v14M16 5v14',
+  lecture: 'M7 5l12 7-12 7z',
+  devis: 'M7 3h7l5 5v13H7zM14 3v5h5M10 13h6M10 17h4',
+  goutte: 'M12 3c3 4 6 7 6 11a6 6 0 0 1-12 0c0-4 3-7 6-11z',
+  etiquette: 'M3 12V4h8l10 10-8 8zM7.5 8.5h.01',
+  calendrier: 'M4 6h16v14H4zM4 10h16M8 3v5M16 3v5',
   fleche: 'M5 12h14M13 6l6 6-6 6',
 }
 
@@ -57,10 +70,10 @@ export function Photo({ nom, alt, sizes = '100vw', className = '', prioritaire =
   { nom: NomPhoto; alt: string; sizes?: string; className?: string; prioritaire?: boolean; mention?: boolean }) {
   return (
     <div className={`${/\babsolute\b/.test(className) ? '' : 'relative'} overflow-hidden ${className}`}>
-      <img src={`/photos/${nom}-1920.webp`} srcSet={`/photos/${nom}-960.webp 960w, /photos/${nom}-1920.webp 1920w, /photos/${nom}-3840.webp 3840w`}
+      <img src={vers(`/photos/${nom}-1920.webp`)} srcSet={`${BASE}photos/${nom}-960.webp 960w, ${BASE}photos/${nom}-1920.webp 1920w, ${BASE}photos/${nom}-3840.webp 3840w`}
         sizes={sizes} alt={alt} loading={prioritaire ? 'eager' : 'lazy'} decoding="async" {...(prioritaire ? { fetchPriority: 'high' } : {})}
         className="h-full w-full object-cover" />
-      {mention && <span className="absolute bottom-2 right-2 rounded bg-black/55 px-2 py-0.5 text-[11px] text-white/85">Photo non contractuelle</span>}
+      {mention && <span className="absolute bottom-2 right-2 hidden rounded bg-black/55 px-2 py-0.5 text-[11px] text-white/85 sm:block">Photo non contractuelle</span>}
     </div>
   )
 }

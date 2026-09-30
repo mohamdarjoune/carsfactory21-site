@@ -74,10 +74,55 @@ test('devis : envoi avec prestation et message de confirmation', async ({ page }
   expect(corps).toContain('Carrosserie')
 })
 
-test('menu mobile : ouvre et mène aux prestations', async ({ page, isMobile }) => {
-  test.skip(!isMobile, 'menu du téléphone')
+test('barre des prestations : mène à la bonne page', async ({ page }) => {
   await page.goto('/')
-  await page.getByRole('button', { name: 'Ouvrir le menu' }).click()
-  await page.locator('#menu-mobile').getByRole('link', { name: 'Covering' }).click()
+  await page.getByRole('navigation', { name: 'Prestations' }).getByRole('link', { name: 'Covering' }).click()
   await expect(page).toHaveURL(/\/covering$/)
+  await expect(page.getByRole('navigation', { name: 'Prestations' }).getByRole('link', { name: 'Covering' })).toHaveAttribute('aria-current', 'page')
+})
+
+test('téléphone : barre d’actions en bas de l’écran (appeler, rendez-vous, itinéraire, devis)', async ({ page, isMobile }) => {
+  await page.goto('/carrosserie')
+  const barre = page.getByRole('navigation', { name: 'Actions rapides' })
+  if (!isMobile) { await expect(barre).toBeHidden(); return }
+  await expect(barre).toBeVisible()
+  await expect(barre.getByRole('link', { name: 'Appeler' })).toHaveAttribute('href', 'tel:+33759563839')
+  await expect(barre.getByRole('link', { name: 'Itinéraire' })).toHaveAttribute('href', /google\.com\/maps\/dir.*47\.339/)
+  // la barre ne cache pas le bas de page
+  await page.evaluate(() => scrollTo(0, document.body.scrollHeight))
+  await expect(page.locator('footer').getByRole('link', { name: 'Confidentialité' })).toBeInViewport()
+})
+
+test('recherche : « voyant » propose le diagnostic', async ({ page, isMobile }) => {
+  await page.goto('/')
+  const champ = page.getByRole('combobox', { name: 'Que recherchez-vous ?' }).filter({ visible: true })
+  await champ.fill('voyant allumé')
+  await expect(page.getByRole('option', { name: /Diagnostic électronique/ }).first()).toBeVisible()
+  await champ.press('Enter')
+  await expect(page).toHaveURL(/\/diagnostic-automobile$/)
+  void isMobile
+})
+
+test('mon véhicule : enregistré puis repris dans le devis', async ({ page }) => {
+  await page.goto('/')
+  await page.getByRole('button', { name: 'Indiquer mon véhicule' }).click()
+  const fenetre = page.getByRole('dialog', { name: 'Mon véhicule' })
+  await fenetre.getByLabel('Marque et modèle').fill('Peugeot 208')
+  await fenetre.getByLabel('Année').fill('2018')
+  await fenetre.getByRole('button', { name: 'Enregistrer mon véhicule' }).click()
+  await expect(page.getByText('Votre véhicule : Peugeot 208 (2018)')).toBeVisible()
+  await expect(page.locator('#devis form').getByLabel('Véhicule')).toHaveValue('Peugeot 208 (2018)')
+})
+
+test('rendez-vous : jour, heure puis confirmation (démonstration)', async ({ page }) => {
+  await page.goto('/#rdv')
+  const rdv = page.locator('#rdv')
+  await rdv.getByRole('button', { name: /, disponible$/ }).first().click()
+  await rdv.getByRole('button', { name: /^\d{2} h \d{2}$/ }).first().click()
+  await rdv.getByLabel('Nom').fill('Test')
+  await rdv.getByLabel('Téléphone').fill('0600000000')
+  await rdv.getByLabel('Véhicule').fill('Clio 4')
+  await rdv.getByRole('button', { name: 'Confirmer le rendez-vous' }).click()
+  await expect(rdv.getByText('Rendez-vous demandé')).toBeVisible()
+  await expect(rdv.getByText('ce rendez-vous n’est pas enregistré')).toBeVisible()
 })

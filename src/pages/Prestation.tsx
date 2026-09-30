@@ -1,3 +1,4 @@
+import { vers } from '../vers'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import Devis from '../components/Devis'
@@ -31,7 +32,7 @@ export default function Prestation({ chemin }: { chemin: string }) {
           <Photo nom={p.icone as NomPhoto} alt={p.nom} prioritaire mention={false} className="absolute inset-0 -z-10 h-full w-full" />
           <div aria-hidden="true" className="absolute inset-0 -z-10 bg-gradient-to-r from-noir via-noir/85 to-noir/35" />
           <Container className="flex min-h-[520px] flex-col justify-center gap-6 py-16">
-            <nav aria-label="Fil d’Ariane" className="text-[14px] text-white/60"><a href="/" className="text-white/60 no-underline hover:text-white">Accueil</a> <span aria-hidden="true">/</span> {p.famille} <span aria-hidden="true">/</span> <span className="text-white">{p.nom}</span></nav>
+            <nav aria-label="Fil d’Ariane" className="text-[14px] text-white/60"><a href={vers('/')} className="text-white/60 no-underline hover:text-white">Accueil</a> <span aria-hidden="true">/</span> {p.famille} <span aria-hidden="true">/</span> <span className="text-white">{p.nom}</span></nav>
             <h1 className="max-w-[760px] text-[52px] font-bold uppercase leading-[0.92] md:text-[80px]">{p.h1}</h1>
             <p className="max-w-[600px] text-[18px] leading-relaxed text-white/80">{p.accroche}</p>
             <div className="flex flex-col gap-3 sm:flex-row">
@@ -84,7 +85,7 @@ export default function Prestation({ chemin }: { chemin: string }) {
           <Container className="flex flex-col gap-4 py-12 md:flex-row md:items-center">
             <p className="font-titre text-[24px] font-bold uppercase">Voir aussi</p>
             <div className="flex flex-wrap gap-3">
-              {p.liees.map((c) => { const l = prestation(c)!; return <a key={c} href={c} className="flex items-center gap-2 rounded-md border border-ligne px-4 py-3 font-semibold text-noir no-underline hover:border-rouge"><Ico nom={l.icone} className="text-rouge" />{l.nom}</a> })}
+              {p.liees.map((c) => { const l = prestation(c)!; return <a key={c} href={vers(c)} className="flex items-center gap-2 rounded-md border border-ligne px-4 py-3 font-semibold text-noir no-underline hover:border-rouge"><Ico nom={l.icone} className="text-rouge" />{l.nom}</a> })}
             </div>
           </Container>
         </section>

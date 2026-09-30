@@ -26,6 +26,8 @@ export const site = {
       texte: 'Carrosserie, peinture et mécanique sont réalisées ici. Le garage s’occupe du transfert de votre voiture entre l’accueil et l’atelier.',
       lat: 47.2937067, lon: 5.1494143 },
   ],
+  // Agenda Cal.com du garage (ex. 'cars-factory-21/rendez-vous') : vide = agenda de démonstration
+  calLink: '',
   lienAvisGoogle: '',              // lien vers les avis Google du garage (à récupérer sur la fiche)
   horaires: [
     ['Lundi', 'Fermé'],
