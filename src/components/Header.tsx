@@ -18,12 +18,12 @@ export default function Header() {
       <Container className="flex h-[72px] items-center justify-between gap-4">
         <a href="/" className="no-underline" aria-label="Cars Factory 21, accueil"><Logo /></a>
 
-        <nav aria-label="Navigation principale" className="hidden items-center gap-7 text-[15px] font-medium lg:flex">
-          {LIENS.map(([l, h]) => <a key={h} href={h} className="text-white/80 no-underline hover:text-white">{l}</a>)}
+        <nav aria-label="Navigation principale" className="hidden items-center gap-5 text-[15px] font-medium lg:flex xl:gap-7">
+          {LIENS.map(([l, h]) => <a key={h} href={h} className="whitespace-nowrap text-white/80 no-underline hover:text-white">{l}</a>)}
         </nav>
 
         <div className="flex items-center gap-2">
-          <a href={appeler} className="hidden items-center gap-2 rounded-md px-3 py-2 text-[15px] font-semibold text-white no-underline hover:bg-white/10 md:flex">
+          <a href={appeler} className="hidden items-center gap-2 whitespace-nowrap rounded-md px-3 py-2 text-[15px] font-semibold text-white no-underline hover:bg-white/10 md:flex">
             <Ico nom="telephone" taille={18} />{site.telephone}
           </a>
           <a href="/#devis" className={`${btnRouge} !min-h-11 !px-4 !py-2`}>Devis</a>

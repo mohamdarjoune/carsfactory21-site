@@ -4,3 +4,4 @@ dist-serveur
 *.tsbuildinfo
 test-results
 playwright-report
+venv
