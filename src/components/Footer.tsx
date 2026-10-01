@@ -30,8 +30,13 @@ export default function Footer() {
         </div>
       </Container>
       <div className="border-t border-white/10">
-        <Container className="flex flex-col gap-2 py-5 text-[13px] text-white/50 md:flex-row md:justify-between">
+        <Container className="flex flex-col gap-2 py-5 text-[13px] text-white/50 md:flex-row md:items-center md:justify-between md:pb-24">
           <span>© {new Date().getFullYear()} {site.nom}</span>
+          <span>
+            Conception, design et réalisation :{' '}
+            <a href="https://ete-85.fr" target="_blank" rel="noopener" className="inline-block py-2.5 font-semibold text-white/80 no-underline hover:text-white">ÉTÉ 85</a>
+            <span className="text-white/45"> · Digital, Data &amp; IA</span>
+          </span>
           <span className="flex gap-5">
             <a href={vers('/mentions-legales')} className="py-2.5 text-white/70 no-underline hover:text-white">Mentions légales</a>
             <a href={vers('/confidentialite')} className="py-2.5 text-white/70 no-underline hover:text-white">Confidentialité</a>
