@@ -33,12 +33,12 @@ function donneesGarage() {
 /** La vidéo de présentation, décrite pour Google (peut apparaître dans les résultats vidéo). */
 const VIDEO = {
   '@context': 'https://schema.org', '@type': 'VideoObject',
-  name: 'Cars Factory 21 : le garage en 48 secondes',
-  description: 'Carrosserie, peinture, covering, mécanique, diagnostic, dépannage 24 h/24 et lavage à Chevigny-Saint-Sauveur, près de Dijon, en dessin animé.',
+  name: 'Cars Factory 21 : le garage en moins d’une minute',
+  description: 'Carrosserie, peinture, covering, mécanique, diagnostic, lavage, et deux façons de nous confier votre voiture : dépannage 24 h/24 jusqu’à l’atelier de Chevigny-Saint-Sauveur, ou dépôt à l’accueil de Saint-Apollinaire. En dessin animé.',
   thumbnailUrl: `${site.siteUrl}/videos/presentation-garage.webp`,
   contentUrl: `${site.siteUrl}/videos/presentation-garage.mp4`,
   uploadDate: '2026-09-30',
-  duration: 'PT48S',
+  duration: 'PT56S',
   publisher: { '@id': `${site.siteUrl}/#garage` },
 }
 
@@ -164,7 +164,7 @@ export default function Accueil() {
           <Container className="grid items-center gap-6 py-12 md:gap-10 md:py-20 lg:grid-cols-12">
             <div className="flex flex-col gap-3 lg:col-span-4">
               <p className="text-[13px] font-semibold uppercase tracking-[0.18em] text-rouge-vif">En vidéo</p>
-              <h2 id="titre-video" className="text-[34px] font-bold uppercase leading-[0.95] md:text-[56px]">Le garage en 48 secondes</h2>
+              <h2 id="titre-video" className="text-[34px] font-bold uppercase leading-[0.95] md:text-[56px]">Le garage en moins d’une minute</h2>
               <p className="text-[16px] leading-relaxed text-white/75">Tous les services de Cars Factory 21, en dessin animé.</p>
             </div>
             <div className="lg:col-span-8">
