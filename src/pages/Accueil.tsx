@@ -91,22 +91,24 @@ export default function Accueil() {
         <section className="relative isolate overflow-hidden bg-noir text-white">
           <Photo nom="atelier" alt="Atelier de réparation automobile" prioritaire mention={false} className="absolute inset-0 -z-10 h-full w-full" />
           <div aria-hidden="true" className="absolute inset-0 -z-10 bg-gradient-to-r from-noir via-noir/85 to-noir/35" />
-          <Container className="grid items-center gap-5 pb-24 pt-6 md:gap-8 md:pb-32 md:pt-14 lg:grid-cols-12">
-            <div className="flex flex-col gap-4 md:gap-6 lg:col-span-5">
-              <StatutOuverture clair />
-              <h1 className="max-w-[820px] text-[46px] font-bold uppercase leading-[0.9] md:text-[80px]">
+          {/* Téléphone et tablette : statut, titre, vidéo, puis texte (le bloc de texte « s'efface » pour que la vidéo s'intercale) ;
+              ordinateur : texte à gauche, vidéo à droite */}
+          <Container className="grid items-center gap-4 pb-24 pt-5 md:gap-6 md:pb-32 md:pt-14 lg:grid-cols-12 lg:gap-8">
+            <div className="contents lg:col-span-5 lg:flex lg:flex-col lg:gap-6">
+              <div className="order-1"><StatutOuverture clair /></div>
+              <h1 className="order-2 max-w-[820px] text-[42px] font-bold uppercase leading-[0.9] md:text-[80px]">
                 Carrosserie <span className="text-rouge-vif">&amp;</span> mécanique
               </h1>
-              <p className="max-w-[580px] text-[16px] leading-relaxed text-white/80 md:text-[19px]">
+              <p className="order-4 max-w-[580px] text-[16px] leading-relaxed text-white/80 md:text-[19px]">
                 Près de Dijon : accueil à Saint-Apollinaire, atelier à Chevigny-Saint-Sauveur. Devis sur photos, dépannage 24 h/24.
               </p>
-              <div className="hidden gap-3 sm:flex">
+              <div className="order-5 hidden gap-3 sm:flex">
                 <a href="#devis" className={btnRouge}>Demander un devis</a>
                 <a href={appeler} className={btnClair}><Ico nom="telephone" taille={18} />{site.telephone}</a>
               </div>
             </div>
             {/* ── Vidéo de présentation, dès le premier écran (chargée seulement au clic sur Lecture) ── */}
-            <figure id="video" aria-labelledby="titre-video" className="m-0 scroll-mt-32 lg:col-span-7">
+            <figure id="video" aria-labelledby="titre-video" className="order-3 m-0 scroll-mt-32 lg:order-none lg:col-span-7">
               <video controls preload="none" playsInline poster={vers('/videos/presentation-garage.webp')} width={1280} height={720}
                 className="aspect-video w-full rounded-lg border border-white/15 bg-acier shadow-[0_20px_60px_rgba(0,0,0,0.5)]"
                 aria-label="Vidéo de présentation des services de Cars Factory 21, en dessin animé">
