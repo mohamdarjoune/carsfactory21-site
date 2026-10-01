@@ -92,5 +92,5 @@ export function LogoDessin({ clair = true, className = '' }: { clair?: boolean; 
 
 /** Logo complet de l'en-tête et du pied de page (le nom est dans le dessin, sous la voiture). */
 export function Logo({ clair = true, grand = false }: { clair?: boolean; grand?: boolean }) {
-  return <LogoDessin clair={clair} className={grand ? 'h-24 w-auto' : 'h-[60px] w-auto md:h-[68px]'} />
+  return <LogoDessin clair={clair} className={grand ? 'h-auto w-full max-w-[364px]' : 'h-[60px] w-auto md:h-[68px]'} />
 }

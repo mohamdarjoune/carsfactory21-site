@@ -47,7 +47,7 @@ export default function Header() {
             <a href={`tel:${site.telephoneLien}`} className="hidden h-11 items-center gap-2 whitespace-nowrap rounded-md px-3 text-[15px] font-semibold text-white no-underline hover:bg-white/10 lg:flex">
               <Ico nom="telephone" taille={20} />{site.telephone}
             </a>
-            <a href={vers('/#devis')} className={`${btnRouge} !min-h-11 !px-4 !py-2 hidden lg:inline-flex`}>Devis</a>
+            <a href={vers('/#devis')} className={`${btnRouge} !min-h-11 !px-4 !py-2 max-sm:!hidden`}>Devis</a>
           </nav>
         </Container>
       </header>

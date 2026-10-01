@@ -4,7 +4,7 @@ const PAGES = ['/', '/carrosserie', '/peinture-automobile', '/reparation-apres-s
   '/entretien-vidange', '/diagnostic-automobile', '/depannage-auto', '/mentions-legales', '/confidentialite']
 
 for (const chemin of PAGES) {
-  test(`page ${chemin} : s’affiche sans erreur`, async ({ page }) => {
+  test(`page ${chemin} : s’affiche sans erreur`, async ({ page, isMobile }) => {
     const erreurs: string[] = []
     page.on('pageerror', (e) => erreurs.push(e.message))
     page.on('console', (m) => { if (m.type() === 'error') erreurs.push(m.text()) })
@@ -13,6 +13,12 @@ for (const chemin of PAGES) {
     await expect(page.locator('h1')).toBeVisible()
     await page.waitForLoadState('networkidle')
     expect(erreurs).toEqual([])
+    // rien ne dépasse à droite de l'écran, même sur un petit téléphone (360 px)
+    for (const l of isMobile ? [360, 412] : [1280]) {
+      await page.setViewportSize({ width: l, height: 800 })
+      const contenu = await page.evaluate(() => document.documentElement.scrollWidth)
+      expect(contenu, `largeur ${l} px`).toBeLessThanOrEqual(l)
+    }
   })
 }
 
