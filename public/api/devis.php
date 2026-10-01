@@ -15,6 +15,7 @@ const DESTINATAIRE     = '[E-mail du garage]';
 const EXPEDITEUR       = '[Adresse d’envoi du site, ex. site@cars-factory-21.fr]';
 const SITES_AUTORISES  = ['https://www.cars-factory-21.fr', 'https://cars-factory-21.fr', 'http://localhost:5173'];
 const MAX_PAR_JOUR     = 40;                // protection contre les envois massifs
+const MAX_PAR_ADRESSE  = 5;                 // par adresse IP et par jour : un robot seul ne bloque pas le formulaire pour tout le monde
 const PHOTOS_MAX       = 3;
 const TAILLE_PHOTO_MAX = 4 * 1024 * 1024;   // 4 Mo (les photos sont réduites dans le navigateur avant l'envoi)
 
@@ -69,30 +70,41 @@ if (($_POST['consentement'] ?? '') === '') {
     repondre(400, ['erreur' => 'Le consentement est obligatoire']);
 }
 
-/* ───────── 2. Limite quotidienne (hors du dossier public) ───────── */
+/* ───────── 2. Limites quotidiennes (hors du dossier public) ───────── */
 $dossier = dirname(__DIR__, 2) . '/cf21-data';
 if (!is_dir($dossier)) {
     @mkdir($dossier, 0700, true);
 }
-$compteur = $dossier . '/devis-' . date('Y-m-d') . '.txt';
-$f = @fopen($compteur, 'c+');
-if ($f !== false) {
+
+/** Ajoute 1 au compteur du fichier ; répond 429 si la limite est déjà atteinte. */
+function compter(string $fichier, int $limite): void
+{
+    $f = @fopen($fichier, 'c+');
+    if ($f === false) {
+        return;
+    }
     flock($f, LOCK_EX);
     $n = (int) stream_get_contents($f);
-    if ($n >= MAX_PAR_JOUR) {
+    if ($n >= $limite) {
         flock($f, LOCK_UN);
         fclose($f);
-        repondre(429, ['erreur' => 'Trop de demandes aujourd’hui']);
+        repondre(429, ['erreur' => 'Trop de demandes aujourd’hui, appelez le garage']);
     }
     ftruncate($f, 0);
     rewind($f);
     fwrite($f, (string) ($n + 1));
     flock($f, LOCK_UN);
     fclose($f);
-    foreach (glob($dossier . '/devis-*.txt') ?: [] as $ancien) {
-        if ($ancien !== $compteur) {
-            @unlink($ancien);
-        }
+}
+
+$jour = date('Y-m-d');
+// L'adresse IP n'est jamais écrite en clair : seulement une empreinte, qui change chaque jour, effacée le lendemain
+$empreinte = substr(hash('sha256', $jour . '|' . ($_SERVER['REMOTE_ADDR'] ?? '') . '|' . __FILE__), 0, 16);
+compter("$dossier/ip-$jour-$empreinte.txt", MAX_PAR_ADRESSE);
+compter("$dossier/devis-$jour.txt", MAX_PAR_JOUR);
+foreach (glob($dossier . '/*.txt') ?: [] as $ancien) {
+    if (!str_contains(basename($ancien), $jour)) {
+        @unlink($ancien);
     }
 }
 

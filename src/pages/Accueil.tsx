@@ -1,4 +1,5 @@
-import { vers } from '../vers'
+import { vers, DEMO } from '../vers'
+import { aCompleter, montrer, Texte } from '../aCompleter'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import Devis from '../components/Devis'
@@ -10,7 +11,11 @@ import { Container, Ico, Photo, TitreSection, btnClair, btnRouge, type NomPhoto 
 import { site, accueil, atelier } from '../config'
 import { PRESTATIONS, type PagePrestation } from './services'
 
-const rempli = (v: string) => v !== '' && !v.startsWith('[')
+const rempli = (v: string) => v !== '' && !aCompleter(v)
+
+/** Présentation du garage et vrais avis Google : à fournir par le garage (rien n'est montré sur le vrai site tant que c'est vide). */
+const PRESENTATION = '[Présentation du garage : son histoire, l’équipe, les équipements de l’atelier, ce qui le distingue. Quelques phrases fournies par le client.]'
+const AVIS: { note: string; texte: string; auteur: string }[] = DEMO ? [1, 2, 3].map(() => ({ note: '[Note ★]', texte: '[Avis réel d’un client]', auteur: '[Prénom], [prestation]' })) : []
 
 /** Données structurées pour Google : un garage (AutoRepair), seulement avec les informations déjà remplies. */
 function donneesGarage() {
@@ -209,45 +214,49 @@ export default function Accueil() {
         </section>
 
         {/* ── Le garage ── */}
-        <section id="garage" className="scroll-mt-32">
-          <Container className="grid items-center gap-6 py-10 md:gap-10 md:py-16 lg:grid-cols-2">
-            <Photo nom="garage" alt="Véhicules en réparation dans un atelier" sizes="(min-width: 1024px) 560px, 100vw" className="hidden aspect-[4/3] rounded-lg lg:block" />
-            <div className="flex flex-col gap-5">
-              <TitreSection label="Le garage" titre={site.nom} texte="[Présentation du garage : son histoire, l’équipe, les équipements de l’atelier, ce qui le distingue. Quelques phrases fournies par le client.]" />
-              <a href="#acces" className="self-start font-semibold text-rouge">Voir nos deux adresses →</a>
-            </div>
-          </Container>
-        </section>
+        {montrer(PRESENTATION) && (
+          <section id="garage" className="scroll-mt-32">
+            <Container className="grid items-center gap-6 py-10 md:gap-10 md:py-16 lg:grid-cols-2">
+              <Photo nom="garage" alt="Véhicules en réparation dans un atelier" sizes="(min-width: 1024px) 560px, 100vw" className="hidden aspect-[4/3] rounded-lg lg:block" />
+              <div className="flex flex-col gap-5">
+                <TitreSection label="Le garage" titre={site.nom} texte={<Texte t={PRESENTATION} />} />
+                <a href="#acces" className="self-start font-semibold text-rouge">Voir nos deux adresses →</a>
+              </div>
+            </Container>
+          </section>
+        )}
 
-        {/* ── Avis ── */}
-        <section id="avis" className="scroll-mt-32 bg-fond">
-          <Container className="flex flex-col gap-6 py-10 md:py-16">
-            <h2 className="text-[30px] font-bold uppercase leading-none md:text-[44px]">Avis clients</h2>
-            <p className="text-[15px] text-gris">De vrais avis, repris de la fiche Google du garage avec l’accord des clients.</p>
-            <div className="-mx-4 flex snap-x gap-3 overflow-x-auto px-4 pb-2 md:mx-0 md:grid md:grid-cols-3 md:overflow-visible md:px-0">
-              {[1, 2, 3].map((n) => (
-                <figure key={n} className="m-0 flex w-[82%] shrink-0 snap-start flex-col gap-3 rounded-xl border border-ligne bg-white p-5 md:w-auto">
-                  <p className="text-[18px] text-rouge">[Note ★]</p>
-                  <blockquote className="m-0 text-[16px] leading-relaxed">« [Avis réel d’un client] »</blockquote>
-                  <figcaption className="text-[14px] text-gris">[Prénom], [prestation]</figcaption>
-                </figure>
-              ))}
-            </div>
-            {site.lienAvisGoogle && <a href={site.lienAvisGoogle} target="_blank" rel="noopener noreferrer" className="self-start font-semibold text-rouge">Voir tous les avis sur Google →</a>}
-          </Container>
-        </section>
+        {/* ── Avis : seulement de vrais avis ── */}
+        {AVIS.length > 0 && (
+          <section id="avis" className="scroll-mt-32 bg-fond">
+            <Container className="flex flex-col gap-6 py-10 md:py-16">
+              <h2 className="text-[30px] font-bold uppercase leading-none md:text-[44px]">Avis clients</h2>
+              <p className="text-[15px] text-gris">De vrais avis, repris de la fiche Google du garage avec l’accord des clients.</p>
+              <div className="-mx-4 flex snap-x gap-3 overflow-x-auto px-4 pb-2 md:mx-0 md:grid md:grid-cols-3 md:overflow-visible md:px-0">
+                {AVIS.map((a, n) => (
+                  <figure key={n} className="m-0 flex w-[82%] shrink-0 snap-start flex-col gap-3 rounded-xl border border-ligne bg-white p-5 md:w-auto">
+                    <p className="text-[18px] text-rouge"><Texte t={a.note} /></p>
+                    <blockquote className="m-0 text-[16px] leading-relaxed">« <Texte t={a.texte} /> »</blockquote>
+                    <figcaption className="text-[14px] text-gris"><Texte t={a.auteur} /></figcaption>
+                  </figure>
+                ))}
+              </div>
+              {site.lienAvisGoogle && <a href={site.lienAvisGoogle} target="_blank" rel="noopener noreferrer" className="self-start font-semibold text-rouge">Voir tous les avis sur Google →</a>}
+            </Container>
+          </section>
+        )}
 
         {/* ── Questions fréquentes ── */}
         <section>
           <Container className="grid gap-6 py-10 md:gap-10 md:py-16 lg:grid-cols-12">
             <h2 className="text-[30px] font-bold uppercase leading-none md:text-[44px] lg:col-span-4">Questions fréquentes</h2>
             <div className="flex flex-col divide-y divide-ligne border-y border-ligne lg:col-span-8">
-              {FAQ.map(([q, r]) => (
+              {FAQ.filter(([, r]) => montrer(r)).map(([q, r]) => (
                 <details key={q} className="group">
                   <summary className="flex min-h-14 cursor-pointer list-none items-center justify-between gap-4 py-3 text-[17px] font-semibold">
                     {q}<span className="text-[26px] text-rouge transition-transform group-open:rotate-45" aria-hidden="true">+</span>
                   </summary>
-                  <p className="pb-4 text-[16px] leading-relaxed text-gris">{r}</p>
+                  <p className="pb-4 text-[16px] leading-relaxed text-gris"><Texte t={r} /></p>
                 </details>
               ))}
             </div>

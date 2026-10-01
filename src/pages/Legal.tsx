@@ -49,6 +49,8 @@ export function Confidentialite() {
       <p>Ce site ne dépose aucun cookie publicitaire ni de mesure d’audience. Aucune donnée n’est vendue ni transmise à des tiers à des fins commerciales.</p>
       <h2>Plans d’accès</h2>
       <p>Les plans de la page d’accueil sont affichés depuis OpenStreetMap (openstreetmap.org), seulement quand ils apparaissent à l’écran. OpenStreetMap reçoit alors votre adresse IP, comme pour toute image chargée depuis son site ; il ne dépose pas de cookie publicitaire.</p>
+      <h2>« Mon véhicule »</h2>
+      <p>Si vous enregistrez votre véhicule (modèle, année, immatriculation) avec le bouton « Mon véhicule », ces informations restent uniquement dans le navigateur de votre téléphone ou ordinateur, pour préremplir le devis. Elles ne sont pas envoyées au garage tant que vous n’envoyez pas de demande. Le bouton « Oublier ce véhicule » les efface.</p>
       <h2>Formulaire de devis</h2>
       <p>Les informations envoyées par le formulaire (nom, téléphone, e-mail, véhicule, message, photos) servent uniquement à répondre à votre demande de devis. Elles sont transmises par e-mail au garage et ne sont pas conservées sur le site.</p>
       <p>Responsable du traitement : {site.mentions.raisonSociale}, {adresseComplete}.</p>

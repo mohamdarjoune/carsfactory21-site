@@ -22,6 +22,23 @@ for (const chemin of PAGES) {
   })
 }
 
+test('aucun texte « [à compléter] » montré aux visiteurs du vrai site', async ({ page }) => {
+  for (const chemin of PAGES.filter((c) => !['/mentions-legales', '/confidentialite'].includes(c))) {
+    await page.goto(chemin)
+    await page.locator('details').evaluateAll((d) => d.forEach((x) => ((x as HTMLDetailsElement).open = true)))
+    expect(await page.locator('main').innerText(), chemin).not.toMatch(/\[[^\]]{3,}\]/)
+  }
+})
+
+test('plans : le doigt fait défiler la page, le plan s’active au toucher', async ({ page }) => {
+  await page.goto('/#acces')
+  const bouton = page.getByRole('button', { name: /Utiliser le plan : Accueil/ })
+  await expect(bouton).toBeVisible()
+  await bouton.click()
+  await expect(bouton).toBeHidden()
+  await expect(page.locator('#acces iframe').first()).toHaveAttribute('tabindex', '0')
+})
+
 test('adresse inconnue : vraie page 404', async ({ page }) => {
   const reponse = await page.goto('/cette-page-nexiste-pas')
   expect(reponse?.status()).toBe(404)

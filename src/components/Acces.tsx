@@ -1,12 +1,29 @@
+import { useState } from 'react'
 import { Container, Ico, TitreSection, btnRouge } from './ui'
 import { site, adresseLieu, planOsm, itineraire, voirOsm, type Lieu } from '../config'
+
+/** Plan OpenStreetMap, chargé seulement quand il approche de l'écran.
+ *  Un voile le couvre jusqu'au premier toucher : sur téléphone, le doigt fait défiler la page au lieu d'être « pris » par le plan. */
+function Plan({ l }: { l: Lieu }) {
+  const [actif, setActif] = useState(false)
+  return (
+    <div className="relative">
+      <iframe src={planOsm(l)} title={`Plan : ${l.titre}, ${adresseLieu(l)}`} loading="lazy"
+        className="block aspect-[16/10] w-full border-0 bg-fond" referrerPolicy="no-referrer" tabIndex={actif ? 0 : -1} />
+      {!actif && (
+        <button type="button" onClick={() => setActif(true)} className="absolute inset-0 flex items-end justify-center bg-transparent p-3"
+          aria-label={`Utiliser le plan : ${l.titre}`}>
+          <span className="rounded-full bg-noir/80 px-3.5 py-2 text-[13px] font-semibold text-white">Toucher pour déplacer le plan</span>
+        </button>
+      )}
+    </div>
+  )
+}
 
 function CarteLieu({ l, numero }: { l: Lieu; numero: number }) {
   return (
     <article className="flex flex-col overflow-hidden rounded-lg border border-ligne bg-white">
-      {/* Plan OpenStreetMap : chargé seulement quand il approche de l'écran */}
-      <iframe src={planOsm(l)} title={`Plan : ${l.titre}, ${adresseLieu(l)}`} loading="lazy"
-        className="aspect-[16/10] w-full border-0 bg-fond" referrerPolicy="no-referrer" />
+      <Plan l={l} />
       <div className="flex flex-1 flex-col gap-3 p-5 md:p-6">
         <p className="flex items-center gap-3">
           <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-rouge font-titre text-[20px] font-bold text-white">{numero}</span>

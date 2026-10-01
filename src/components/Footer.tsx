@@ -14,10 +14,10 @@ export default function Footer() {
           <p className="text-[14px] leading-relaxed text-white/60">{site.metier} à Saint-Apollinaire et Chevigny-Saint-Sauveur, près de Dijon ({site.adresse.departement}).</p>
         </div>
         {(['Carrosserie', 'Mécanique', 'Services'] as const).map((famille) => (
-          <div key={famille} className="flex flex-col gap-2.5">
-            <p className="font-titre text-[20px] font-bold uppercase">{famille}</p>
+          <div key={famille} className="flex flex-col">
+            <p className="mb-1 font-titre text-[20px] font-bold uppercase">{famille}</p>
             {PRESTATIONS.filter((p) => p.famille === famille).map((p) => (
-              <a key={p.chemin} href={vers(p.chemin)} className="text-[15px] text-white/70 no-underline hover:text-white">{p.nom}</a>
+              <a key={p.chemin} href={vers(p.chemin)} className="py-2 text-[15px] text-white/70 no-underline hover:text-white">{p.nom}</a>
             ))}
           </div>
         ))}
@@ -25,7 +25,7 @@ export default function Footer() {
           <p className="font-titre text-[20px] font-bold uppercase text-white">Contact</p>
           <span><strong className="text-white">Accueil</strong> · {adresseLieu(accueil)}</span>
           <span><strong className="text-white">Atelier</strong> · {adresseLieu(atelier)}</span>
-          <a href={`tel:${site.telephoneLien}`} className="text-white/70 no-underline hover:text-white">{site.telephone}</a>
+          <a href={`tel:${site.telephoneLien}`} className="-my-2 py-2 text-white/70 no-underline hover:text-white">{site.telephone}</a>
           {site.horaires.map(([j, h]) => <span key={j} className="text-[14px]">{j} : {h}</span>)}
         </div>
       </Container>
@@ -33,8 +33,8 @@ export default function Footer() {
         <Container className="flex flex-col gap-2 py-5 text-[13px] text-white/50 md:flex-row md:justify-between">
           <span>© {new Date().getFullYear()} {site.nom}</span>
           <span className="flex gap-5">
-            <a href={vers('/mentions-legales')} className="text-white/60 no-underline hover:text-white">Mentions légales</a>
-            <a href={vers('/confidentialite')} className="text-white/60 no-underline hover:text-white">Confidentialité</a>
+            <a href={vers('/mentions-legales')} className="py-2.5 text-white/70 no-underline hover:text-white">Mentions légales</a>
+            <a href={vers('/confidentialite')} className="py-2.5 text-white/70 no-underline hover:text-white">Confidentialité</a>
           </span>
         </Container>
       </div>

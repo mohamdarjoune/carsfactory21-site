@@ -5,12 +5,11 @@ import Devis from '../components/Devis'
 import { Container, Ico, Photo, TitreSection, btnClair, btnRouge, type NomPhoto } from '../components/ui'
 import { site } from '../config'
 import { prestation, type PagePrestation } from './services'
-
-const aConfirmer = (t: string) => t.startsWith('[')
+import { aCompleter, montrer, Texte } from '../aCompleter'
 
 function donnees(p: PagePrestation) {
   const url = site.siteUrl + p.chemin
-  const faq = p.faq.filter(([, r]) => !aConfirmer(r))
+  const faq = p.faq.filter(([, r]) => !aCompleter(r))
   return [
     { '@context': 'https://schema.org', '@type': 'Service', name: p.nom, description: p.description, url, serviceType: p.nom,
       provider: { '@id': `${site.siteUrl}/#garage` }, areaServed: { '@type': 'AdministrativeArea', name: site.adresse.departement } },
@@ -48,7 +47,7 @@ export default function Prestation({ chemin }: { chemin: string }) {
             <div className="flex flex-col gap-6">
               <TitreSection label="Ce que nous prenons en charge" titre={p.nom} />
               <ul className="flex flex-col gap-3">
-                {p.interventions.map((i) => <li key={i} className="flex items-start gap-3 text-[17px]"><span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-rouge text-white"><Ico nom="coche" taille={14} /></span>{i}</li>)}
+                {p.interventions.filter(montrer).map((i) => <li key={i} className="flex items-start gap-3 text-[17px]"><span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-rouge text-white"><Ico nom="coche" taille={14} /></span><span><Texte t={i} /></span></li>)}
               </ul>
             </div>
             <div className="flex flex-col gap-6">
@@ -69,12 +68,12 @@ export default function Prestation({ chemin }: { chemin: string }) {
           <Container className="grid gap-10 py-16 md:py-20 lg:grid-cols-12">
             <div className="lg:col-span-4"><TitreSection label="FAQ" titre="Vos questions" /></div>
             <div className="flex flex-col divide-y divide-ligne border-y border-ligne lg:col-span-8">
-              {p.faq.map(([q, r]) => (
+              {p.faq.filter(([, r]) => montrer(r)).map(([q, r]) => (
                 <details key={q} className="group py-5">
                   <summary className="flex cursor-pointer list-none items-center justify-between gap-4 text-[18px] font-semibold">
                     {q}<span className="text-[26px] text-rouge transition-transform group-open:rotate-45" aria-hidden="true">+</span>
                   </summary>
-                  <p className="pt-3 text-[16px] leading-relaxed text-gris">{r}</p>
+                  <p className="pt-3 text-[16px] leading-relaxed text-gris"><Texte t={r} /></p>
                 </details>
               ))}
             </div>
