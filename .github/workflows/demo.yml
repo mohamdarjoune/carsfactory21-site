@@ -25,6 +25,8 @@ jobs:
         with:
           node-version: 22
       - run: npm ci
+      - id: pages
+        uses: actions/configure-pages@v5
       - name: Tests automatiques
         run: npm test
       - name: Construction (démonstration, sous-dossier du dépôt)
@@ -33,6 +35,8 @@ jobs:
           # Dépôt « <compte>.github.io » : site à la racine ; sinon dans le sous-dossier du dépôt
           BASE_SITE: ${{ endsWith(github.event.repository.name, '.github.io') && '/' || format('/{0}/', github.event.repository.name) }}
           VITE_DEMO: '1'
+          # Adresse publique de la démonstration, pour le QR code du pied de page
+          URL_PUBLIQUE: ${{ steps.pages.outputs.base_url }}/
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist

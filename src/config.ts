@@ -29,6 +29,17 @@ export const site = {
   // Agenda Cal.com du garage (ex. 'cars-factory-21/rendez-vous') : vide = agenda de démonstration
   calLink: '',
   lienAvisGoogle: '',              // lien vers les avis Google du garage (à récupérer sur la fiche)
+  // Réseaux sociaux du garage : [nom, lien]. Lien vide = pas encore de compte
+  // (l'emplacement n'apparaît que sur la démonstration ; sur le vrai site, seuls les liens remplis s'affichent).
+  reseaux: [
+    ['Fiche Google', ''],
+    ['Facebook', ''],
+    ['Instagram', ''],
+    ['TikTok', ''],
+    ['Snapchat', ''],
+    ['WhatsApp', ''],
+  ] as [string, string][],
+  snapcode: '',                    // image du Snapcode Snapchat du garage, ex. '/reseaux/snapcode.svg' (à fournir)
   horaires: [
     ['Lundi', 'Fermé'],
     ['Mardi – samedi', '9 h – 19 h'],

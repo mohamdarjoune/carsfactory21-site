@@ -39,6 +39,18 @@ test('plans : le doigt fait défiler la page, le plan s’active au toucher', as
   await expect(page.locator('#acces iframe').first()).toHaveAttribute('tabindex', '0')
 })
 
+test('pied de page : QR code du site affiché et fichier servi', async ({ page, request }) => {
+  await page.goto('/')
+  const qr = page.getByRole('img', { name: 'QR code pour ouvrir le site sur un téléphone' })
+  await qr.scrollIntoViewIfNeeded()
+  await expect(qr).toBeVisible()
+  expect(await qr.evaluate((i: HTMLImageElement) => i.naturalWidth)).toBeGreaterThan(0)
+  const fichier = await request.get('/qr-site.svg')
+  expect(fichier.status()).toBe(200)
+  // vrai site : aucun réseau sans lien ni emplacement vide
+  await expect(page.getByText('à ajouter')).toHaveCount(0)
+})
+
 test('adresse inconnue : vraie page 404', async ({ page }) => {
   const reponse = await page.goto('/cette-page-nexiste-pas')
   expect(reponse?.status()).toBe(404)

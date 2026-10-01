@@ -40,6 +40,12 @@ const urls = PAGES_PRERENDUES.filter((p) => !p.introuvable).map((p) =>
   `  <url>\n    <loc>${SITE}${p.chemin === '/' ? '/' : p.chemin}</loc>\n    <lastmod>${aujourdhui}</lastmod>\n    <priority>${p.priorite}</priority>\n  </url>`)
 await writeFile(path.join(dist, 'sitemap.xml'), `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.join('\n')}\n</urlset>\n`)
 console.log(`✓ sitemap.xml (${urls.length} pages)`)
+// QR code qui ouvre le site sur un téléphone (adresse publique fournie à la mise en ligne, sinon l'adresse du site)
+const QRCode = (await import('qrcode')).default
+const urlPublique = process.env.URL_PUBLIQUE || `${SITE}/`
+await writeFile(path.join(dist, 'qr-site.svg'), await QRCode.toString(urlPublique, { type: 'svg', errorCorrectionLevel: 'M', margin: 1, color: { dark: '#16181d', light: '#ffffff' } }))
+console.log(`✓ qr-site.svg → ${urlPublique}`)
+
 if (process.env.VITE_DEMO === '1') {
   await writeFile(path.join(dist, 'robots.txt'), 'User-agent: *\nDisallow: /\n')
   console.log('✓ démonstration : pages non indexées par Google')
