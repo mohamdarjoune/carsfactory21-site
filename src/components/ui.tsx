@@ -23,7 +23,9 @@ export function TitreSection({ label, titre, texte, clair = false }: { label: st
 }
 
 /* Icônes au trait (aucune image extérieure) */
-const TRACES: Record<Icone | 'telephone' | 'horloge' | 'lieu' | 'photo' | 'coche' | 'fleche' | 'loupe' | 'bulle' | 'fermer' | 'sms' | 'gauche' | 'droite' | 'pause' | 'lecture' | 'devis' | 'goutte' | 'etiquette' | 'calendrier', string> = {
+const TRACES: Record<Icone | 'telephone' | 'horloge' | 'lieu' | 'photo' | 'coche' | 'fleche' | 'loupe' | 'bulle' | 'fermer' | 'sms' | 'gauche' | 'droite' | 'pause' | 'lecture' | 'devis' | 'goutte' | 'etiquette' | 'calendrier' | 'voiture', string> = {
+  // voiture entière vue de profil (« Mon véhicule ») : caisse, vitres, deux roues
+  voiture: 'M3.7 17H1v-3.6l3-1.2 3.6-4.8h8.4l4.2 4.2 2.6.7c.7.2 1.2.8 1.2 1.6V17h-2.2M8.9 17h6.7M6.3 19.6a2.6 2.6 0 1 0 0-5.2 2.6 2.6 0 0 0 0 5.2zM18.2 19.6a2.6 2.6 0 1 0 0-5.2 2.6 2.6 0 0 0 0 5.2zM7.3 12.2h12.3M12 7.4v4.8',
   carrosserie: 'M3 15l2-5 3-3h8l3 3 2 5v3H3zM3 15h18M7 18v2M17 18v2M7.5 15a1 1 0 1 0 0-2 1 1 0 0 0 0 2M16.5 15a1 1 0 1 0 0-2 1 1 0 0 0 0 2',
   peinture: 'M4 4h11v5H4zM15 6h3v5h-7v3M10 14h2v7h-2z',
   sinistre: 'M12 3l9 16H3zM12 10v4M12 17v.5',

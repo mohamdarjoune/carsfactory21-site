@@ -43,7 +43,7 @@ export default function Header() {
           <Recherche className="hidden flex-1 md:block md:max-w-[520px]" />
           <nav aria-label="Raccourcis" className="ml-auto flex items-center gap-0.5 md:gap-1">
             <BoutonIcone icone="lieu" libelle="Nos adresses" detail="Saint-Apollinaire · Chevigny" href="/#acces" />
-            <BoutonIcone icone="carrosserie" libelle="Mon véhicule" detail={vehicule ? decrireVehicule(vehicule) : 'Préparer mon devis'} onClick={ouvrirMonVehicule} />
+            <BoutonIcone icone="voiture" libelle="Mon véhicule" detail={vehicule ? decrireVehicule(vehicule) : 'Préparer mon devis'} onClick={ouvrirMonVehicule} />
             <a href={`tel:${site.telephoneLien}`} className="hidden h-11 items-center gap-2 whitespace-nowrap rounded-md px-3 text-[15px] font-semibold text-white no-underline hover:bg-white/10 lg:flex">
               <Ico nom="telephone" taille={20} />{site.telephone}
             </a>

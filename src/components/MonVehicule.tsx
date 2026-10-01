@@ -50,7 +50,7 @@ export function EncartVehicule() {
   return (
     <Container>
       <div className="flex flex-col gap-4 rounded-xl border-2 border-rouge/30 bg-[#FFF4F2] p-5 sm:flex-row sm:items-center md:p-6">
-        <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-white text-rouge"><Ico nom="carrosserie" taille={28} /></span>
+        <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-white text-rouge"><Ico nom="voiture" taille={30} /></span>
         <div className="flex-1">
           {v ? (
             <><p className="text-[18px] font-bold">Votre véhicule : {decrireVehicule(v)}</p><p className="text-[15px] text-gris">Il est déjà ajouté à votre demande de devis.</p></>
