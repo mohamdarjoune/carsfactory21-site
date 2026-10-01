@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-75 -14 440 120" role="img" aria-label="Cars Factory 21">
+  <defs>
+    <filter id="trait" x="-5%" y="-10%" width="110%" height="120%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="2" seed="4" result="bruit"/>
+      <feDisplacementMap in="SourceGraphic" in2="bruit" scale="1.1"/>
+    </filter>
+    <linearGradient id="fondu" gradientUnits="userSpaceOnUse" x1="300" y1="0" x2="-75" y2="0">
+      <stop offset="0" stop-color="#fff" stop-opacity="0.35"/><stop offset="0.55" stop-color="#fff" stop-opacity="1"/><stop offset="1" stop-color="#fff" stop-opacity="0"/>
+    </linearGradient>
+    <mask id="vent" maskUnits="userSpaceOnUse" x="-80" y="-20" width="460" height="120"><rect x="-80" y="-20" width="460" height="120" fill="url(#fondu)"/></mask>
+  </defs>
+  <g transform="skewX(-6)" style="transform-origin:160px 40px" filter="url(#trait)">
+    <g mask="url(#vent)" fill="none" stroke="#6B7C8F" stroke-linecap="round">
+      <path d="M297,29 C270,22 230,6 180,3 C140,1 95,10 40,22 C0,30 -30,28 -72,26" stroke-width="0.9" opacity="1"/><path d="M290,20 C262,12 218,-6 168,-7 C118,-8 68,5 10,13 C-20,17 -45,16 -72,15" stroke-width="0.7" opacity="0.7"/><path d="M12,47 C-10,46.5 -40,46 -72,46" stroke-width="0.9" opacity="0.9"/><path d="M250,80 C200,81 120,81 40,76 C10,74 -30,72 -72,72" stroke-width="0.7" opacity="0.55"/>
+      <path d="M9,41 C-3,38 -13,43 -11,49 C-9,54 -1,53 -1,48 C-1,45 -5,45 -6,47" stroke-width="0.8"/><path d="M5,57 C-7,55 -15,60 -11,64 C-8,67 -3,64 -5,61" stroke-width="0.8"/>
+    </g>
+    <g fill="none" stroke="#121417" stroke-linecap="round" stroke-linejoin="round">
+      <path stroke-width="1.6" d="M24,58 L20,50 Q19,44 24,42 L38,39.5 Q41,38.8 43,37.5 C72,24 108,14 150,13.5 C172,13 190,17 210,30 L262,33.5 Q280,35 288,41 L291,49 Q291.5,57 285,58 L272,58 A22,22 0 0 0 228,58 L88,58 A22,22 0 0 0 44,58 L28,58 Q24,58.5 24,58 Z"/>
+      <path stroke-width="1.15" d="M112,32 C128,22 146,17.5 162,17.5 L182,18 Q193,21 203,31 Z M166,17.6 L163.5,31.8"/>
+      <path stroke-width="0.8" opacity=".75" d="M50,43 C95,40 200,37.5 282,37"/>
+      <path stroke-width="0.9" d="M272,36 L288,40.6 M276,38.8 L285,40.8 M21,45 L38,41.8 M203,31.5 L210,30.8 L209,34.6 Z M183,37.6 L193,37.4 M272,52.5 L289,52.5 M276,55.2 L288,55.2 M25,54.5 L34,54.5 M27,57 L33,57 M92,54.8 L226,54.6"/>
+      <path stroke-width="0.7" opacity=".45" d="M100,58 L105,54.8 M112,58 L117,54.8 M124,58 L129,54.8 M136,58 L141,54.8 M180,58 L185,54.8 M192,58 L197,54.8 M204,58 L209,54.8"/>
+      <g>
+    <circle cx="66" cy="58" r="18" stroke="#121417" stroke-width="1.7"/>
+    <circle cx="66" cy="58" r="14.2" stroke="#121417" stroke-width="0.9"/>
+    <path d="M58.5,52.5 A9.3,9.3 0 0 1 65.5,48.7" stroke="#C8281A" stroke-width="2"/>
+    <circle cx="66" cy="58" r="3.2" stroke="#121417" stroke-width="0.9"/>
+    <path d="M66.00,54.40 L64.96,45.04 M66.79,54.49 L69.84,45.58 M69.42,56.89 L78.00,53.01 M69.58,57.66 L79.00,57.82 M68.12,60.91 L74.46,67.87 M67.43,61.30 L70.19,70.31 M63.88,60.91 L59.22,69.09 M63.30,60.38 L55.59,65.79 M62.58,56.89 L53.35,54.98 M62.90,56.17 L55.38,50.51" stroke="#121417" stroke-width="0.85"/>
+  </g>
+      <g>
+    <circle cx="250" cy="58" r="18" stroke="#121417" stroke-width="1.7"/>
+    <circle cx="250" cy="58" r="14.2" stroke="#121417" stroke-width="0.9"/>
+    <path d="M242.5,52.5 A9.3,9.3 0 0 1 249.5,48.7" stroke="#C8281A" stroke-width="2"/>
+    <circle cx="250" cy="58" r="3.2" stroke="#121417" stroke-width="0.9"/>
+    <path d="M250.00,54.40 L248.96,45.04 M250.79,54.49 L253.84,45.58 M253.42,56.89 L262.00,53.01 M253.58,57.66 L263.00,57.82 M252.12,60.91 L258.46,67.87 M251.43,61.30 L254.19,70.31 M247.88,60.91 L243.22,69.09 M247.30,60.38 L239.59,65.79 M246.58,56.89 L237.35,54.98 M246.90,56.17 L239.38,50.51" stroke="#121417" stroke-width="0.85"/>
+  </g>
+      <g stroke="#C8281A" stroke-width="2.6"><path d="M151,41 L117,41 L109,44.6 L109,48.9 L117,52.5 L149,52.5"/><path d="M159,52.5 L159,41 L280,39.2 M159,46.6 L187,46.5"/></g>
+    </g>
+    <text x="306" y="62" font-family="'Barlow Condensed','Arial Narrow',sans-serif" font-weight="600" font-size="54"
+      fill="#C8281A" stroke="#C8281A" stroke-width="0">21</text>
+  </g>
+  <text x="160" y="102" text-anchor="middle" font-family="'Barlow Condensed','Arial Narrow',sans-serif" font-weight="600" font-size="23"
+    letter-spacing="6" fill="#121417">CARS <tspan fill="#C8281A">FACTORY</tspan> 21</text>
+</svg>
