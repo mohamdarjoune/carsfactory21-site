@@ -43,7 +43,7 @@ console.log(`✓ sitemap.xml (${urls.length} pages)`)
 // QR code qui ouvre le site sur un téléphone (adresse publique fournie à la mise en ligne, sinon l'adresse du site)
 const QRCode = (await import('qrcode')).default
 const urlPublique = process.env.URL_PUBLIQUE || `${SITE}/`
-await writeFile(path.join(dist, 'qr-site.svg'), await QRCode.toString(urlPublique, { type: 'svg', errorCorrectionLevel: 'M', margin: 1, color: { dark: '#16181d', light: '#ffffff' } }))
+await writeFile(path.join(dist, 'qr-site.svg'), await QRCode.toString(urlPublique, { type: 'svg', errorCorrectionLevel: 'M', margin: 3, color: { dark: '#16181d', light: '#ffffff' } }))
 console.log(`✓ qr-site.svg → ${urlPublique}`)
 
 if (process.env.VITE_DEMO === '1') {

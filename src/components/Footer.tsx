@@ -29,7 +29,7 @@ function Reseaux() {
           {site.snapcode
             ? <img src={vers(site.snapcode)} alt="Snapcode de Cars Factory 21 sur Snapchat" width={96} height={96} loading="lazy" className="h-24 w-24 rounded-lg" />
             : DEMO && <div className="flex h-24 w-24 shrink-0 items-center justify-center rounded-lg border-2 border-dashed border-noir bg-[#FFFC00] p-2 text-center font-titre text-[13px] font-bold uppercase leading-tight text-noir">Emplacement Snapcode</div>}
-          <img src={vers('/qr-site.svg')} alt="QR code pour ouvrir le site sur un téléphone" width={96} height={96} loading="lazy" className="h-24 w-24 shrink-0 rounded-lg bg-white" />
+          <img src={vers('/qr-site.svg')} alt="QR code pour ouvrir le site sur un téléphone" width={112} height={112} loading="lazy" className="h-28 w-28 shrink-0 rounded-md bg-white" />
           <p className="max-w-[200px] text-[13px] leading-snug text-white/70">
             <strong className="mb-0.5 block text-[14px] text-white">Le site sur votre téléphone</strong>
             Scannez le code avec l’appareil photo, puis ajoutez le site à l’écran d’accueil.
