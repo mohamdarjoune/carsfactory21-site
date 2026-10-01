@@ -86,18 +86,33 @@ export default function Accueil() {
         <section className="relative isolate overflow-hidden bg-noir text-white">
           <Photo nom="atelier" alt="Atelier de réparation automobile" prioritaire mention={false} className="absolute inset-0 -z-10 h-full w-full" />
           <div aria-hidden="true" className="absolute inset-0 -z-10 bg-gradient-to-r from-noir via-noir/85 to-noir/35" />
-          <Container className="flex flex-col gap-4 pb-24 pt-8 md:gap-6 md:pb-32 md:pt-16">
-            <StatutOuverture clair />
-            <h1 className="max-w-[820px] text-[46px] font-bold uppercase leading-[0.9] md:text-[88px]">
-              Carrosserie <span className="text-rouge-vif">&amp;</span> mécanique
-            </h1>
-            <p className="max-w-[580px] text-[16px] leading-relaxed text-white/80 md:text-[19px]">
-              Près de Dijon : accueil à Saint-Apollinaire, atelier à Chevigny-Saint-Sauveur. Devis sur photos, dépannage 24 h/24.
-            </p>
-            <div className="hidden gap-3 sm:flex">
-              <a href="#devis" className={btnRouge}>Demander un devis</a>
-              <a href={appeler} className={btnClair}><Ico nom="telephone" taille={18} />{site.telephone}</a>
+          <Container className="grid items-center gap-5 pb-24 pt-6 md:gap-8 md:pb-32 md:pt-14 lg:grid-cols-12">
+            <div className="flex flex-col gap-4 md:gap-6 lg:col-span-5">
+              <StatutOuverture clair />
+              <h1 className="max-w-[820px] text-[46px] font-bold uppercase leading-[0.9] md:text-[80px]">
+                Carrosserie <span className="text-rouge-vif">&amp;</span> mécanique
+              </h1>
+              <p className="max-w-[580px] text-[16px] leading-relaxed text-white/80 md:text-[19px]">
+                Près de Dijon : accueil à Saint-Apollinaire, atelier à Chevigny-Saint-Sauveur. Devis sur photos, dépannage 24 h/24.
+              </p>
+              <div className="hidden gap-3 sm:flex">
+                <a href="#devis" className={btnRouge}>Demander un devis</a>
+                <a href={appeler} className={btnClair}><Ico nom="telephone" taille={18} />{site.telephone}</a>
+              </div>
             </div>
+            {/* ── Vidéo de présentation, dès le premier écran (chargée seulement au clic sur Lecture) ── */}
+            <figure id="video" aria-labelledby="titre-video" className="m-0 scroll-mt-32 lg:col-span-7">
+              <video controls preload="none" playsInline poster={vers('/videos/presentation-garage.webp')} width={1280} height={720}
+                className="aspect-video w-full rounded-lg border border-white/15 bg-acier shadow-[0_20px_60px_rgba(0,0,0,0.5)]"
+                aria-label="Vidéo de présentation des services de Cars Factory 21, en dessin animé">
+                <source src={vers('/videos/presentation-garage.mp4')} type="video/mp4" />
+                Votre navigateur ne lit pas cette vidéo. <a href={vers('/videos/presentation-garage.mp4')} className="text-rouge-vif">Télécharger la vidéo</a>.
+              </video>
+              <figcaption className="mt-2 flex items-baseline justify-between gap-3 text-[13px] text-white/70">
+                <span id="titre-video"><Ico nom="lecture" taille={14} className="mr-1 inline align-[-2px] text-rouge-vif" />Le garage en moins d’une minute, en dessin animé</span>
+                <span className="shrink-0 text-[11px] text-white/45">Illustrations non contractuelles</span>
+              </figcaption>
+            </figure>
           </Container>
           <span className="absolute bottom-2 right-3 text-[11px] text-white/45">Photo non contractuelle</span>
         </section>
@@ -156,26 +171,6 @@ export default function Accueil() {
               <a href={appeler} className="inline-flex min-h-14 items-center justify-center gap-2 self-stretch rounded-md bg-white px-5 py-3 text-[19px] font-bold text-rouge no-underline hover:bg-white/90 sm:self-start"><Ico nom="telephone" taille={22} />{site.telephone}</a>
             </div>
             <Photo nom="depannage" alt="Voiture chargée sur une dépanneuse" sizes="(min-width: 1024px) 560px, 100vw" className="hidden aspect-[16/10] rounded-lg sm:block" />
-          </Container>
-        </section>
-
-        {/* ── Vidéo de présentation (chargée seulement au clic sur Lecture) ── */}
-        <section id="video" aria-labelledby="titre-video" className="scroll-mt-32 bg-noir text-white">
-          <Container className="grid items-center gap-6 py-12 md:gap-10 md:py-20 lg:grid-cols-12">
-            <div className="flex flex-col gap-3 lg:col-span-4">
-              <p className="text-[13px] font-semibold uppercase tracking-[0.18em] text-rouge-vif">En vidéo</p>
-              <h2 id="titre-video" className="text-[34px] font-bold uppercase leading-[0.95] md:text-[56px]">Le garage en moins d’une minute</h2>
-              <p className="text-[16px] leading-relaxed text-white/75">Tous les services de Cars Factory 21, en dessin animé.</p>
-            </div>
-            <div className="lg:col-span-8">
-              <video controls preload="none" playsInline poster={vers('/videos/presentation-garage.webp')} width={1280} height={720}
-                className="aspect-video w-full rounded-lg border border-white/10 bg-acier shadow-[0_20px_60px_rgba(0,0,0,0.45)]"
-                aria-label="Vidéo de présentation des services de Cars Factory 21, en dessin animé">
-                <source src={vers('/videos/presentation-garage.mp4')} type="video/mp4" />
-                Votre navigateur ne lit pas cette vidéo. <a href={vers('/videos/presentation-garage.mp4')} className="text-rouge-vif">Télécharger la vidéo</a>.
-              </video>
-              <p className="mt-2 text-right text-[12px] text-white/45">Illustrations non contractuelles</p>
-            </div>
           </Container>
         </section>
 
