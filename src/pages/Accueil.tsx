@@ -74,7 +74,7 @@ const FAQ: [string, string][] = [
   ['Où dois-je déposer ma voiture ?', 'À notre accueil, 6 rue de Bastogne à Saint-Apollinaire, près des commerces et des transports en commun.'],
   ['Quels sont les horaires du garage ?', 'Le garage est ouvert du mardi au samedi, de 9 h à 19 h. Il est fermé le lundi et le dimanche. Le dépannage fonctionne 24 h/24, 7 j/7.'],
   ['Le garage s’occupe-t-il des démarches avec mon assurance ?', 'Le garage vous aide à préparer votre dossier et à présenter le véhicule à l’expert si votre assurance en mandate un.'],
-  ['Faut-il prendre rendez-vous ?', '[À confirmer avec le garage : rendez-vous obligatoire ou possibilité de passer sans rendez-vous.]'],
+  ['Faut-il prendre rendez-vous ?', 'Non : on vous accueille sans rendez-vous, du mardi au samedi de 9 h à 19 h, à notre accueil de Saint-Apollinaire. Vous pouvez aussi réserver un créneau en ligne si vous préférez.'],
 ]
 
 export default function Accueil() {
