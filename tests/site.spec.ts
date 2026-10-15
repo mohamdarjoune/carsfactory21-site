@@ -161,3 +161,15 @@ test('rendez-vous : jour, heure puis confirmation (démonstration)', async ({ pa
   await expect(rdv.getByText('Rendez-vous demandé')).toBeVisible()
   await expect(rdv.getByText('ce rendez-vous n’est pas enregistré')).toBeVisible()
 })
+
+test('logo : le « 21 » est vert quand le garage est ouvert, rouge quand il est fermé', async ({ page }) => {
+  const logo21 = page.locator('header .logo-21').first()
+  await page.clock.setFixedTime(new Date('2026-10-13T10:00:00+02:00'))   // mardi 10 h, heure de Paris : ouvert
+  await page.goto('/')
+  await expect(logo21).toHaveAttribute('data-ouvert', 'true')
+  await expect(logo21).toHaveAttribute('stroke', '#2FBF62')
+  await page.clock.setFixedTime(new Date('2026-10-12T10:00:00+02:00'))   // lundi : fermé
+  await page.goto('/')
+  await expect(logo21).toHaveAttribute('data-ouvert', 'false')
+  await expect(logo21).toHaveAttribute('stroke', '#FF4B36')
+})

@@ -1,8 +1,10 @@
 import { useId } from 'react'
+import { useStatutOuverture } from './Statut'
 
 /*
  * Logo CF21, dessin au trait fin : un coupé fastback de la fin des années 60 vu de profil, fendant l'air.
- * Sur le flanc, l'écope en creux dessine le C, le montant et la bande de caisse dessinent le F ; « 21 » à côté.
+ * Sur le flanc, l'écope en creux dessine le C, le montant et la bande de caisse dessinent le F ; « 21 » à côté,
+ * en vert quand le garage est ouvert, en rouge quand il est fermé (rouge aussi avant le calcul, sur la page pré-rendue).
  * Des filets d'air épousent le pavillon et le capot puis s'étirent et tourbillonnent derrière la voiture.
  * Animation : le vent s'écoule en continu, la voiture arrive en glissant, les roues tournent au survol
  * (tout est coupé si l'on préfère moins d'animations). Aucun nom ni emblème de constructeur : silhouette générique.
@@ -42,6 +44,9 @@ export function LogoDessin({ clair = true, className = '' }: { clair?: boolean; 
   const trait = clair ? '#FFFFFF' : '#121417'
   const rouge = clair ? '#FF4B36' : '#C8281A'
   const air = clair ? '#9FB3C8' : '#6B7C8F'
+  const vert = clair ? '#2FBF62' : '#1E8F47'
+  const statut = useStatutOuverture()
+  const couleur21 = statut?.ouvert ? vert : rouge
   const id = useId().replace(/:/g, '')
   return (
     <svg viewBox="-75 -12 440 116" className={`logo-cf21 ${className}`} role="img" aria-label="Cars Factory 21">
@@ -81,7 +86,8 @@ export function LogoDessin({ clair = true, className = '' }: { clair?: boolean; 
           </g>
         </g>
         <text x="306" y="60" fontFamily="'Barlow Condensed', 'Arial Narrow', sans-serif" fontWeight="600" fontSize="54"
-          fill={clair ? 'none' : rouge} stroke={rouge} strokeWidth={clair ? 1.5 : 0}>21</text>
+          fill={clair ? 'none' : couleur21} stroke={couleur21} strokeWidth={clair ? 1.5 : 0} className="logo-21"
+          data-ouvert={statut ? String(statut.ouvert) : undefined}>21</text>
       </g>
       {/* Le nom en toutes lettres, sous la voiture (droit, pour rester bien lisible) */}
       <text x="160" y="100" textAnchor="middle" fontFamily="'Barlow Condensed', 'Arial Narrow', sans-serif" fontWeight="600" fontSize="23"

@@ -58,6 +58,7 @@ a, button, summary, input, select, textarea, label { touch-action: manipulation;
 @keyframes cf21-air { from { stroke-dashoffset: 100; } to { stroke-dashoffset: 0; } }
 @keyframes cf21-remous { 0%, 100% { transform: none; opacity: 1; } 50% { transform: translateX(-3px); opacity: 0.6; } }
 @keyframes cf21-roue { to { transform: rotate(360deg); } }
+.logo-cf21 .logo-21 { transition: fill 0.6s, stroke 0.6s; }
 .logo-cf21 .logo-voiture { animation: cf21-arrivee 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) both; }
 .logo-cf21 .logo-vent path[pathLength] { stroke-dasharray: 62 38; animation: cf21-air 2.8s linear infinite; }
 .logo-cf21 .logo-vent path:not([pathLength]) { animation: cf21-remous 2.8s ease-in-out infinite; }
