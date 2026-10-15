@@ -129,8 +129,8 @@ export default function Accueil() {
             <a href="#devis" className={tuileAction}>
               <Ico nom="devis" taille={28} className="text-rouge" /><span className="text-[17px] font-bold leading-tight">Demander un devis</span><span className="hidden text-[13px] text-gris sm:block">Avec des photos, sans vous déplacer</span>
             </a>
-            <a href={appeler} className={`${tuileAction} !bg-rouge !text-white`}>
-              <Ico nom="depannage" taille={28} /><span className="text-[17px] font-bold leading-tight">Dépannage 24 h/24</span><span className="text-[13px] text-white/85">{site.telephone}</span>
+            <a href={appeler} className={`${tuileAction} !bg-rouge !px-3 !text-white sm:!px-5`}>
+              <Ico nom="depannage" taille={28} /><span className="whitespace-nowrap text-[clamp(12px,3.8vw,17px)] font-bold leading-tight tracking-tight sm:tracking-normal">Dépannage 24 h/24</span><span className="text-[13px] text-white/85">{site.telephone}</span>
             </a>
             <a href="#acces" className={tuileAction}>
               <Ico nom="lieu" taille={28} className="text-rouge" /><span className="text-[17px] font-bold leading-tight">Notre adresse</span><span className="hidden text-[13px] text-gris sm:block">Plan · horaires</span>

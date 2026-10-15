@@ -34,7 +34,8 @@ const TRACES: Record<Icone | 'telephone' | 'horloge' | 'lieu' | 'photo' | 'coche
   entretien: 'M12 3c3 4 5 6.5 5 9.5a5 5 0 0 1-10 0C7 9.5 9 7 12 3zM10 14a2 2 0 0 0 2 2',
   diagnostic: 'M3 5h18v11H3zM8 20h8M12 16v4M6 12l3-3 2 2 4-4 3 3',
   covering: 'M4 20l4-12 12-4-4 12zM8 8l8 8M4 20l6-2',
-  depannage: 'M2 16V7h9v9M11 11h5l3 3v2h-8M5 19a2 2 0 1 0 0-4 2 2 0 0 0 0 4zM17 19a2 2 0 1 0 0-4 2 2 0 0 0 0 4',
+  // dépanneuse : cabine avec gyrophare, plateau, grue et crochet
+  depannage: 'M14 16V9h4l3 3.5V16h-1.5M17 9V7.5h1.5V9M17 9v3.5h4M14 13H5.5M3 16h1M8 16h7.5M5.5 13L3.5 5.5L2 6.5M3.5 5.5v4.5M3.5 10a1.2 1.2 0 1 0 1.2 1.2M6 19a2 2 0 1 0 0-4 2 2 0 0 0 0 4zM17.5 19a2 2 0 1 0 0-4 2 2 0 0 0 0 4z',
   telephone: 'M5 3h4l2 5-2.5 1.5a11 11 0 0 0 6 6L16 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 5a2 2 0 0 1 2-2',
   horloge: 'M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18zM12 7v5l3 2',
   lieu: 'M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11zM12 12.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5',
