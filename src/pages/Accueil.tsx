@@ -41,8 +41,8 @@ const VIDEO = {
   description: 'Carrosserie, peinture, covering, mécanique, diagnostic, lavage, et deux façons de nous confier votre voiture : dépannage 24 h/24, ou dépôt à notre accueil de Saint-Apollinaire. En dessin animé.',
   thumbnailUrl: `${site.siteUrl}/videos/presentation-garage.webp`,
   contentUrl: `${site.siteUrl}/videos/presentation-garage.mp4`,
-  uploadDate: '2026-09-30',
-  duration: 'PT56S',
+  uploadDate: '2026-10-15',
+  duration: 'PT61S',
   publisher: { '@id': `${site.siteUrl}/#garage` },
 }
 

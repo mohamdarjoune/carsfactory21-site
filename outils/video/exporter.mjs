@@ -7,7 +7,7 @@ import { spawn } from 'node:child_process'
 import path from 'node:path'
 import fs from 'node:fs'
 const requireLocal = createRequire(import.meta.url)
-const { chromium } = createRequire('C:/Users/ST/Projet_perso/carsfactory21-site/package.json')('@playwright/test')
+const { chromium } = createRequire(new URL('../../package.json', import.meta.url))('@playwright/test')
 const ffmpeg = requireLocal('ffmpeg-static')
 const ici = path.dirname(new URL(import.meta.url).pathname.replace(/^\/([A-Z]:)/, '$1'))
 const [sortie, partiesTexte = '3'] = process.argv.slice(2)

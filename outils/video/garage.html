@@ -4,7 +4,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700;900&display=swap" rel="stylesheet">
 <style>
-@font-face { font-family: BC; src: url("file:///C:/Users/ST/Projet_perso/carsfactory21-site/node_modules/@fontsource/barlow-condensed/files/barlow-condensed-latin-700-normal.woff2"); font-weight: 700; }
+@font-face { font-family: BC; src: url("../../node_modules/@fontsource/barlow-condensed/files/barlow-condensed-latin-700-normal.woff2"); font-weight: 700; }
 html, body { margin: 0; width: 1920px; height: 1080px; overflow: hidden; background: #000; }
 #film { position: relative; width: 1920px; height: 1080px; overflow: hidden; }
 .s { position: absolute; inset: 0; opacity: 0; }
@@ -263,7 +263,7 @@ scene(0, 6,
     ${feuilles('s1-feuilles', 22, 5)}
   </g>`,
   `<div class="grand-titre" id="s1-titre" style="top:120px"><div style="font-weight:900;font-size:128px;letter-spacing:2px">Cars Factory 21</div>
-   <div style="font-weight:700;font-size:40px;margin-top:6px">Carrosserie · Mécanique · Saint-Apollinaire et Chevigny</div></div>`,
+   <div style="font-weight:700;font-size:40px;margin-top:6px">Carrosserie · Mécanique · Saint-Apollinaire</div></div>`,
   (t) => {
     $('s1-monde').setAttribute('transform', `translate(0,${lerp(-140, 0, sortie(entre(t, 0, 3.2)))})`)
     ;['s1-n1', 's1-n2', 's1-n3', 's1-n4'].forEach((n, i) => { const x = [300, 1000, 1650, 700][i] + t * [14, 9, 18, 24][i]; $(n).setAttribute('transform', `translate(${x},${[150, 90, 250, 330][i]}) scale(${[1.1, 1.4, 0.9, 0.6][i]})`) })
@@ -274,7 +274,7 @@ scene(0, 6,
     const titre = $('s1-titre'), kt = sortie(entre(t, 2.4, 3.4)); titre.style.opacity = kt; titre.style.transform = `translateY(${(1 - kt) * 24}px)`
   })
 
-/* 2 · Le garage : un garage, deux adresses (6 – 11 s) */
+/* 2 · Qui sommes-nous : plus de 20 ans d'expertise (6 – 11 s) */
 scene(6, 11,
   `<rect width="1920" height="1080" fill="url(#cielJour)"/>
    ${nuage('s2-n1', 260, 170, 1)}${nuage('s2-n2', 1500, 120, 1.2)}
@@ -286,7 +286,7 @@ scene(6, 11,
    </g>
    <rect x="980" y="470" width="440" height="72" rx="10" fill="#2E2A28"/>
    <text x="1200" y="522" text-anchor="middle" font-family="BC" font-size="48" letter-spacing="5" fill="#F5EDDF">CARS <tspan fill="#E24A36">FACTORY</tspan> 21</text>
-   <rect x="772" y="600" width="96" height="40" rx="6" fill="#D23A2B"/><text x="820" y="629" text-anchor="middle" font-family="BC" font-size="26" letter-spacing="3" fill="#FFF">ATELIER</text>
+
    <rect x="880" y="570" width="640" height="340" fill="#F2C879"/>
    <circle cx="1200" cy="690" r="260" fill="url(#lampe)"/>
    <path d="M900,910 L960,700 L1440,700 L1500,910" fill="#E9B865" opacity=".5"/>
@@ -296,7 +296,7 @@ scene(6, 11,
    ${personne('s2-meca', { coiffure: 'casquette', barbe: true, cheveux: '#3A2A20', haut: '#3E4A5E', bas: '#3E4A5E', bretelles: '#2B3445', peau: PEAUX[2] })}
    ${voiture('s2-auto')}
    ${herbe('s2-herbe', 110, 21, 1085, 30, 80)}`,
-  carte('Le garage', 'Un garage, deux adresses', 'Accueil à Saint-Apollinaire · atelier à Chevigny-Saint-Sauveur', 's2-carte'),
+  carte('Qui sommes-nous', 'Plus de 20 ans d’expertise', 'Une passion intacte et un seul objectif : votre satisfaction', 's2-carte'),
   (t) => {
     ;['s2-n1', 's2-n2'].forEach((n, i) => $(n).setAttribute('transform', `translate(${[260, 1500][i] + t * 12},${[170, 120][i]}) scale(${[1, 1.2][i]})`))
     const h = lerp(340, 26, sortie(entre(t, 0.4, 2.2))); attr($('s2-rideau'), { height: h })
@@ -307,6 +307,34 @@ scene(6, 11,
     poser('s2-meca', 1560, 912, 1.3, 8, -150 + Math.sin(t * 7) * 18)
     animerHerbe('s2-herbe', t, 0.8); animerArbres(SCENES[1].el, t)
     montrerCarte($('s2-carte'), t, 1.2)
+  })
+
+/* 2 bis · Notre engagement : qualité, accompagnement, zéro franchise (11 – 16 s) */
+scene(11, 16,
+  `<rect width="1920" height="1080" fill="url(#cielJour)"/>
+   ${nuage('s2b-n1', 1250, 130, 1.1)}${nuage('s2b-n2', 1700, 260, 0.7)}
+   ${collines(arbre(1150, 700, 0.9) + arbre(1820, 690, 1))}
+   <path d="M0,905 C500,890 1400,890 1920,900 V1080 H0Z" fill="#E6D3AE" filter="url(#aquarelle)"/>
+   ${voiture('s2b-auto')}
+   <g id="s2b-eclats">${etoile4(260, 640, 30)}${etoile4(620, 600, 24)}${etoile4(820, 700, 20)}${etoile4(420, 760, 18)}</g>
+   ${personne('s2b-meca', { coiffure: 'casquette', barbe: true, cheveux: '#3A2A20', haut: '#3E4A5E', bas: '#3E4A5E', bretelles: '#2B3445', peau: PEAUX[2] })}
+   ${personne('s2b-client', { coiffure: 'long', cheveux: '#B5652E', haut: '#4C8C6A', bas: '#2F3340', peau: PEAUX[0] })}`,
+  `<div class="carte" id="s2b-carte"><span class="etq">Notre engagement</span>
+     <div class="titre" id="s2b-l1" style="font-size:56px">✓ Une réparation de qualité</div>
+     <div class="titre" id="s2b-l2" style="font-size:56px">✓ Un accompagnement personnalisé</div>
+     <div class="titre" id="s2b-l3" style="font-size:56px">✓ Zéro franchise à votre charge</div>
+     <div class="sous" id="s2b-l4" style="font-size:28px">Selon les conditions applicables</div></div>`,
+  (t) => {
+    ;['s2b-n1', 's2b-n2'].forEach((n, i) => $(n).setAttribute('transform', `translate(${[1250, 1700][i] + t * 12},${[130, 260][i]}) scale(${[1.1, 0.7][i]})`))
+    const s = 2.2
+    placerVoiture('s2b-auto', 120, 905 - 74 * s, s, 0)
+    for (const [i, e] of [...$('s2b-eclats').children].entries()) e.style.opacity = Math.max(0, Math.sin(t * 2.4 + i * 1.7))
+    // le mécanicien et la cliente se serrent la main
+    const serre = t > 1.4 && t < 4.2, secoue = serre ? Math.sin(t * 12) * 6 : 0
+    poser('s2b-meca', lerp(1180, 1330, sortie(entre(t, 0.2, 1.3))), 912, 1.3, 8, serre ? -70 + secoue : -8)
+    poser('s2b-client', lerp(1780, 1525, sortie(entre(t, 0.2, 1.3))), 912, 1.3, serre ? 70 + secoue : 8, -8)
+    montrerCarte($('s2b-carte'), t, 0.3)
+    ;['s2b-l1', 's2b-l2', 's2b-l3', 's2b-l4'].forEach((id, i) => { const k = sortie(entre(t, 0.8 + i * 0.6, 1.3 + i * 0.6)); $(id).style.opacity = k; $(id).style.transform = `translateX(${(1 - k) * -30}px)` })
   })
 
 /* Décor d'atelier (scènes 3 et 5) */
@@ -331,7 +359,7 @@ function atelier(extra = '') {
 }
 
 /* 3 · Carrosserie : le carrossier efface la bosse au maillet (11 – 16 s) */
-scene(11, 16,
+scene(16, 21,
   atelier() +
   `<g id="s3-auto-g">${voiture('s3-auto', { surCaisse: `<g id="s3-bosse"><path d="M112,43 Q124,36 138,44 Q126,40 112,43Z" fill="#7B6E62" opacity=".55"/><path d="M116,47 Q127,43 136,49" fill="none" stroke="#5B5048" stroke-width="1.6"/><path d="M104,38 L118,41 M108,50 L121,48 M140,38 L150,41" stroke="#8A7D71" stroke-width="1"/></g>` })}</g>
    ${personne('s3-carrossier', { coiffure: 'casquette', bonnet: '#D23A2B', barbe: true, cheveux: '#5A3A28', haut: '#3E4A5E', bas: '#3E4A5E', bretelles: '#2B3445', peau: PEAUX[1], objetD: MAILLET })}
@@ -352,7 +380,7 @@ scene(11, 16,
 
 /* 4 · Peinture (le peintre masqué) puis covering (16 – 22 s) */
 const clipPeinture = `<clipPath id="s4-clip"><rect id="s4-rect" x="0" y="0" width="0" height="120"/></clipPath><clipPath id="s4-clip2"><rect id="s4-rect2" x="300" y="0" width="0" height="120"/></clipPath><clipPath id="s4-forme"><path d="${CONTOUR}"/></clipPath>`
-scene(16, 22,
+scene(21, 27,
   `<defs>${clipPeinture}</defs>
    <rect width="1920" height="1080" fill="url(#cabine)"/>
    <circle cx="960" cy="0" r="700" fill="#FFFFFF" opacity=".55" filter="url(#halo)"/>
@@ -392,7 +420,7 @@ scene(16, 22,
   })
 
 /* 5 · Mécanique et entretien : le mécanicien et sa clé (22 – 27 s) */
-scene(22, 27,
+scene(27, 32,
   atelier(`<g filter="url(#aquarelle)">
      <rect x="560" y="430" width="780" height="360" rx="40" fill="#8E969E" stroke="#3B3F44" stroke-width="6"/>
      <rect x="620" y="360" width="660" height="110" rx="24" fill="#A7AFB6" stroke="#3B3F44" stroke-width="6"/>
@@ -417,7 +445,7 @@ scene(22, 27,
   })
 
 /* 6 · Diagnostic électronique : la technicienne montre l'écran (27 – 32 s) */
-scene(27, 32,
+scene(32, 37,
   `<rect width="1920" height="1080" fill="#3A3431"/>
    <circle cx="960" cy="200" r="700" fill="#5A4E46" opacity=".6" filter="url(#halo)"/>
    <g filter="url(#aquarelle)"><rect x="140" y="260" width="1000" height="520" rx="120" fill="#2A2523" stroke="#15110F" stroke-width="8"/></g>
@@ -449,7 +477,7 @@ scene(27, 32,
     montrerCarte($('s6-carte'), t, 0.6)
   })
 
-/* 7 · Scénario 1 : en panne ou accidentée, on vient la chercher et on la dépose à l'atelier (32 – 39 s) */
+/* 7 · Scénario 1 : en panne ou accidentée, on vient la chercher (32 – 39 s) */
 function etoiles(n, graine) { const r = hasard(graine); let h = '<g id="s7-etoiles">'; for (let i = 0; i < n; i++) h += `<circle cx="${(r() * 1920).toFixed(0)}" cy="${(r() * 560).toFixed(0)}" r="${(1 + r() * 2.6).toFixed(1)}" fill="#FFF6D8" data-p="${(r() * 6).toFixed(2)}"/>`; return h + '</g>' }
 const DEPANNEUSE = `<g id="s7-camion">
    <polygon points="-40,108 900,108 900,150 -20,150" fill="#A7B3C2" stroke="#2A3242" stroke-width="5" stroke-linejoin="round"/>
@@ -465,7 +493,7 @@ const DEPANNEUSE = `<g id="s7-camion">
    ${[140, 700, 1080].map((x, i) => `<g><circle cx="${x}" cy="160" r="46" fill="#2F2B2A"/><circle cx="${x}" cy="160" r="22" fill="#C9CED3"/><g id="s7-rc${i}"><path d="M${x - 22},160 H${x + 22} M${x},138 V182" stroke="#6E767D" stroke-width="5"/></g></g>`).join('')}
 </g>`
 const PANNEAU_ATELIER = (x, y, id) => `<g id="${id}" transform="translate(${x},${y})"><rect x="-8" y="0" width="16" height="190" fill="#55606E"/><rect x="-110" y="-70" width="220" height="80" rx="10" fill="#D23A2B" stroke="#FFFFFF" stroke-width="5"/><text x="-12" y="-17" text-anchor="middle" font-family="BC" font-size="40" letter-spacing="3" fill="#FFFFFF">ATELIER</text><path d="M66,-30 h24 m-12,-12 l12,12 l-12,12" fill="none" stroke="#FFFFFF" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/></g>`
-scene(32, 39,
+scene(37, 44,
   `<rect width="1920" height="1080" fill="url(#cielNuit)"/>
    ${etoiles(110, 4)}
    <circle cx="1560" cy="190" r="150" fill="#FFF4D6" opacity=".25" filter="url(#halo)"/><circle cx="1560" cy="190" r="78" fill="#FFF4D6"/><circle cx="1535" cy="170" r="14" fill="#EFE3C0"/><circle cx="1585" cy="215" r="9" fill="#EFE3C0"/>
@@ -473,14 +501,14 @@ scene(32, 39,
    <path d="M0,650 C300,590 700,640 1000,610 C1350,575 1650,640 1920,610 V1080 H0Z" fill="#2B3D5A" filter="url(#aquarelle)"/>
    <path d="M0,760 C400,720 900,745 1300,735 C1600,728 1800,740 1920,736 V1080 H0Z" fill="#22324A" filter="url(#aquarelle)"/>
    ${[250, 900].map((x) => `<path d="M${x},900 V640" stroke="#1A2233" stroke-width="12"/><path d="M${x},645 h50" stroke="#1A2233" stroke-width="10"/><circle cx="${x + 50}" cy="660" r="120" fill="url(#lampe)" opacity=".5"/><circle cx="${x + 50}" cy="656" r="14" fill="#FFE9A8"/>`).join('')}
-   ${PANNEAU_ATELIER(1770, 700, 's7-panneau')}
+
    <path d="M0,880 H1920 V1080 H0Z" fill="#3A4252"/><path d="M0,960 H1920" stroke="#F2D98A" stroke-width="6" stroke-dasharray="60 50" opacity=".7"/>
    <g id="s7-lucioles"></g>
    ${personne('s7-client', { coiffure: 'long', cheveux: '#B5652E', haut: '#4C8C6A', bas: '#2F3340', peau: PEAUX[0], objetD: TELEPHONE })}
    <g id="s7-panne-g">${voiture('s7-panne', { devant: `<path d="M268,36 l6,6 l-5,5 l7,6 l-6,6" fill="none" stroke="#5B5048" stroke-width="1.6"/><circle id="s7-warn1" cx="289" cy="47" r="4" fill="#FFB33B"/><circle id="s7-warn2" cx="15" cy="44" r="4" fill="#FFB33B"/>` })}</g>
    <g id="s7-bulle"><path d="M-70,-50 h140 q16,0 16,16 v52 q0,16 -16,16 h-90 l-24,22 l4,-22 h-30 q-16,0 -16,-16 v-52 q0,-16 16,-16z" fill="#FFFFFF"/><path d="M-16,-20 h10 l6,14 l-7,4 a28,28 0 0 0 14,14 l4,-7 l14,6 v10 a6,6 0 0 1 -6,6 a44,44 0 0 1 -42,-42 a6,6 0 0 1 7,-5z" fill="#D23A2B"/><text x="40" y="6" text-anchor="middle" font-family="BC" font-size="34" fill="#2E2A28">24/24</text></g>
    ${DEPANNEUSE}`,
-  carte('En panne ou accidentée', 'On vient la chercher', 'Dépannage 24 h/24, puis dépôt direct à l’atelier de Chevigny', 's7-carte'),
+  carte('En panne ou accidentée', 'On vient la chercher', 'Dépannage 24 h/24 et 7 j/7 : on s’occupe de tout', 's7-carte'),
   (t) => {
     for (const e of $('s7-etoiles').children) e.style.opacity = 0.45 + 0.55 * Math.abs(Math.sin(t * 1.7 + +e.dataset.p))
     // la voiture en panne, warnings allumés
@@ -492,7 +520,7 @@ scene(32, 39,
     const appelle = t < 3.2
     poser('s7-client', 190, 935, 1.2, 8, appelle ? 146 : -150 + Math.sin(t * 8) * 16)
     $('s7-bulle').setAttribute('transform', `translate(250,${520 + Math.sin(t * 3) * 6}) scale(${appelle ? 1 + Math.sin(t * 6) * 0.04 : 0})`)
-    // la dépanneuse arrive, charge la voiture, repart vers l'atelier
+    // la dépanneuse arrive, charge la voiture et repart
     const xArrivee = lerp(2300, 300, sortie(entre(t, 0.6, 3.1)))   // elle recule jusqu'à la voiture
     const x = t < 4.0 ? xArrivee : lerp(300, 2400, Math.pow(entre(t, 4.0, 7.0), 1.6))
     $('s7-camion').setAttribute('transform', `translate(${x},${760 + Math.sin(t * 9) * 2})`)
@@ -506,12 +534,12 @@ scene(32, 39,
     montrerCarte($('s7-carte'), t, 0.6)
   })
 
-/* 8 · Scénario 2 : elle roule, on la dépose à l'accueil, le garage la conduit à l'atelier (39 – 46 s) */
+/* 8 · Scénario 2 : elle roule, on la dépose à notre accueil et on s'en occupe (39 – 46 s) */
 const BUS = `<g id="s8-bus"><rect x="0" y="-250" width="620" height="230" rx="34" fill="#2F6FB0" stroke="#1D4A78" stroke-width="5"/>
   ${[30, 160, 290, 420].map((x) => `<rect x="${x}" y="-224" width="110" height="90" rx="12" fill="#BFE0F2"/>`).join('')}
   <rect x="540" y="-224" width="60" height="180" rx="10" fill="#9CC7DE"/><rect x="0" y="-110" width="620" height="16" fill="#F2D16B"/>
   <circle cx="120" cy="-18" r="34" fill="#2F2B2A"/><circle cx="500" cy="-18" r="34" fill="#2F2B2A"/></g>`
-scene(39, 46,
+scene(44, 51,
   `<rect width="1920" height="1080" fill="url(#cielJour)"/>
    ${nuage('s8-n1', 300, 150, 0.9)}${nuage('s8-n2', 1450, 110, 1.1)}
    <g filter="url(#aquarelle)" opacity=".85"><rect x="0" y="520" width="260" height="380" fill="#E8D9C4"/><rect x="1240" y="480" width="300" height="420" fill="#E3D2BC"/><rect x="1700" y="540" width="240" height="360" fill="#D9C7B0"/></g>
@@ -528,20 +556,20 @@ scene(39, 46,
    </g>
    <rect x="1780" y="600" width="10" height="300" fill="#55606E"/><rect x="1745" y="560" width="80" height="80" rx="12" fill="#2F6FB0"/><path d="M1760,622 v-36 h50 v36 M1760,606 h50" fill="none" stroke="#FFF" stroke-width="6" stroke-linejoin="round"/>
    <path d="M0,880 H1920 V905 H0Z" fill="#D8D2C6"/><path d="M0,905 H1920 V1080 H0Z" fill="#5E6670"/><path d="M0,990 H1920" stroke="#F2F2F2" stroke-width="6" stroke-dasharray="60 50" opacity=".8"/>
-   ${PANNEAU_ATELIER(1300, 720, 's8-panneau')}
+
    ${BUS}
    ${personne('s8-accueil', { coiffure: 'chignon', cheveux: '#1F1A18', lunettes: '#7A2E25', haut: '#D23A2B', bas: '#2F3340', peau: PEAUX[3] })}
    ${personne('s8-meca', { coiffure: 'casquette', bonnet: '#2B2523', haut: '#3E4A5E', bas: '#3E4A5E', bretelles: '#2B3445', peau: PEAUX[1], barbe: '#5A3A28' })}
    ${voiture('s8-auto')}
    ${personne('s8-client', { coiffure: 'raie', cheveux: '#C9A15A', haut: '#7FA7C4', bas: '#3B3F4A', peau: PEAUX[0], lunettes: '#2B2523' })}
    <g id="s8-cles">${CLES}</g>`,
-  carte('Elle roule', 'Déposez-la à l’accueil', 'Saint-Apollinaire, près des transports · on la conduit à l’atelier et on vous la ramène', 's8-carte'),
+  carte('Elle roule', 'Déposez-la à notre accueil', 'Saint-Apollinaire, près des transports · on s’occupe du reste', 's8-carte'),
   (t) => {
     ;['s8-n1', 's8-n2'].forEach((n, i) => $(n).setAttribute('transform', `translate(${[300, 1450][i] + t * 12},${[150, 110][i]}) scale(${[0.9, 1.1][i]})`))
     const s = 1.9
     // le client arrive en voiture et se gare devant l'accueil
     const xArr = lerp(-700, 120, sortie(entre(t, 0.2, 1.8)))
-    // un mécanicien la conduit ensuite à l'atelier
+    // un mécanicien la prend en charge
     const x = t < 4.0 ? xArr : lerp(120, 2300, Math.pow(entre(t, 4.0, 6.2), 1.5))
     placerVoiture('s8-auto', x, 960 - 74 * s, s, x)
     // le client descend, va donner les clés, puis part prendre le bus
@@ -564,7 +592,7 @@ scene(39, 46,
   })
 
 /* 9 · Lavage et occasions : le laveur et son éponge (46 – 50 s) */
-scene(46, 50,
+scene(51, 55,
   `<rect width="1920" height="1080" fill="url(#cielJour)"/>
    ${nuage('s9l-n1', 400, 160, 0.9)}${nuage('s9l-n2', 1500, 130, 1.1)}
    <path d="M300,760 A660,560 0 0 1 1620,760" fill="none" stroke="#F7C6D0" stroke-width="26" opacity=".35"/><path d="M330,760 A630,530 0 0 1 1590,760" fill="none" stroke="#FFF1A8" stroke-width="26" opacity=".35"/><path d="M360,760 A600,500 0 0 1 1560,760" fill="none" stroke="#BFE6C8" stroke-width="26" opacity=".35"/>
@@ -590,7 +618,7 @@ const EQUIPE = [
   ['s10-p3', { coiffure: 'chauve', barbe: '#2E2420', haut: '#C8342A', bas: '#3E4A5E', bretelles: '#3E4A5E', peau: PEAUX[4] }, 1620],
   ['s10-p4', { coiffure: 'boucles', cheveux: '#1F1A18', haut: '#2F8F8A', bas: '#2F3340', peau: PEAUX[2] }, 1750],
 ]
-scene(50, 56,
+scene(55, 61,
   `<rect width="1920" height="1080" fill="url(#cielSoir)"/>
    <circle cx="960" cy="720" r="420" fill="url(#soleil)"/><circle cx="960" cy="740" r="150" fill="#FFE2A0"/>
    ${nuage('s10-n1', 360, 260, 1, '#F8C9B0', '#D79A95')}${nuage('s10-n2', 1560, 200, 1.2, '#F8C9B0', '#D79A95')}
@@ -610,8 +638,7 @@ scene(50, 56,
    </div>
    <div class="grand-titre" id="s10-infos" style="top:440px;font-weight:700;font-size:38px;line-height:1.5">
      <div style="font-size:74px;font-weight:900">07 59 56 38 39</div>
-     <div>Accueil : 6 rue de Bastogne · Saint-Apollinaire</div>
-     <div>Atelier : 1 bis rue de la Fonderie · Chevigny-Saint-Sauveur</div>
+     <div>Notre accueil : 6 rue de Bastogne · Saint-Apollinaire</div>
      <div>Du mardi au samedi, 9 h – 19 h</div>
    </div>
    <div style="position:absolute;right:30px;bottom:18px;font:500 20px 'Zen Maru Gothic',sans-serif;color:#FFFFFFAA">Illustrations non contractuelles</div>`,
@@ -631,7 +658,7 @@ scene(50, 56,
   })
 
 /* ═══════════════ Horloge du film ═══════════════ */
-const DUREE = 56, FONDU = 0.7
+const DUREE = 61, FONDU = 0.7
 window.DUREE = DUREE
 window.rendre = (t) => {
   SCENES.forEach((s, i) => {

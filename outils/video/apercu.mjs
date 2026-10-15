@@ -1,7 +1,7 @@
 // Images-clés du film pour vérification (planche contact)
 import { createRequire } from 'node:module'
 import path from 'node:path'
-const { chromium } = createRequire('C:/Users/ST/Projet_perso/carsfactory21-site/package.json')('@playwright/test')
+const { chromium } = createRequire(new URL('../../package.json', import.meta.url))('@playwright/test')
 const ici = path.dirname(new URL(import.meta.url).pathname.replace(/^\/([A-Z]:)/, '$1'))
 const instants = (process.argv[2] ?? '3,8.5,13,18,21,25,30,35,40.5,46').split(',').map(Number)
 const b = await chromium.launch()

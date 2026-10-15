@@ -1,6 +1,6 @@
 # Vidéo de présentation (dessin animé)
 
-`garage.html` contient tout le film (48 s, 9 scènes) : décors, voiture, textes et minutage.
+`garage.html` contient tout le film (61 s, 11 scènes) : décors, voiture, textes et minutage.
 Ouvrir `garage.html#lecture` dans un navigateur pour le voir tourner en boucle.
 
 Pour refaire le fichier MP4 (1920×1080, 30 images/s) après une modification :
