@@ -34,8 +34,8 @@ const TRACES: Record<Icone | 'telephone' | 'horloge' | 'lieu' | 'photo' | 'coche
   entretien: 'M12 3c3 4 5 6.5 5 9.5a5 5 0 0 1-10 0C7 9.5 9 7 12 3zM10 14a2 2 0 0 0 2 2',
   diagnostic: 'M3 5h18v11H3zM8 20h8M12 16v4M6 12l3-3 2 2 4-4 3 3',
   covering: 'M4 20l4-12 12-4-4 12zM8 8l8 8M4 20l6-2',
-  // dépanneuse : cabine avec gyrophare, plateau, grue et crochet
-  depannage: 'M14 16V9h4l3 3.5V16h-1.5M17 9V7.5h1.5V9M17 9v3.5h4M14 13H5.5M3 16h1M8 16h7.5M5.5 13L3.5 5.5L2 6.5M3.5 5.5v4.5M3.5 10a1.2 1.2 0 1 0 1.2 1.2M6 19a2 2 0 1 0 0-4 2 2 0 0 0 0 4zM17.5 19a2 2 0 1 0 0-4 2 2 0 0 0 0 4z',
+  // dépanneuse remorquant une voiture (avant soulevé), dessinée dans un cadre plus large : 36 × 24
+  depannage: 'M1.94 17.89L1.19 15.62L3 14.39L4.17 11.18L8.73 9.69L11.46 11.32L14.79 10.88L15.63 13.44M4.88 19.2a1.95 1.95 0 1 0 0-3.9a1.95 1.95 0 0 0 0 3.9zM12.87 16.61a1.95 1.95 0 1 0 0-3.9a1.95 1.95 0 0 0 0 3.9zM15.63 13.44L18.53 13.2M19.88 11.1L17.93 6.9L15.53 11.7M18.53 15.9L18.53 11.1L25.57 11.1M25.57 15.9L25.57 6.3L30.52 6.3L34.57 11.1L34.57 15.9M27.98 6.3L27.98 9.75L32.17 9.75M27.67 6.3L27.67 4.2L30.07 4.2L30.07 6.3M18.53 15.9L19.43 15.9M24.38 15.9L28.57 15.9M33.38 15.9L34.57 15.9M21.98 19.2a2.1 2.1 0 1 0 0-4.2a2.1 2.1 0 0 0 0 4.2zM30.98 19.2a2.1 2.1 0 1 0 0-4.2a2.1 2.1 0 0 0 0 4.2z',
   telephone: 'M5 3h4l2 5-2.5 1.5a11 11 0 0 0 6 6L16 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 5a2 2 0 0 1 2-2',
   horloge: 'M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18zM12 7v5l3 2',
   lieu: 'M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11zM12 12.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5',
@@ -56,9 +56,13 @@ const TRACES: Record<Icone | 'telephone' | 'horloge' | 'lieu' | 'photo' | 'coche
   fleche: 'M5 12h14M13 6l6 6-6 6',
 }
 
+/** Icônes plus larges que hautes : largeur du cadre de dessin (24 par défaut). */
+const LARGEURS: Partial<Record<keyof typeof TRACES, number>> = { depannage: 36 }
+
 export function Ico({ nom, taille = 24, className = '' }: { nom: keyof typeof TRACES; taille?: number; className?: string }) {
+  const largeur = LARGEURS[nom] ?? 24
   return (
-    <svg width={taille} height={taille} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" className={className}>
+    <svg width={taille * largeur / 24} height={taille} viewBox={`0 0 ${largeur} 24`} fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" className={className}>
       <path d={TRACES[nom]} />
     </svg>
   )
