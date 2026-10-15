@@ -88,7 +88,7 @@ export default function Accueil() {
       <main>
         {/* ── Accroche courte : l'essentiel tient dans le premier écran du téléphone ── */}
         <section className="relative isolate overflow-hidden bg-noir text-white">
-          <Photo nom="atelier" alt="Atelier de réparation automobile" prioritaire mention={false} className="absolute inset-0 -z-10 h-full w-full" />
+          <Photo nom="atelier" alt="L’atelier Cars Factory 21" prioritaire mention={false} className="absolute inset-0 -z-10 h-full w-full" />
           <div aria-hidden="true" className="absolute inset-0 -z-10 bg-gradient-to-r from-noir via-noir/85 to-noir/35" />
           {/* Téléphone et tablette : statut, titre, vidéo, puis texte (le bloc de texte « s'efface » pour que la vidéo s'intercale) ;
               ordinateur : texte à gauche, vidéo à droite */}
@@ -121,7 +121,7 @@ export default function Accueil() {
               </figcaption>
             </figure>
           </Container>
-          <span className="absolute bottom-2 right-3 text-[11px] text-white/45">Photo non contractuelle</span>
+
         </section>
 
         {/* ── Tuiles d'action, posées sur la photo ── */}
@@ -146,7 +146,7 @@ export default function Accueil() {
         <section id="prestations" className="scroll-mt-32">
           <Container className="flex flex-col gap-8 py-10 md:gap-10 md:py-16">
             <div id="carrosserie" className="flex scroll-mt-32 flex-col gap-4">
-              <h2 className="flex items-baseline justify-between gap-3 text-[30px] font-bold uppercase leading-none md:text-[44px]">Carrosserie <span className="font-sans text-[13px] font-normal normal-case text-gris">Photos non contractuelles</span></h2>
+              <h2 className="flex items-baseline justify-between gap-3 text-[30px] font-bold uppercase leading-none md:text-[44px]">Carrosserie</h2>
               <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
                 {PRESTATIONS.filter((p) => p.famille === 'Carrosserie').map((p) => <Tuile key={p.chemin} p={p} />)}
               </div>
@@ -219,7 +219,7 @@ export default function Accueil() {
         {montrer(PRESENTATION) && (
           <section id="garage" className="scroll-mt-32">
             <Container className="grid items-center gap-6 py-10 md:gap-10 md:py-16 lg:grid-cols-2">
-              <Photo nom="garage" alt="Véhicules en réparation dans un atelier" sizes="(min-width: 1024px) 560px, 100vw" className="hidden aspect-[4/3] rounded-lg lg:block" />
+              <Photo nom="garage" alt="Véhicule en préparation de carrosserie à l’atelier Cars Factory 21" sizes="(min-width: 1024px) 560px, 100vw" className="hidden aspect-[4/3] rounded-lg lg:block" />
               <div className="flex flex-col gap-5">
                 <TitreSection label="Qui sommes-nous" texte={<Texte t={PRESENTATION} />}
                   titre={<span className="block text-[28px] leading-[1.02] md:text-[40px]">Plus de 20 ans d’expertise, une passion intacte et un seul objectif : <span className="text-rouge">votre satisfaction</span></span>} />

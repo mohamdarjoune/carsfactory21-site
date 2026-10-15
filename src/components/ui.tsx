@@ -1,6 +1,7 @@
 import { vers, BASE } from '../vers'
 import type { ReactNode } from 'react'
 import type { Icone } from '../pages/services'
+import photos from '../photos.json'
 
 export const btnRouge = 'inline-flex min-h-12 items-center justify-center gap-2 rounded-md bg-rouge px-5 py-3 text-[15px] font-semibold text-white no-underline transition-colors hover:bg-[#A91F13]'
 export const btnClair = 'inline-flex min-h-12 items-center justify-center gap-2 rounded-md border border-white/35 px-5 py-3 text-[15px] font-semibold text-white no-underline transition-colors hover:border-white hover:bg-white/10'
@@ -64,9 +65,12 @@ export function Ico({ nom, taille = 24, className = '' }: { nom: keyof typeof TR
 
 export type NomPhoto = 'atelier' | 'garage' | 'carrosserie' | 'peinture' | 'sinistre' | 'mecanique' | 'entretien' | 'diagnostic' | 'covering' | 'depannage' | 'lavage'
 
+/** Vraie photo de l'atelier (fournie par le garage), et non photo d'illustration Unsplash. */
+export const photoReelle = (nom: NomPhoto) => photos[nom].reelle
+
 /**
- * Photo d'illustration (Unsplash, 4K) en 3 tailles : le navigateur charge la plus petite suffisante
- * (téléphone ≈ 960 px, ordinateur ≈ 1920 px, écran 4K = 3840 px). Mention « non contractuelle » incrustée.
+ * Photo en 3 tailles : le navigateur charge la plus petite suffisante (téléphone ≈ 960 px, ordinateur ≈ 1920 px, écran 4K = 3840 px).
+ * Photos d'illustration (Unsplash, 4K) : mention « non contractuelle » incrustée. Vraies photos du garage (1200 px au plus) : sans mention.
  */
 export function Photo({ nom, alt, sizes = '100vw', className = '', prioritaire = false, mention = true }:
   { nom: NomPhoto; alt: string; sizes?: string; className?: string; prioritaire?: boolean; mention?: boolean }) {
@@ -75,7 +79,7 @@ export function Photo({ nom, alt, sizes = '100vw', className = '', prioritaire =
       <img src={vers(`/photos/${nom}-1920.webp`)} srcSet={`${BASE}photos/${nom}-960.webp 960w, ${BASE}photos/${nom}-1920.webp 1920w, ${BASE}photos/${nom}-3840.webp 3840w`}
         sizes={sizes} alt={alt} loading={prioritaire ? 'eager' : 'lazy'} decoding="async" {...(prioritaire ? { fetchPriority: 'high' } : {})}
         className="h-full w-full object-cover" />
-      {mention && <span className="absolute bottom-2 right-2 hidden rounded bg-black/55 px-2 py-0.5 text-[11px] text-white/85 sm:block">Photo non contractuelle</span>}
+      {mention && !photoReelle(nom) && <span className="absolute bottom-2 right-2 hidden rounded bg-black/55 px-2 py-0.5 text-[11px] text-white/85 sm:block">Photo non contractuelle</span>}
     </div>
   )
 }

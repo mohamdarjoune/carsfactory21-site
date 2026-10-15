@@ -2,7 +2,7 @@ import { vers } from '../vers'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import Devis from '../components/Devis'
-import { Container, Ico, Photo, TitreSection, btnClair, btnRouge, type NomPhoto } from '../components/ui'
+import { Container, Ico, Photo, TitreSection, btnClair, btnRouge, photoReelle, type NomPhoto } from '../components/ui'
 import { site } from '../config'
 import { prestation, type PagePrestation } from './services'
 import { aCompleter, montrer, Texte } from '../aCompleter'
@@ -39,7 +39,7 @@ export default function Prestation({ chemin }: { chemin: string }) {
               <a href={appeler} className={btnClair}><Ico nom="telephone" taille={18} />Appeler le garage</a>
             </div>
           </Container>
-          <span className="absolute bottom-3 right-3 text-[11px] text-white/50">Photo non contractuelle</span>
+          {!photoReelle(p.icone as NomPhoto) && <span className="absolute bottom-3 right-3 text-[11px] text-white/50">Photo non contractuelle</span>}
         </section>
 
         <section>

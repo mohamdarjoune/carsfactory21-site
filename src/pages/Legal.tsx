@@ -31,9 +31,10 @@ export function MentionsLegales() {
       <h2>Hébergement</h2>
       <p>{m.hebergeur}</p>
       <h2>Photos</h2>
-      <p>Les photos du site sont des <strong>photos d’illustration non contractuelles</strong>, issues d’Unsplash (licence Unsplash, usage commercial autorisé). Elles ne représentent pas l’atelier ni des véhicules réparés par le garage.</p>
+      <p>Les photos de l’atelier, de la carrosserie, de la peinture et de la réparation après sinistre sont de <strong>vraies photos prises à l’atelier</strong> par {m.raisonSociale} ; les plaques d’immatriculation des clients y sont floutées.</p>
+      <p>Les autres photos sont des <strong>photos d’illustration non contractuelles</strong>, issues d’Unsplash (licence Unsplash, usage commercial autorisé). Elles ne représentent pas l’atelier ni des véhicules réparés par le garage.</p>
       <ul className="list-disc pl-5 text-[15px] text-gris">
-        {Object.entries(photos).map(([nom, c]) => (
+        {Object.entries(photos).filter(([, c]) => !c.reelle).map(([nom, c]) => (
           <li key={nom}><a href={c.lien} target="_blank" rel="noopener noreferrer" className="text-noir">{nom}</a>{c.auteur ? ` · photo de ${c.auteur}` : ''} sur Unsplash</li>
         ))}
       </ul>

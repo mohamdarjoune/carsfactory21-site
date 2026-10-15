@@ -20,9 +20,11 @@ npm run test:site  # tests dans un vrai navigateur (ordinateur + téléphone), a
 - `src/pages/services.ts` : réponses marquées « [À confirmer avec le garage] ».
 - `public/api/devis.php` : adresse e-mail du garage et adresse d’envoi du site.
 - Nom de domaine : `siteUrl` (config.ts), `SITE` (scripts/prerendu.mjs), `index.html`, `public/.htaccess`, `public/robots.txt`.
-- Remplacer peu à peu les photos d’illustration par de vraies photos de l’atelier.
+- Remplacer peu à peu les photos d’illustration qui restent (mécanique, entretien, diagnostic, covering, dépannage, lavage) par de vraies photos de l’atelier.
 
 ## Photos
 
+Vraies photos de l’atelier (fournies par le garage, plaques floutées) pour l’atelier, le garage, la carrosserie, la peinture et la réparation après sinistre : originaux dans `medias/photos-khalid`, source de chaque photo dans `src/photos.json`.
+Les autres photos sont des photos d’illustration non contractuelles :
 Photos d’illustration non contractuelles, Unsplash (licence gratuite, usage commercial autorisé), en 960, 1920 et 3840 px (4K).
 Auteurs dans `src/photos.json`, affichés dans les mentions légales. Pour en changer : `node scripts/telecharger-photos.mjs`.
