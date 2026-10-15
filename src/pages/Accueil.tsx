@@ -96,12 +96,13 @@ export default function Accueil() {
           <Container className="grid items-center gap-4 pb-24 pt-5 md:gap-6 md:pb-32 md:pt-14 lg:grid-cols-12 lg:gap-8">
             <div className="contents lg:col-span-5 lg:flex lg:flex-col lg:gap-6">
               <div className="order-1"><StatutOuverture clair /></div>
-              <h1 className="order-2 max-w-[820px] text-[42px] font-bold uppercase leading-[0.9] md:text-[80px]">
-                Carrosserie <span className="text-rouge-vif">&amp;</span> mécanique
-              </h1>
-              <p className="order-4 max-w-[580px] text-[16px] leading-relaxed text-white/80 md:text-[19px]">
-                Près de Dijon : accueil à Saint-Apollinaire, atelier à Chevigny-Saint-Sauveur. Devis sur photos, dépannage 24 h/24.
-              </p>
+              <div className="order-2 flex max-w-[820px] flex-col gap-2">
+                <p className="font-titre text-[15px] font-bold uppercase tracking-wide text-rouge-vif md:text-[18px]">Notre engagement</p>
+                <h1 className="text-[28px] font-bold uppercase leading-[1.02] md:text-[44px]">
+                  Une réparation de qualité, un accompagnement personnalisé et <span className="text-rouge-vif">zéro franchise</span> à votre charge
+                </h1>
+                <p className="text-[14px] text-white/70 md:text-[15px]">Selon les conditions applicables.</p>
+              </div>
               <div className="order-5 hidden gap-3 sm:flex">
                 <a href="#devis" className={btnRouge}>Demander un devis</a>
                 <a href={appeler} className={btnClair}><Ico nom="telephone" taille={18} />{site.telephone}</a>
