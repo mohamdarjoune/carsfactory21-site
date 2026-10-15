@@ -13,9 +13,8 @@ import { PRESTATIONS, type PagePrestation } from './services'
 
 const rempli = (v: string) => v !== '' && !aCompleter(v)
 
-/** Présentation du garage et vrais avis Google : à fournir par le garage (rien n'est montré sur le vrai site tant que c'est vide). */
+/** Présentation du garage (rubrique « Qui sommes-nous »), texte fourni par le garage. La rubrique « Avis clients » est retirée pour l'instant (voir l'historique git pour la remettre). */
 const PRESENTATION = 'Fort de plus de 20 ans d’expérience en carrosserie et passionné par l’automobile, j’ai développé mon savoir-faire au sein de grands groupes tels qu’Airbus et Peugeot, ainsi qu’en tant qu’indépendant. Aujourd’hui, je mets mon savoir-faire au service de mes clients avec une exigence constante de qualité et de satisfaction.'
-const AVIS: { note: string; texte: string; auteur: string }[] = DEMO ? [1, 2, 3].map(() => ({ note: '[Note ★]', texte: '[Avis réel d’un client]', auteur: '[Prénom], [prestation]' })) : []
 
 /** Données structurées pour Google : un garage (AutoRepair), seulement avec les informations déjà remplies. */
 function donneesGarage() {
@@ -225,26 +224,6 @@ export default function Accueil() {
                   titre={<span className="block text-[28px] leading-[1.02] md:text-[40px]">Plus de 20 ans d’expertise, une passion intacte et un seul objectif : <span className="text-rouge">votre satisfaction</span></span>} />
                 <a href="#acces" className="self-start font-semibold text-rouge">Voir notre adresse →</a>
               </div>
-            </Container>
-          </section>
-        )}
-
-        {/* ── Avis : seulement de vrais avis ── */}
-        {AVIS.length > 0 && (
-          <section id="avis" className="scroll-mt-32 bg-fond">
-            <Container className="flex flex-col gap-6 py-10 md:py-16">
-              <h2 className="text-[30px] font-bold uppercase leading-none md:text-[44px]">Avis clients</h2>
-              <p className="text-[15px] text-gris">De vrais avis, repris de la fiche Google du garage avec l’accord des clients.</p>
-              <div className="-mx-4 flex snap-x gap-3 overflow-x-auto px-4 pb-2 md:mx-0 md:grid md:grid-cols-3 md:overflow-visible md:px-0">
-                {AVIS.map((a, n) => (
-                  <figure key={n} className="m-0 flex w-[82%] shrink-0 snap-start flex-col gap-3 rounded-xl border border-ligne bg-white p-5 md:w-auto">
-                    <p className="text-[18px] text-rouge"><Texte t={a.note} /></p>
-                    <blockquote className="m-0 text-[16px] leading-relaxed">« <Texte t={a.texte} /> »</blockquote>
-                    <figcaption className="text-[14px] text-gris"><Texte t={a.auteur} /></figcaption>
-                  </figure>
-                ))}
-              </div>
-              {site.lienAvisGoogle && <a href={site.lienAvisGoogle} target="_blank" rel="noopener noreferrer" className="self-start font-semibold text-rouge">Voir tous les avis sur Google →</a>}
             </Container>
           </section>
         )}
