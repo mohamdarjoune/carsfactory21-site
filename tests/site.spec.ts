@@ -32,7 +32,7 @@ test('aucun texte « [à compléter] » montré aux visiteurs du vrai site', asy
 
 test('plans : le doigt fait défiler la page, le plan s’active au toucher', async ({ page }) => {
   await page.goto('/#acces')
-  const bouton = page.getByRole('button', { name: /Utiliser le plan : Le garage/ })
+  const bouton = page.getByRole('button', { name: /Utiliser le plan : Notre accueil/ })
   await expect(bouton).toBeVisible()
   await bouton.click()
   await expect(bouton).toBeHidden()

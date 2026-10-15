@@ -14,7 +14,7 @@ import { PRESTATIONS, type PagePrestation } from './services'
 const rempli = (v: string) => v !== '' && !aCompleter(v)
 
 /** Présentation du garage et vrais avis Google : à fournir par le garage (rien n'est montré sur le vrai site tant que c'est vide). */
-const PRESENTATION = '[Présentation du garage : son histoire, l’équipe, les équipements de l’atelier, ce qui le distingue. Quelques phrases fournies par le client.]'
+const PRESENTATION = 'Fort de plus de 20 ans d’expérience en carrosserie et passionné par l’automobile, j’ai développé mon savoir-faire au sein de grands groupes tels qu’Airbus et Peugeot, ainsi qu’en tant qu’indépendant. Aujourd’hui, je mets mon savoir-faire au service de mes clients avec une exigence constante de qualité et de satisfaction.'
 const AVIS: { note: string; texte: string; auteur: string }[] = DEMO ? [1, 2, 3].map(() => ({ note: '[Note ★]', texte: '[Avis réel d’un client]', auteur: '[Prénom], [prestation]' })) : []
 
 /** Données structurées pour Google : un garage (AutoRepair), seulement avec les informations déjà remplies. */
@@ -38,7 +38,7 @@ function donneesGarage() {
 const VIDEO = {
   '@context': 'https://schema.org', '@type': 'VideoObject',
   name: 'Cars Factory 21 : le garage en moins d’une minute',
-  description: 'Carrosserie, peinture, covering, mécanique, diagnostic, lavage, et deux façons de nous confier votre voiture : dépannage 24 h/24, ou dépôt au garage à Saint-Apollinaire. En dessin animé.',
+  description: 'Carrosserie, peinture, covering, mécanique, diagnostic, lavage, et deux façons de nous confier votre voiture : dépannage 24 h/24, ou dépôt à notre accueil de Saint-Apollinaire. En dessin animé.',
   thumbnailUrl: `${site.siteUrl}/videos/presentation-garage.webp`,
   contentUrl: `${site.siteUrl}/videos/presentation-garage.mp4`,
   uploadDate: '2026-09-30',
@@ -72,7 +72,7 @@ const ETAPES: [string, string][] = [
 
 const FAQ: [string, string][] = [
   ['Puis-je obtenir un devis sans venir au garage ?', 'Oui. Remplissez le formulaire de devis en ajoutant des photos des dégâts et le modèle de votre voiture : le garage vous recontacte pour une première estimation.'],
-  ['Où dois-je déposer ma voiture ?', 'Au garage, 6 rue de Bastogne à Saint-Apollinaire, près des commerces et des transports en commun.'],
+  ['Où dois-je déposer ma voiture ?', 'À notre accueil, 6 rue de Bastogne à Saint-Apollinaire, près des commerces et des transports en commun.'],
   ['Quels sont les horaires du garage ?', 'Le garage est ouvert du mardi au samedi, de 9 h à 19 h. Il est fermé le lundi et le dimanche. Le dépannage fonctionne 24 h/24, 7 j/7.'],
   ['Le garage s’occupe-t-il des démarches avec mon assurance ?', 'Le garage vous aide à préparer votre dossier et à présenter le véhicule à l’expert si votre assurance en mandate un.'],
   ['Faut-il prendre rendez-vous ?', '[À confirmer avec le garage : rendez-vous obligatoire ou possibilité de passer sans rendez-vous.]'],
@@ -221,7 +221,8 @@ export default function Accueil() {
             <Container className="grid items-center gap-6 py-10 md:gap-10 md:py-16 lg:grid-cols-2">
               <Photo nom="garage" alt="Véhicules en réparation dans un atelier" sizes="(min-width: 1024px) 560px, 100vw" className="hidden aspect-[4/3] rounded-lg lg:block" />
               <div className="flex flex-col gap-5">
-                <TitreSection label="Le garage" titre={site.nom} texte={<Texte t={PRESENTATION} />} />
+                <TitreSection label="Qui sommes-nous" texte={<Texte t={PRESENTATION} />}
+                  titre={<span className="block text-[28px] leading-[1.02] md:text-[40px]">Plus de 20 ans d’expertise, une passion intacte et un seul objectif : <span className="text-rouge">votre satisfaction</span></span>} />
                 <a href="#acces" className="self-start font-semibold text-rouge">Voir notre adresse →</a>
               </div>
             </Container>
@@ -269,7 +270,7 @@ export default function Accueil() {
         <section aria-labelledby="titre-zone" className="bg-noir text-white">
           <Container className="flex flex-col gap-4 py-10">
             <h2 id="titre-zone" className="text-[28px] font-bold uppercase leading-none md:text-[40px]">À deux pas de Dijon</h2>
-            <p className="max-w-[720px] text-[15px] text-white/70">Installé à {accueil.ville}, le garage accueille les conducteurs de toute l’agglomération et des communes voisines.</p>
+            <p className="max-w-[720px] text-[15px] text-white/70">Notre accueil à {accueil.ville} reçoit les conducteurs de toute l’agglomération et des communes voisines.</p>
             <ul className="flex flex-wrap gap-2">
               {site.zone.map((v) => <li key={v} className="rounded-full border border-white/20 px-3 py-1.5 text-[14px] text-white/85">{v}</li>)}
             </ul>

@@ -16,7 +16,7 @@ npm run test:site  # tests dans un vrai navigateur (ordinateur + téléphone), a
 ## À compléter avant la mise en ligne
 
 - `src/config.ts` : e-mail, lien des avis Google, capital et RCS, hébergeur ; confirmer « Devis gratuit » et « Prix annoncé avant travaux ».
-- `src/pages/Accueil.tsx` : présentation du garage, 3 vrais avis clients (avec leur accord).
+- `src/pages/Accueil.tsx` : 3 vrais avis clients (avec leur accord).
 - `src/pages/services.ts` : réponses marquées « [À confirmer avec le garage] ».
 - `public/api/devis.php` : adresse e-mail du garage et adresse d’envoi du site.
 - Nom de domaine : `siteUrl` (config.ts), `SITE` (scripts/prerendu.mjs), `index.html`, `public/.htaccess`, `public/robots.txt`.

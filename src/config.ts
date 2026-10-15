@@ -12,13 +12,14 @@ export const site = {
   telephone: '07 59 56 38 39',
   telephoneLien: '+33759563839',
   email: '[E-mail]',
-  // Seule adresse affichée sur le site : l'accueil de Saint-Apollinaire (commerces et transports en commun à proximité)
+  // Seule adresse affichée sur le site, au choix du client : l'accueil de Saint-Apollinaire (ce n'est pas l'adresse de l'atelier ;
+  // on la présente toujours comme « notre accueil », jamais comme « le garage », pour ne pas créer de confusion)
   adresse: { rue: '6 rue de Bastogne', codePostal: '21850', ville: 'Saint-Apollinaire', departement: 'Côte-d’Or' },
   lienItineraire: 'https://www.google.com/maps/dir/?api=1&destination=47.3391354,5.0720674',
   // Coordonnées : OpenStreetMap (Nominatim), 30/09/2026
   lieux: [
-    { id: 'accueil', titre: 'Le garage', rue: '6 rue de Bastogne', codePostal: '21850', ville: 'Saint-Apollinaire',
-      texte: 'C’est ici que vous déposez et récupérez votre voiture, et que se font devis et démarches. Commerces et transports en commun à proximité.',
+    { id: 'accueil', titre: 'Notre accueil', rue: '6 rue de Bastogne', codePostal: '21850', ville: 'Saint-Apollinaire',
+      texte: 'Vous y déposez et récupérez votre voiture, et c’est ici que se font devis et démarches. Commerces et transports en commun à proximité.',
       lat: 47.3391354, lon: 5.0720674 },
   ],
   // Agenda Cal.com du garage (ex. 'cars-factory-21/rendez-vous') : vide = agenda de démonstration
