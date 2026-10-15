@@ -141,6 +141,20 @@ export default function Accueil() {
           </Container>
         </section>
 
+        {/* ── Mon parcours (qui sommes-nous), juste sous l'accroche ── */}
+        {montrer(PRESENTATION) && (
+          <section id="garage" className="scroll-mt-32">
+            <Container className="grid items-center gap-6 py-10 md:gap-10 md:py-16 lg:grid-cols-2">
+              <Photo nom="garage" alt="Véhicule en préparation de carrosserie à l’atelier Cars Factory 21" sizes="(min-width: 1024px) 560px, 100vw" className="hidden aspect-[4/3] rounded-lg lg:block" />
+              <div className="flex flex-col gap-5">
+                <TitreSection label="Mon parcours" texte={<Texte t={PRESENTATION} />}
+                  titre={<span className="block text-[28px] leading-[1.02] md:text-[40px]">Plus de 20 ans d’expertise, une passion intacte et un seul objectif : <span className="text-rouge">votre satisfaction</span></span>} />
+                <a href="#acces" className="self-start font-semibold text-rouge">Voir notre adresse →</a>
+              </div>
+            </Container>
+          </section>
+        )}
+
         {/* ── Prestations ── */}
         <section id="prestations" className="scroll-mt-32">
           <Container className="flex flex-col gap-8 py-10 md:gap-10 md:py-16">
@@ -213,20 +227,6 @@ export default function Accueil() {
             </ol>
           </Container>
         </section>
-
-        {/* ── Le garage ── */}
-        {montrer(PRESENTATION) && (
-          <section id="garage" className="scroll-mt-32">
-            <Container className="grid items-center gap-6 py-10 md:gap-10 md:py-16 lg:grid-cols-2">
-              <Photo nom="garage" alt="Véhicule en préparation de carrosserie à l’atelier Cars Factory 21" sizes="(min-width: 1024px) 560px, 100vw" className="hidden aspect-[4/3] rounded-lg lg:block" />
-              <div className="flex flex-col gap-5">
-                <TitreSection label="Qui sommes-nous" texte={<Texte t={PRESENTATION} />}
-                  titre={<span className="block text-[28px] leading-[1.02] md:text-[40px]">Plus de 20 ans d’expertise, une passion intacte et un seul objectif : <span className="text-rouge">votre satisfaction</span></span>} />
-                <a href="#acces" className="self-start font-semibold text-rouge">Voir notre adresse →</a>
-              </div>
-            </Container>
-          </section>
-        )}
 
         {/* ── Questions fréquentes ── */}
         <section>
