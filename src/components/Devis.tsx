@@ -1,7 +1,7 @@
 import { vers, DEMO } from '../vers'
 import { useState, type FormEvent } from 'react'
 import { Container, Ico, TitreSection, btnRouge } from './ui'
-import { site, accueil, atelier, adresseLieu } from '../config'
+import { site, accueil, adresseLieu } from '../config'
 import { PRESTATIONS } from '../pages/services'
 import { decrireVehicule, useVehicule } from '../vehicule'
 
@@ -71,7 +71,7 @@ export default function Devis({ prestationParDefaut = '' }: { prestationParDefau
           <TitreSection label="Demande de devis" titre="Décrivez-nous le problème" texte="Quelques photos des dégâts et votre modèle de voiture suffisent pour une première estimation. On vous rappelle pour fixer un rendez-vous." />
           <ul className="flex flex-col gap-4 text-[16px]">
             <li className="flex items-start gap-3"><Ico nom="telephone" className="mt-0.5 shrink-0 text-rouge" /><span><strong className="block">Téléphone · dépannage 24 h/24</strong><a href={`tel:${site.telephoneLien}`} className="text-noir">{site.telephone}</a></span></li>
-            <li className="flex items-start gap-3"><Ico nom="lieu" className="mt-0.5 shrink-0 text-rouge" /><span><strong className="block">Accueil et bureau</strong>{adresseLieu(accueil)}<strong className="mt-2 block">Atelier</strong>{adresseLieu(atelier)} <a href={vers('/#acces')} className="text-rouge">(plan)</a></span></li>
+            <li className="flex items-start gap-3"><Ico nom="lieu" className="mt-0.5 shrink-0 text-rouge" /><span>{adresseLieu(accueil)} <a href={vers('/#acces')} className="text-rouge">(plan)</a></span></li>
             <li className="flex items-start gap-3"><Ico nom="horloge" className="mt-0.5 shrink-0 text-rouge" />
               <span className="flex flex-col"><strong>Horaires</strong>
                 {site.horaires.map(([j, h]) => <span key={j} className="text-gris">{j} : <span className="text-noir">{h}</span></span>)}

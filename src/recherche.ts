@@ -20,7 +20,7 @@ const MOTS_CLES: Record<string, string[]> = {
 const AUTRES: (Resultat & { mots: string[] })[] = [
   { nom: 'Lavage auto', chemin: '/#autres', detail: 'Intérieur et extérieur', mots: ['lavage', 'nettoyage', 'laver', 'propre'] },
   { nom: 'Véhicules d’occasion', chemin: '/#autres', detail: 'Véhicules à la vente', mots: ['occasion', 'achat', 'acheter', 'vente', 'voiture a vendre'] },
-  { nom: 'Nos adresses et horaires', chemin: '/#acces', detail: 'Saint-Apollinaire et Chevigny-Saint-Sauveur', mots: ['adresse', 'plan', 'horaire', 'ouvert', 'itineraire', 'ou', 'acces', 'saint-apollinaire', 'chevigny'] },
+  { nom: 'Notre adresse et nos horaires', chemin: '/#acces', detail: 'Saint-Apollinaire', mots: ['adresse', 'plan', 'horaire', 'ouvert', 'itineraire', 'ou', 'acces', 'saint-apollinaire'] },
   { nom: 'Demander un devis', chemin: '/#devis', detail: 'Avec des photos, sans vous déplacer', mots: ['devis', 'prix', 'tarif', 'combien', 'photo'] },
 ]
 

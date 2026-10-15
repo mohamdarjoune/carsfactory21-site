@@ -8,7 +8,7 @@ import StatutOuverture from '../components/Statut'
 import { EncartVehicule } from '../components/MonVehicule'
 import Rendezvous from '../components/Rendezvous'
 import { Container, Ico, Photo, TitreSection, btnClair, btnRouge, type NomPhoto } from '../components/ui'
-import { site, accueil, atelier } from '../config'
+import { site, accueil } from '../config'
 import { PRESTATIONS, type PagePrestation } from './services'
 
 const rempli = (v: string) => v !== '' && !aCompleter(v)
@@ -22,10 +22,9 @@ function donneesGarage() {
   const d: Record<string, unknown> = {
     '@context': 'https://schema.org', '@type': 'AutoRepair', '@id': `${site.siteUrl}/#garage`,
     name: site.nom, url: `${site.siteUrl}/`, image: `${site.siteUrl}/photos/atelier-1920.webp`,
-    description: 'Carrosserie, peinture, covering, réparation après sinistre, mécanique, entretien, diagnostic et dépannage 24 h/24 à Chevigny-Saint-Sauveur, près de Dijon.',
+    description: 'Carrosserie, peinture, covering, réparation après sinistre, mécanique, entretien, diagnostic et dépannage 24 h/24 à Saint-Apollinaire, près de Dijon.',
     telephone: site.telephoneLien,
-    geo: { '@type': 'GeoCoordinates', latitude: atelier.lat, longitude: atelier.lon },
-    location: site.lieux.map((l) => ({ '@type': 'Place', name: `Cars Factory 21 · ${l.titre}`, address: { '@type': 'PostalAddress', streetAddress: l.rue, postalCode: l.codePostal, addressLocality: l.ville, addressCountry: 'FR' }, geo: { '@type': 'GeoCoordinates', latitude: l.lat, longitude: l.lon } })),
+    geo: { '@type': 'GeoCoordinates', latitude: accueil.lat, longitude: accueil.lon },
     address: { '@type': 'PostalAddress', streetAddress: site.adresse.rue, postalCode: site.adresse.codePostal, addressLocality: site.adresse.ville, addressRegion: 'Bourgogne-Franche-Comté', addressCountry: 'FR' },
     openingHoursSpecification: site.horairesGoogle.map((h) => ({ '@type': 'OpeningHoursSpecification', dayOfWeek: h.jours, opens: h.ouverture, closes: h.fermeture })),
     areaServed: [...site.zone.map((name) => ({ '@type': 'City', name })), { '@type': 'AdministrativeArea', name: site.adresse.departement }],
@@ -39,7 +38,7 @@ function donneesGarage() {
 const VIDEO = {
   '@context': 'https://schema.org', '@type': 'VideoObject',
   name: 'Cars Factory 21 : le garage en moins d’une minute',
-  description: 'Carrosserie, peinture, covering, mécanique, diagnostic, lavage, et deux façons de nous confier votre voiture : dépannage 24 h/24 jusqu’à l’atelier de Chevigny-Saint-Sauveur, ou dépôt à l’accueil de Saint-Apollinaire. En dessin animé.',
+  description: 'Carrosserie, peinture, covering, mécanique, diagnostic, lavage, et deux façons de nous confier votre voiture : dépannage 24 h/24, ou dépôt au garage à Saint-Apollinaire. En dessin animé.',
   thumbnailUrl: `${site.siteUrl}/videos/presentation-garage.webp`,
   contentUrl: `${site.siteUrl}/videos/presentation-garage.mp4`,
   uploadDate: '2026-09-30',
@@ -68,12 +67,12 @@ const ETAPES: [string, string][] = [
   ['Devis', 'Par téléphone, à l’accueil ou en ligne avec des photos.'],
   ['Dépôt', 'À l’accueil de Saint-Apollinaire, du mardi au samedi.'],
   ['Réparation', 'À l’atelier, seulement les travaux validés.'],
-  ['Restitution', 'Votre voiture revient à l’accueil, travaux expliqués.'],
+  ['Restitution', 'Vous récupérez votre voiture, travaux expliqués.'],
 ]
 
 const FAQ: [string, string][] = [
   ['Puis-je obtenir un devis sans venir au garage ?', 'Oui. Remplissez le formulaire de devis en ajoutant des photos des dégâts et le modèle de votre voiture : le garage vous recontacte pour une première estimation.'],
-  ['Où dois-je déposer ma voiture ?', 'À l’accueil, 6 rue de Bastogne à Saint-Apollinaire, près des commerces et des transports en commun. Le garage emmène ensuite votre voiture à son atelier de Chevigny-Saint-Sauveur et vous la ramène une fois les travaux terminés.'],
+  ['Où dois-je déposer ma voiture ?', 'Au garage, 6 rue de Bastogne à Saint-Apollinaire, près des commerces et des transports en commun.'],
   ['Quels sont les horaires du garage ?', 'Le garage est ouvert du mardi au samedi, de 9 h à 19 h. Il est fermé le lundi et le dimanche. Le dépannage fonctionne 24 h/24, 7 j/7.'],
   ['Le garage s’occupe-t-il des démarches avec mon assurance ?', 'Le garage vous aide à préparer votre dossier et à présenter le véhicule à l’expert si votre assurance en mandate un.'],
   ['Faut-il prendre rendez-vous ?', '[À confirmer avec le garage : rendez-vous obligatoire ou possibilité de passer sans rendez-vous.]'],
@@ -135,7 +134,7 @@ export default function Accueil() {
               <Ico nom="depannage" taille={28} /><span className="text-[17px] font-bold leading-tight">Dépannage 24 h/24</span><span className="text-[13px] text-white/85">{site.telephone}</span>
             </a>
             <a href="#acces" className={tuileAction}>
-              <Ico nom="lieu" taille={28} className="text-rouge" /><span className="text-[17px] font-bold leading-tight">Nos adresses</span><span className="hidden text-[13px] text-gris sm:block">Accueil · atelier · horaires</span>
+              <Ico nom="lieu" taille={28} className="text-rouge" /><span className="text-[17px] font-bold leading-tight">Notre adresse</span><span className="hidden text-[13px] text-gris sm:block">Plan · horaires</span>
             </a>
             <a href="#rdv" className={tuileAction}>
               <Ico nom="calendrier" taille={28} className="text-rouge" /><span className="text-[17px] font-bold leading-tight">Prendre rendez-vous</span><span className="hidden text-[13px] text-gris sm:block">Choisissez le jour et l’heure</span>
@@ -223,7 +222,7 @@ export default function Accueil() {
               <Photo nom="garage" alt="Véhicules en réparation dans un atelier" sizes="(min-width: 1024px) 560px, 100vw" className="hidden aspect-[4/3] rounded-lg lg:block" />
               <div className="flex flex-col gap-5">
                 <TitreSection label="Le garage" titre={site.nom} texte={<Texte t={PRESENTATION} />} />
-                <a href="#acces" className="self-start font-semibold text-rouge">Voir nos deux adresses →</a>
+                <a href="#acces" className="self-start font-semibold text-rouge">Voir notre adresse →</a>
               </div>
             </Container>
           </section>
@@ -270,7 +269,7 @@ export default function Accueil() {
         <section aria-labelledby="titre-zone" className="bg-noir text-white">
           <Container className="flex flex-col gap-4 py-10">
             <h2 id="titre-zone" className="text-[28px] font-bold uppercase leading-none md:text-[40px]">À deux pas de Dijon</h2>
-            <p className="max-w-[720px] text-[15px] text-white/70">Accueil à {accueil.ville}, atelier à {atelier.ville} : le garage accueille les conducteurs de toute l’agglomération et des communes voisines.</p>
+            <p className="max-w-[720px] text-[15px] text-white/70">Installé à {accueil.ville}, le garage accueille les conducteurs de toute l’agglomération et des communes voisines.</p>
             <ul className="flex flex-wrap gap-2">
               {site.zone.map((v) => <li key={v} className="rounded-full border border-white/20 px-3 py-1.5 text-[14px] text-white/85">{v}</li>)}
             </ul>

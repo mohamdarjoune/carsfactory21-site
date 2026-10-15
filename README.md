@@ -1,6 +1,6 @@
 # Site Cars Factory 21
 
-Site de Cars Factory 21, carrosserie et mécanique à Chevigny-Saint-Sauveur (Côte-d’Or).
+Site de Cars Factory 21, carrosserie et mécanique à Saint-Apollinaire (Côte-d’Or).
 Même base technique que ete-85.fr : React + Vite + Tailwind, pages pré-rendues pour Google, formulaire PHP pour OVH.
 
 ## Commandes

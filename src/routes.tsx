@@ -19,12 +19,12 @@ export function Pages() {
 /** Pages écrites en HTML complet à la construction (référencement), avec leur titre et leur description Google. */
 export const PAGES_PRERENDUES: { chemin: string; fichier: string; priorite: string; titre: string; description: string; introuvable?: boolean }[] = [
   { chemin: '/', fichier: 'index.html', priorite: '1.0',
-    titre: 'Garage carrosserie et mécanique à Chevigny | Cars Factory 21',
-    description: 'Carrosserie, peinture, covering, mécanique et dépannage 24 h/24 à Chevigny-Saint-Sauveur, près de Dijon. Devis sur photos. Appelez le 07 59 56 38 39.' },
+    titre: 'Carrosserie, mécanique à Saint-Apollinaire | Cars Factory 21',
+    description: 'Carrosserie, peinture, covering, mécanique et dépannage 24 h/24 à Saint-Apollinaire, près de Dijon. Devis sur photos. Appelez le 07 59 56 38 39.' },
   ...PRESTATIONS.map((p) => ({ chemin: p.chemin, fichier: `${p.chemin.slice(1)}.html`, priorite: '0.8', titre: p.titre, description: p.description })),
   { chemin: '/mentions-legales', fichier: 'mentions-legales.html', priorite: '0.2',
     titre: 'Mentions légales | Cars Factory 21',
-    description: 'Mentions légales du site de Cars Factory 21, garage de carrosserie et de mécanique à Chevigny-Saint-Sauveur (Côte-d’Or).' },
+    description: 'Mentions légales du site de Cars Factory 21, garage de carrosserie et de mécanique à Saint-Apollinaire (Côte-d’Or).' },
   { chemin: '/confidentialite', fichier: 'confidentialite.html', priorite: '0.2',
     titre: 'Confidentialité | Cars Factory 21',
     description: 'Comment Cars Factory 21 utilise les informations envoyées par le formulaire de devis, et comment exercer vos droits sur vos données.' },

@@ -3,7 +3,7 @@ import type { ReactNode } from 'react'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import { Container } from '../components/ui'
-import { site, adresseComplete, adresseLieu } from '../config'
+import { site, adresseComplete } from '../config'
 import photos from '../photos.json'
 
 function PageTexte({ titre, children }: { titre: string; children: ReactNode }) {
@@ -26,7 +26,7 @@ export function MentionsLegales() {
   return (
     <PageTexte titre="Mentions légales">
       <h2>Éditeur du site</h2>
-      <p>{m.raisonSociale}, capital {m.capital}<br />Siège et atelier : {adresseComplete}<br />Accueil et bureau : {adresseLieu(site.lieux[0])}<br />SIREN {m.siren} · {m.rcs}<br />Téléphone : {site.telephone} · E-mail : {site.email}</p>
+      <p>{m.raisonSociale}, capital {m.capital}<br />Adresse : {adresseComplete}<br />Siège social : {m.siege}<br />SIREN {m.siren} · {m.rcs}<br />Téléphone : {site.telephone} · E-mail : {site.email}</p>
       <p>Responsable de la publication : {m.responsable}.</p>
       <h2>Hébergement</h2>
       <p>{m.hebergeur}</p>

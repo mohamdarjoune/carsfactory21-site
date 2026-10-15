@@ -32,7 +32,7 @@ test('aucun texte « [à compléter] » montré aux visiteurs du vrai site', asy
 
 test('plans : le doigt fait défiler la page, le plan s’active au toucher', async ({ page }) => {
   await page.goto('/#acces')
-  const bouton = page.getByRole('button', { name: /Utiliser le plan : Accueil/ })
+  const bouton = page.getByRole('button', { name: /Utiliser le plan : Le garage/ })
   await expect(bouton).toBeVisible()
   await bouton.click()
   await expect(bouton).toBeHidden()
@@ -62,7 +62,7 @@ test('accueil : bouton d’appel et données pour Google', async ({ page }) => {
   await expect(page.locator('a[href="tel:+33759563839"]').filter({ visible: true }).first()).toBeVisible()
   const donnees = JSON.parse(await page.locator('script[type="application/ld+json"]').first().textContent() ?? '{}')
   expect(donnees['@type']).toBe('AutoRepair')
-  expect(donnees.address.postalCode).toBe('21800')
+  expect(donnees.address.postalCode).toBe('21850')
 })
 
 test('photos : version adaptée à l’écran, pas le 4K sur téléphone', async ({ page, isMobile }) => {
@@ -71,16 +71,16 @@ test('photos : version adaptée à l’écran, pas le 4K sur téléphone', async
   expect(src).toMatch(isMobile ? /-(960|1920)\.webp$/ : /\.webp$/)
 })
 
-test('accès : les deux adresses avec leur plan et leur itinéraire', async ({ page }) => {
+test('accès : une seule adresse (Saint-Apollinaire) avec son plan et son itinéraire', async ({ page }) => {
   await page.goto('/#acces')
   const acces = page.locator('#acces')
   await expect(acces.getByText('6 rue de Bastogne, 21850 Saint-Apollinaire')).toBeVisible()
-  await expect(acces.getByText('1 bis rue de la Fonderie, 21800 Chevigny-Saint-Sauveur')).toBeVisible()
   const plans = acces.locator('iframe')
-  await expect(plans).toHaveCount(2)
+  await expect(plans).toHaveCount(1)
   await expect(plans.first()).toHaveAttribute('src', /openstreetmap\.org\/export\/embed\.html.*marker=47\.339/)
-  await expect(plans.nth(1)).toHaveAttribute('src', /marker=47\.293/)
-  await expect(acces.getByRole('link', { name: 'Itinéraire' })).toHaveCount(2)
+  await expect(acces.getByRole('link', { name: 'Itinéraire' })).toHaveCount(1)
+  // l'ancienne adresse de l'atelier n'apparaît plus sur la page (Chevigny reste dans la liste des communes desservies)
+  await expect(page.getByText(/Fonderie/)).toHaveCount(0)
 })
 
 test('vidéo : image de couverture, chargée seulement au clic, fichier servi', async ({ page, request }) => {
